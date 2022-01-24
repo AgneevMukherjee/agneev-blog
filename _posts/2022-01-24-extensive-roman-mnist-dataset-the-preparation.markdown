@@ -63,7 +63,7 @@ def convert_images(input_folder, output_folder):
         cv2.imwrite(os.path.join(output_folder, os.path.basename(f)), image)
 {% endhighlight %}
 
-![Image_17](/agneev-blog/assets/img/img_1_17.png?raw=true){: width="150", height="125" }
+![Image_17](/agneev-blog/assets/img/img_1_17.png?raw=true){: width="150", height="125" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_18](/agneev-blog/assets/img/img_1_18.png?raw=true){: width="150", height="125" }
 
 Although this was optional, I chose to undertake this conversion anyway. Since the data provided was in black and white, I felt the test data was unlikely to be in colour, and so would probably resemble the processed images more than the original colour versions (this turned out to be true, btw).
@@ -72,19 +72,19 @@ Although this was optional, I chose to undertake this conversion anyway. Since t
 
 Now, even after gathering my own data, I ended up with less than 6000 images. How to boost the numbers further? One method is via manipulating the existing images. An easy way to do this is flipping the images using OpenCV's flip method. The small versions of 1, 2, 3 and 10 can be flipped horizontally, while their capital versions can be flipped either horizontally and vertically. For 5, only the horizontal flip is meaningful. Examples:
 
-![Image_19](/agneev-blog/assets/img/img_1_19.png?raw=true){: width="150", height="125" }
-![Image_20](/agneev-blog/assets/img/img_1_20.png?raw=true){: width="150", height="125" }
+![Image_19](/agneev-blog/assets/img/img_1_19.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_20](/agneev-blog/assets/img/img_1_20.png?raw=true){: width="125", height="100" }
 
-![Image_21](/agneev-blog/assets/img/img_1_21.png?raw=true){: width="150", height="125" }
-![Image_22](/agneev-blog/assets/img/img_1_22.png?raw=true){: width="150", height="125" }
+![Image_21](/agneev-blog/assets/img/img_1_21.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_22](/agneev-blog/assets/img/img_1_22.png?raw=true){: width="125", height="100" }
 
-![Image_23](/agneev-blog/assets/img/img_1_23.png?raw=true){: width="150", height="125" }
-![Image_24](/agneev-blog/assets/img/img_1_24.png?raw=true){: width="150", height="125" }
+![Image_23](/agneev-blog/assets/img/img_1_23.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_24](/agneev-blog/assets/img/img_1_24.png?raw=true){: width="125", height="100" }
 
 For the numbers 4 and 6, I flipped the numbers horizontally, and put the results in the other number's folder. Here's what I mean...the images to the left below are the original, and to the right the flipped versions.
 
-![Image_25](/agneev-blog/assets/img/img_1_25.png?raw=true){: width="150", height="125" }
-![Image_26](/agneev-blog/assets/img/img_1_26.png?raw=true){: width="150", height="125" }
+![Image_25](/agneev-blog/assets/img/img_1_25.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_26](/agneev-blog/assets/img/img_1_26.png?raw=true){: width="125", height="100" }
 
-![Image_27](/agneev-blog/assets/img/img_1_27.png?raw=true){: width="150", height="125" }
-![Image_28](/agneev-blog/assets/img/img_1_28.png?raw=true){: width="150", height="125" }
+![Image_27](/agneev-blog/assets/img/img_1_27.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_28](/agneev-blog/assets/img/img_1_28.png?raw=true){: width="125", height="100" }

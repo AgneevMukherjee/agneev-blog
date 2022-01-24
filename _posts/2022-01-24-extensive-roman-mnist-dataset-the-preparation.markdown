@@ -70,7 +70,7 @@ Although this was optional, I chose to undertake this conversion anyway. Since t
 
 ## Data manipulation for augmentation
 
-Now, even after gathering my own data, I ended up with less than 6000 images. How to boost the numbers further? One method is via manipulating the existing images. An easy way to do this is flipping the images using OpenCV's flip method. The small versions of 1, 2, 3 and 10 can be flipped horizontally, while their capital versions can be flipped either horizontally and vertically. For 5, only the horizontal flip is meaningful. Examples:
+Now, even after gathering my own data, I ended up with less than 6000 images. How to boost the numbers further? One method is via manipulating the existing images. An easy way to do this is flipping the images using OpenCV's flip method. The small versions of 1, 2, 3 and 10 can be flipped horizontally, while their capital versions can be flipped either horizontally and vertically. For 5, only the horizontal flip is meaningful, while for 9, only the capital 9 can be flipped vertically. Examples:
 
 ![Image_19](/agneev-blog/assets/img/img_1_19.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_20](/agneev-blog/assets/img/img_1_20.png?raw=true){: width="125", height="100" }
@@ -88,3 +88,11 @@ For the numbers 4 and 6, I flipped the numbers horizontally, and put the results
 
 ![Image_27](/agneev-blog/assets/img/img_1_27.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_28](/agneev-blog/assets/img/img_1_28.png?raw=true){: width="125", height="100" }
+
+Obviously some flipped images had to be eliminated because the flipped version didn't quite look right, while in some others, some manual changes were necessary:
+
+![Image_29](/agneev-blog/assets/img/img_1_29.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_30](/agneev-blog/assets/img/img_1_30.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_31](/agneev-blog/assets/img/img_1_31.png?raw=true){: width="125", height="100" }
+
+Unfortunately, no sensible flips are possible for the numbers 7 and 8, and so these therefore need to be augmented in a different way.

@@ -96,6 +96,7 @@ Obviously some flipped images had to be eliminated because the flipped version d
 ![Image_31](/agneev-blog/assets/img/img_1_31.png?raw=true){: width="125", height="100" }
 
 Unfortunately, no sensible flips are possible for the numbers 7 and 8, and so these therefore need to be augmented in a different way. I manually added an ‘i’ to vii’s and removed an ‘i’ from viii’s, as shown below (original to the right in each pair). While effective, this method was laborious and time-consuming, taking me over half an hour to generate a hundred images.
+
 ![Image_32](/agneev-blog/assets/img/img_1_32.png?raw=true){: width="150", height="125" }
 ![Image_33](/agneev-blog/assets/img/img_1_33.png?raw=true){: width="150", height="125" }
 ![Image_34](/agneev-blog/assets/img/img_1_34.png?raw=true){: width="150", height="125" }

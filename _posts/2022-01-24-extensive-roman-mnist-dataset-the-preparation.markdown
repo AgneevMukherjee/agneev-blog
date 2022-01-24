@@ -2,7 +2,8 @@
 layout: post
 title:  "1. Extensive Roman MNIST dataset – the preparation"
 date:   2022-01-24 12:00:00 +0100
-categories: general
+category: data science
+categories:
 ---
 ## A novel data science competition...
 
@@ -45,3 +46,24 @@ Eliminating all the bad images left something like 2500 images in all, well belo
 ![Image_14](/agneev-blog/assets/img/img_1_14.png?raw=true){: width="150", height="125" }
 ![Image_15](/agneev-blog/assets/img/img_1_15.png?raw=true){: width="150", height="125" }
 ![Image_16](/agneev-blog/assets/img/img_1_16.png?raw=true){: width="150", height="125" }
+
+## Data quantisation and manipulation
+
+The organisers provided a script for optionally processing the added images so as to make them more similar to data already provided. The script below, which uses the OpenCV library, loads the images in grayscale mode and converts all the pixels that aren't very dark (brightness of 43 or less) to white. The results can be seen below, with an original image to the left, and the quantised image to the right.
+
+{% highlight ruby %}
+def convert_images(input_folder, output_folder):
+    Path(output_folder).mkdir(parents=True, exist_ok=True)
+    input_files = glob(os.path.join(input_folder, "*.png"))
+    for f in input_files:
+        image = cv2.imread(f, cv2.IMREAD_GRAYSCALE)
+        # quantize
+        image = (image // 43) * 43
+        image[image > 43] = 255
+        cv2.imwrite(os.path.join(output_folder, os.path.basename(f)), image)
+{% endhighlight %}
+
+![Image_17](/agneev-blog/assets/img/img_1_17.png?raw=true){: width="150", height="125" }
+![Image_18](/agneev-blog/assets/img/img_1_18.png?raw=true){: width="150", height="125" }
+
+Although this was optional, I chose to undertake this conversion anyway. Since the data provided was in black and white, I felt the test data was unlikely to be in colour, and so would probably resemble the processed images more than the original colour versions (this turned out to be true, btw).

@@ -91,7 +91,7 @@ For the numbers 4 and 6, I flipped the numbers horizontally, and put the results
 ![Image_28](/agneev-blog/assets/img/img_1_28.png?raw=true){: width="125", height="100" }
 
 <br/><br/>
-Obviously some flipped images had to be eliminated because the flipped version didn't quite look right (see the 4 below), while in some others, some manual changes were necessary (the dot of the flipped 9 moved to the top):
+Obviously some flipped images had to be eliminated because the flipped version didn't quite look right (see the 4 below), while in some others, some manual changes were necessary (the dot of the flipped 9 had to be moved to the top):
 
 ![Image_29](/agneev-blog/assets/img/img_1_29.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_30](/agneev-blog/assets/img/img_1_30.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;

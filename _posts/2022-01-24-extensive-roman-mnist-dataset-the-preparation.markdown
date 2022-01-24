@@ -22,6 +22,6 @@ As mentioned above, the competition organisers provided some data to get started
 
 The first thing one could see while looking at the images provided was that many of them were...strange. Have a look:
 
-![Image_1](/agneev-blog/_posts/assets/2022-01-24-extensive-roman-mnist-dataset-the-preparation-4c4363dd.png?raw=true)
+![Image_1](/agneev-blog/assets/img/img_1_1.png?raw=true)
 
 While deciding on which image to remove, one must be careful not to make the images left behind _too_ clean - after all, the model must learn to recognise images even if they are not squeaky clean and perfectly written. A good thumb rule, therefore, is to remove images that you yourself are unable to recognise, and keep the rest. The pix shown above are clearly undesirable, and so these, and similar images, were removed.

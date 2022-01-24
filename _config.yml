@@ -30,7 +30,6 @@ twitter_username:
 github_username:  AgneevMukherjee
 
 permalink: /:title/
-bundle exec jekyll serve
 
 # Build settings
 theme: minima

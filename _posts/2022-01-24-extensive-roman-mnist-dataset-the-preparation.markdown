@@ -90,16 +90,16 @@ For the numbers 4 and 6, I flipped the numbers horizontally, and put the results
 ![Image_27](/agneev-blog/assets/img/img_1_27.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_28](/agneev-blog/assets/img/img_1_28.png?raw=true){: width="125", height="100" }
 
-&nbsp;
-&nbsp;
+#  
+
 Obviously some flipped images had to be eliminated because the flipped version didn't quite look right (see the 4 below), while in some others, some manual changes were necessary (the dot of the flipped 9 moved to the top):
 
 ![Image_29](/agneev-blog/assets/img/img_1_29.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_30](/agneev-blog/assets/img/img_1_30.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_31](/agneev-blog/assets/img/img_1_31.png?raw=true){: width="125", height="100" }
 
-&nbsp;
-&nbsp;
+#  
+
 Unfortunately, no sensible flips are possible for the numbers 7 and 8, and so these therefore need to be augmented in a different way. I manually added an ‘i’ to vii’s and removed an ‘i’ from viii’s, as shown below (original to the right in each pair). While effective, this method was laborious and time-consuming, taking me over half an hour to generate a hundred images.
 
 ![Image_32](/agneev-blog/assets/img/img_1_32.png?raw=true){: width="150", height="125" }

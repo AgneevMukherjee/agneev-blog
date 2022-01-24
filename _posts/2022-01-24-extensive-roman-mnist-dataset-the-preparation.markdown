@@ -89,15 +89,17 @@ For the numbers 4 and 6, I flipped the numbers horizontally, and put the results
 
 ![Image_27](/agneev-blog/assets/img/img_1_27.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_28](/agneev-blog/assets/img/img_1_28.png?raw=true){: width="125", height="100" }
+<pre>
 
-
+</pre>
 Obviously some flipped images had to be eliminated because the flipped version didn't quite look right (see the 4 below), while in some others, some manual changes were necessary (the dot of the flipped 9 moved to the top):
 
 ![Image_29](/agneev-blog/assets/img/img_1_29.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_30](/agneev-blog/assets/img/img_1_30.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_31](/agneev-blog/assets/img/img_1_31.png?raw=true){: width="125", height="100" }
+<pre>
 
-
+</pre>
 Unfortunately, no sensible flips are possible for the numbers 7 and 8, and so these therefore need to be augmented in a different way. I manually added an ‘i’ to vii’s and removed an ‘i’ from viii’s, as shown below (original to the right in each pair). While effective, this method was laborious and time-consuming, taking me over half an hour to generate a hundred images.
 
 ![Image_32](/agneev-blog/assets/img/img_1_32.png?raw=true){: width="150", height="125" }
@@ -110,3 +112,5 @@ Overall, while the flipping and manual modification methods worked, they did not
 ## Generate synthetic data
 
 In the absence of enough 'real' or 'augmented' data, synthetic data is a plausible means of increasing data availability, provided the synthetic data is similar enough to the real data. I therefore decided to see how to generate artificial images to boost the number of images. For this, Generative Adversarial Networks (GANs) seemed to be the ideal choice, and hence I first tried them. However, the numbers generated were either virtually identical to those fed, defeating the purpose, or were unrecognisable.
+
+I then decided on a different technique. The Roman numbers in question are all composed of three letters – i, v and x – and hence I decided to compose synthetic numerals based on open-source handwritten datasets. I tried different datasets, including the [HASYv2 dataset](https://www.kaggle.com/martinthoma/hasyv2-dataset-friend-of-mnist) and the [T-H-E dataset](https://github.com/bartosgaye/thedataset), but after a trial and error process settled on the [Chars74K](http://www.ee.surrey.ac.uk/CVSSP/demos/chars74k/) and the [EMNIST](https://arxiv.org/abs/1702.05373v1) datasets. This was because I felt that these datasets possessed diverse and realistic letters, while also being relatively easy to manipulate into the different numbers.

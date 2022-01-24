@@ -46,7 +46,6 @@ Eliminating all the bad images left something like 2500 images in all, well belo
 ![Image_14](/agneev-blog/assets/img/img_1_14.png?raw=true){: width="150", height="125" }
 ![Image_15](/agneev-blog/assets/img/img_1_15.png?raw=true){: width="150", height="125" }
 ![Image_16](/agneev-blog/assets/img/img_1_16.png?raw=true){: width="150", height="125" }
-
 <br/><br/>
 
 ## Data quantisation

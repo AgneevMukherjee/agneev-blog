@@ -81,6 +81,7 @@ Now, even after gathering my own data, I ended up with less than 6000 images. Ho
 ![Image_23](/agneev-blog/assets/img/img_1_23.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_24](/agneev-blog/assets/img/img_1_24.png?raw=true){: width="125", height="100" }
 
+
 For the numbers 4 and 6, I flipped the numbers horizontally, and put the results in the other number's folder. Here's what I mean...the images to the left below are the original, and to the right the flipped versions.
 
 ![Image_25](/agneev-blog/assets/img/img_1_25.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
@@ -89,11 +90,13 @@ For the numbers 4 and 6, I flipped the numbers horizontally, and put the results
 ![Image_27](/agneev-blog/assets/img/img_1_27.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_28](/agneev-blog/assets/img/img_1_28.png?raw=true){: width="125", height="100" }
 
+
 Obviously some flipped images had to be eliminated because the flipped version didn't quite look right (see the 4 below), while in some others, some manual changes were necessary (the dot of the flipped 9 moved to the top):
 
 ![Image_29](/agneev-blog/assets/img/img_1_29.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_30](/agneev-blog/assets/img/img_1_30.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_31](/agneev-blog/assets/img/img_1_31.png?raw=true){: width="125", height="100" }
+
 
 Unfortunately, no sensible flips are possible for the numbers 7 and 8, and so these therefore need to be augmented in a different way. I manually added an ‘i’ to vii’s and removed an ‘i’ from viii’s, as shown below (original to the right in each pair). While effective, this method was laborious and time-consuming, taking me over half an hour to generate a hundred images.
 
@@ -103,3 +106,7 @@ Unfortunately, no sensible flips are possible for the numbers 7 and 8, and so th
 ![Image_35](/agneev-blog/assets/img/img_1_35.png?raw=true){: width="150", height="125" }
 
 Overall, while the flipping and manual modification methods worked, they did not add all that much diversity to the dataset, and the manual manipulation in particular was very time consuming. I therefore used another method to generate some more images.
+
+## Generate synthetic data
+
+In the absence of enough 'real' or 'augmented' data, synthetic data is a plausible means of increasing data availability, provided the synthetic data is similar enough to the real data. I therefore decided to see how to generate artificial images to boost the number of images. For this, Generative Adversarial Networks (GANs) seemed to be the ideal choice, and hence I first tried them. However, the numbers generated were either virtually identical to those fed, defeating the purpose, or were unrecognisable.

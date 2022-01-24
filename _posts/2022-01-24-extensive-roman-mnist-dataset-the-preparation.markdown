@@ -22,13 +22,26 @@ As mentioned above, the competition organisers provided some data to get started
 
 The first thing one could see while looking at the images provided was that many of them were...strange. Have a look:
 
-![Image_1](/agneev-blog/assets/img/img_1_1.png?raw=true){: width="125", height="125" }
-![Image_2](/agneev-blog/assets/img/img_1_2.png?raw=true){: width="125", height="125" }
-![Image_3](/agneev-blog/assets/img/img_1_3.png?raw=true){: width="125", height="125" }
-![Image_4](/agneev-blog/assets/img/img_1_4.png?raw=true){: width="125", height="125" }
-![Image_5](/agneev-blog/assets/img/img_1_5.png?raw=true){: width="125", height="125" }
-![Image_6](/agneev-blog/assets/img/img_1_6.png?raw=true){: width="125", height="125" }
-![Image_7](/agneev-blog/assets/img/img_1_7.png?raw=true){: width="125", height="125" }
-![Image_8](/agneev-blog/assets/img/img_1_8.png?raw=true){: width="125", height="125" }
+![Image_1](/agneev-blog/assets/img/img_1_1.png?raw=true){: width="150", height="125" }
+![Image_2](/agneev-blog/assets/img/img_1_2.png?raw=true){: width="150", height="125" }
+![Image_3](/agneev-blog/assets/img/img_1_3.png?raw=true){: width="150", height="125" }
+![Image_4](/agneev-blog/assets/img/img_1_4.png?raw=true){: width="150", height="125" }
+![Image_5](/agneev-blog/assets/img/img_1_5.png?raw=true){: width="150", height="125" }
+![Image_6](/agneev-blog/assets/img/img_1_6.png?raw=true){: width="150", height="125" }
+![Image_7](/agneev-blog/assets/img/img_1_7.png?raw=true){: width="150", height="125" }
+![Image_8](/agneev-blog/assets/img/img_1_8.png?raw=true){: width="150", height="125" }
 
-While deciding on which image to remove, one must be careful not to make the images left behind _too_ clean - after all, the model must learn to recognise images even if they are not squeaky clean and perfectly written. A good thumb rule, therefore, is to remove images that you yourself are unable to recognise, and keep the rest. The pix shown above are clearly undesirable, and so these, and similar images, were removed.
+While deciding on which image to remove, one must be careful not to make the images left behind _too_ clean - after all, the model must learn to recognise images even if they are not squeaky clean and perfectly written. A good thumb rule, therefore, is to remove images that you yourself are unable to recognise, and keep the rest. The pix shown above are clearly undesirable, and so these, and similar images, were removed. There were also several instances of images being in the wrong folder (e.g. 5 or 10 in the folder for 2), and these were put in the right place.
+
+## Gathering own data
+
+Eliminating all the bad images left something like 2500 images in all, well below the max limit of 10,000. In general, deep learning systems tend to perform better with more data, which meant that gathering more images snapped in different settings would be a good way to make the dataset more diverse and robust. My way of doing this was relatively straightforward – I clicked pictures of numbers I wrote myself in a variety of styles and conditions, and asked as many relatives and friends as I could, without their thinking I was crazy, to send me their handwritten Roman numerals. Chopping the images into the individual numbers was a surprisingly time-consuming and laborious task, and one which made me appreciate afresh the challenges in gathering good quality data. Nevertheless, I was able to gather 300+ images for each number. At the time, I didn’t know whether these resembled the test data or not (spoiler: they didn't), but I anyway attempted to gather the most diverse set of images possible. Some samples are given below.
+
+![Image_9](/agneev-blog/assets/img/img_1_9.png?raw=true){: width="150", height="125" }
+![Image_10](/agneev-blog/assets/img/img_1_10.png?raw=true){: width="150", height="125" }
+![Image_11](/agneev-blog/assets/img/img_1_11.png?raw=true){: width="150", height="125" }
+![Image_12](/agneev-blog/assets/img/img_1_12.png?raw=true){: width="150", height="125" }
+![Image_13](/agneev-blog/assets/img/img_1_13.png?raw=true){: width="150", height="125" }
+![Image_14](/agneev-blog/assets/img/img_1_14.png?raw=true){: width="150", height="125" }
+![Image_15](/agneev-blog/assets/img/img_1_15.png?raw=true){: width="150", height="125" }
+![Image_16](/agneev-blog/assets/img/img_1_16.png?raw=true){: width="150", height="125" }

@@ -22,4 +22,4 @@ As mentioned above, the competition organisers provided some data to get started
 
 The first thing one could see while looking at the images provided was that many of them were...strange. Have a look:
 
-![Image 1](assets/2022-01-24-extensive-roman-mnist-dataset-the-preparation-4c4363dd.png?raw=true)
+![Image 1](/assets/2022-01-24-extensive-roman-mnist-dataset-the-preparation-4c4363dd.png?raw=true)

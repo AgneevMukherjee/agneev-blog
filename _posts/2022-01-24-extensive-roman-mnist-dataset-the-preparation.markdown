@@ -23,12 +23,12 @@ As mentioned above, the competition organisers provided some data to get started
 The first thing one could see while looking at the images provided was that many of them were...strange. Have a look:
 
 ![Image_1](/agneev-blog/assets/img/img_1_1.png?raw=true){: width="125", height="125" }
-![Image_2](/agneev-blog/assets/img/img_1_2.png?raw=true)
-![Image_3](/agneev-blog/assets/img/img_1_3.png?raw=true)
-![Image_4](/agneev-blog/assets/img/img_1_4.png?raw=true)
-![Image_5](/agneev-blog/assets/img/img_1_5.png?raw=true)
-![Image_6](/agneev-blog/assets/img/img_1_6.png?raw=true)
-![Image_7](/agneev-blog/assets/img/img_1_7.png?raw=true)
-![Image_8](/agneev-blog/assets/img/img_1_8.png?raw=true)
+![Image_2](/agneev-blog/assets/img/img_1_2.png?raw=true){: width="125", height="125" }
+![Image_3](/agneev-blog/assets/img/img_1_3.png?raw=true){: width="125", height="125" }
+![Image_4](/agneev-blog/assets/img/img_1_4.png?raw=true){: width="125", height="125" }
+![Image_5](/agneev-blog/assets/img/img_1_5.png?raw=true){: width="125", height="125" }
+![Image_6](/agneev-blog/assets/img/img_1_6.png?raw=true){: width="125", height="125" }
+![Image_7](/agneev-blog/assets/img/img_1_7.png?raw=true){: width="125", height="125" }
+![Image_8](/agneev-blog/assets/img/img_1_8.png?raw=true){: width="125", height="125" }
 
 While deciding on which image to remove, one must be careful not to make the images left behind _too_ clean - after all, the model must learn to recognise images even if they are not squeaky clean and perfectly written. A good thumb rule, therefore, is to remove images that you yourself are unable to recognise, and keep the rest. The pix shown above are clearly undesirable, and so these, and similar images, were removed.

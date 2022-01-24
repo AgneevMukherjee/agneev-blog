@@ -22,7 +22,7 @@ As mentioned above, the competition organisers provided some data to get started
 
 The first thing one could see while looking at the images provided was that many of them were...strange. Have a look:
 
-![Image_1](/agneev-blog/assets/img/img_1_1.png?raw=true){: width="25" }
+![Image_1](/agneev-blog/assets/img/img_1_1.png?raw=true){: width="125", height="125" }
 ![Image_2](/agneev-blog/assets/img/img_1_2.png?raw=true)
 ![Image_3](/agneev-blog/assets/img/img_1_3.png?raw=true)
 ![Image_4](/agneev-blog/assets/img/img_1_4.png?raw=true)

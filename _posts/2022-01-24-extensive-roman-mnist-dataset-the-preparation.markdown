@@ -48,6 +48,7 @@ Eliminating all the bad images left something like 2500 images in all, well belo
 ![Image_16](/agneev-blog/assets/img/img_1_16.png?raw=true){: width="150", height="125" }
 
 <br/><br/>
+
 ## Data quantisation
 
 The organisers provided a script for optionally processing the added images so as to make them more similar to data already provided. The script below, which uses the OpenCV library, loads the images in grayscale mode and converts all the pixels that aren't very dark (brightness of 43 or less) to white. The results can be seen below, with an original image to the left, and the quantised image to the right.

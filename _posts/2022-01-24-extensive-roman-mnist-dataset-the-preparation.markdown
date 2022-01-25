@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "1. Extensive Roman MNIST dataset – the preparation"
+title:  "1. YARoMNIST dataset – the preparation"
 date:   2022-01-24 12:00:00 +0100
 category: data science
 categories:
@@ -13,7 +13,7 @@ If you have ever been involved in data science (DS) or machine learning (ML), ev
 
 In June 2021, [Andrew Ng](https://en.wikipedia.org/wiki/Andrew_Ng) announced a [Data-Centric AI competition](https://https-deeplearning-ai.github.io/data-centric-comp/), which turned the problem on its head. Here, the model (a modified ResNet50, which is a convolutional neural network - more on these in a later post...) was kept fixed, and the competitors were asked to modify the image data provided in any way they saw fit, subject to a maximum of 10,000 images. This was an interesting challenge, and in line with Dr. Ng's philosophy that ML technology like neural networks have progressed far enough that major future advances in their application must come not via finetuning their architectures but through improvements in the data fed to these models, an area that has been neglected so far.
 
-So what was the challenge itself? It was to enable the model provided to recognise hand-written Roman numerals. In other words, the competitors had to create a Roman numerals version of the famous [Modified National Institute of Standards and Technology (MNIST)](https://en.wikipedia.org/wiki/MNIST_database) dataset. The winners were selected on two tracks - the best overall leaderboard score, and the most innovative approach, as decided by a jury. Unfortunately, my entries did not finish in the top three in either category, but no matter - it was a great learning experience! This blog post will focus on my dataset preparation, while next week we will look at training the model and evaluating the dataset.
+So what was the challenge itself? It was to enable the model provided to recognise hand-written Roman numerals. In other words, the competitors had to create a Roman numerals version of the famous [Modified National Institute of Standards and Technology (MNIST)](https://en.wikipedia.org/wiki/MNIST_database) dataset. The winners were selected on two tracks - the best overall leaderboard score, and the most innovative approach, as decided by a jury. Unfortunately, my entries did not finish in the top three in either category, but no matter - it was a great learning experience! I wound up creating a pretty interesting dataset, which I named the Yet Another Roman MNIST (YARoMNIST), to distinguish it from all the other Roman MNIST datasets floating around, created by other participants in this competition! This blog post will focus on the dataset preparation, while next week we will look at training the model and evaluating the dataset.
 
 ## The data provided
 
@@ -113,3 +113,17 @@ Overall, while the flipping and manual modification methods worked, they did not
 In the absence of enough 'real' or 'augmented' data, synthetic data is a plausible means of increasing data availability, provided the synthetic data is similar enough to the real data. I therefore decided to see how to generate artificial images to boost the number of images. For this, Generative Adversarial Networks (GANs) seemed to be the ideal choice, and hence I first tried them. However, the numbers generated were either virtually identical to those fed, defeating the purpose, or were unrecognisable.
 
 I then decided on a different technique. The Roman numbers in question are all composed of three letters – i, v and x – and hence I decided to compose synthetic numerals based on open-source handwritten datasets. I tried different datasets, including the [HASYv2 dataset](https://www.kaggle.com/martinthoma/hasyv2-dataset-friend-of-mnist) and the [T-H-E dataset](https://github.com/bartosgaye/thedataset), but after a trial and error process settled on the [Chars74K](http://www.ee.surrey.ac.uk/CVSSP/demos/chars74k/) and the [EMNIST](https://arxiv.org/abs/1702.05373v1) datasets. This was because I felt that these datasets possessed diverse and realistic letters, while also being relatively easy to manipulate into the different numbers.
+
+### Chars74K dataset
+
+The Chars74K dataset contains 3410 handwritten English characters, with 55 samples each of 62 classes. 55 volunteers were used to create the images, so, for instance, the 41st small ‘v’ and the 41st block ‘i’ would have been created by the same individual, something that is of importance when combining the images. Of the 62 classes, only 6 classes (small and block i, v and x) are of interest to us. Samples of the original images are:
+![Image_36](/agneev-blog/assets/img/img_1_36.png?raw=true){: width="100", height="75" }
+![Image_37](/agneev-blog/assets/img/img_1_37.png?raw=true){: width="100", height="75" }
+![Image_38](/agneev-blog/assets/img/img_1_38.png?raw=true){: width="100", height="75" }
+![Image_39](/agneev-blog/assets/img/img_1_39.png?raw=true){: width="100", height="75" }
+![Image_40](/agneev-blog/assets/img/img_1_40.png?raw=true){: width="100", height="75" }
+![Image_41](/agneev-blog/assets/img/img_1_41.png?raw=true){: width="100", height="75" }
+
+The parent images were combined using OpenCV methods into the different numerals. The parent numerals were shifted to the left or the right, and the images were then superimposed. For instance, for creating the number 7, a ‘v’ was shifted to the left, an ‘i’ slightly to the right, and another ‘i’ way to the right. White rectangles were added to cover up the area of the shift, before these images were superimposed (see figure below). To maintain realism, only numerals from the same writer were combined in an image. For example, block letters ‘v’ and ‘i’ from volunteer 23 would only be combined with each other, not with those of any other writer.
+
+As the Chars74K dataset images were composed of thick black lines on a white background, to make them more realistic, I added random levels of Gaussian, uniform and impulse noise to the images, and also dilated them randomly to reduce the letter thickness. Additionally, I manually added horizontal strokes to some capital v’s and x’s to make them more realistic. The original images are large and high quality (1200x900), and these were downsized after modification to 32x32, both to reduce the file sizes and since this would anyway be done prior to feeding to the CNN. The images below show the sequence of making the number 7:

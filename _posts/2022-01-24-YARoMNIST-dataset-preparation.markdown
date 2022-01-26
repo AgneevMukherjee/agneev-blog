@@ -132,7 +132,7 @@ I then decided on a different technique. The Roman numbers in question are all c
 
 ### Chars74K dataset
 
-The Chars74K dataset contains 3410 handwritten English characters, with 55 samples each of 62 classes. 55 volunteers were used to create the images, so, for instance, the 41st small ‘v’ and the 41st block ‘i’ would have been created by the same individual, something that is of importance when combining the images. Of the 62 classes, only 6 classes (small and block i, v and x) are of interest to us. Samples of the original images are:
+The Chars74K dataset contains 3410 handwritten English characters, with 55 samples each of 62 classes. The authors enlisted 55 volunteers to create the images, so, for instance, the 41st small ‘v’ and the 41st block ‘i’ would have been created by the same individual, something that is of importance when combining the images. Of the 62 classes, only 6 classes (small and block i, v and x) are of interest to us. Samples of the original images are:
 {: style="text-align: justify"}
 
 ![Image_36](/agneev-blog/assets/img/img_1_36.png?raw=true){: width="100", height="75" }
@@ -142,7 +142,7 @@ The Chars74K dataset contains 3410 handwritten English characters, with 55 sampl
 ![Image_40](/agneev-blog/assets/img/img_1_40.png?raw=true){: width="100", height="75" }
 ![Image_41](/agneev-blog/assets/img/img_1_41.png?raw=true){: width="100", height="75" }
 
-The parent images were combined using OpenCV methods into the different numerals. The parent numerals were shifted to the left or the right, and the images were then superimposed. For instance, for creating the number 7, a ‘v’ was shifted to the left, an ‘i’ slightly to the right, and another ‘i’ way to the right. White rectangles were added to cover up the area of the shift, before these images were superimposed (see figure below). To maintain realism, only numerals from the same writer were combined in an image. For example, block letters ‘v’ and ‘i’ from volunteer 23 would only be combined with each other, not with those of any other writer.
+I used different OpenCV methods to combine the parent images into the different numerals. First, I shifted the parent numerals to the left or the right and then I superimposed the images. For instance, for creating the number 7, a ‘v’ was shifted to the left, an ‘i’ slightly to the right, and another ‘i’ way to the right. I added white rectangles to cover up the area of the shift before superimposing these images (see figure below). To maintain realism, I only combined numerals from the same writer in an image. For example, block letters ‘v’ and ‘i’ from volunteer 23 would only be combined with each other, not with those of any other writer.
 {: style="text-align: justify"}
 
 As the Chars74K dataset images were composed of thick black lines on a white background, to make them more realistic, I added random levels of Gaussian, uniform and impulse noise to the images, and also dilated them randomly to reduce the letter thickness. Additionally, I manually added horizontal strokes to some capital v’s and x’s to make them more realistic. The original images are large and high quality (1200x900), and these were downsized after modification to 32x32, both to reduce the file sizes and since this would anyway be done prior to feeding to the CNN. The images below show the sequence of making the number 7:

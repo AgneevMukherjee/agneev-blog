@@ -175,7 +175,7 @@ The originals were thus modified and combined into the different numbers as show
 ![Image_62](/agneev-blog/assets/img/img_1_62.png?raw=true){: width="125", height="100" }
 
 <br/><br/>
-As can be seen, the results obtained were passable copies of the numbers, without being so realistic as to eliminate the need for real data. The random addition of noise and dilation made some samples unusable – these were discarded and fresh samples created in their place. Examples:
+As can be seen, the results obtained were passable copies of the numbers, without being so realistic as to eliminate the need for real data. The random addition of noise and dilation made some samples unusable – these I discarded and created fresh samples in their place. Examples:
 {: style="text-align: justify"}
 
 ![Image_63](/agneev-blog/assets/img/img_1_63.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -211,7 +211,8 @@ The procedure I used for these images was a little different from that used for 
 ![Image_80](/agneev-blog/assets/img/img_1_80.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_81](/agneev-blog/assets/img/img_1_81.png?raw=true){: width="100", height="100" }
 
-Some of the images created in this fashion are shown below:
+Some of the images created in this fashion are shown below, and the imperfect code used to make them can be found [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/emnist-based-roman-numbers.ipynb).
+{: style="text-align: justify"}
 
 ![Image_82](/agneev-blog/assets/img/img_1_82.png?raw=true){: width="80", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_83](/agneev-blog/assets/img/img_1_83.png?raw=true){: width="80", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -219,6 +220,7 @@ Some of the images created in this fashion are shown below:
 ![Image_85](/agneev-blog/assets/img/img_1_85.png?raw=true){: width="80", height="80" }
 
 <br/><br/>
+
 ## Conclusion
 
 So that's it, we have seen the various methods I used to create the YARoMNIST dataset. Next week we will look at evaluating this dataset using a cut-off Resnet50, as used in the competition, as well as full Resnet versions. So long!

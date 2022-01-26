@@ -32,7 +32,7 @@ github_username:  AgneevMukherjee
 permalink: /:title/
 
 # Build settings
-theme: jekyll-theme-cayman
+theme: minima
 
 plugins:
   - jekyll-feed

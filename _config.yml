@@ -32,13 +32,12 @@ github_username:  AgneevMukherjee
 permalink: /:title/
 
 # Build settings
-# theme: minima
-remote_theme: pages-themes/cayman@v0.2.0
+theme: minima
+
 plugins:
   - jekyll-feed
   - jemoji
   - jekyll-seo-tag
-  - jekyll-remote-theme
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

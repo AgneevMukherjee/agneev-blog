@@ -220,7 +220,6 @@ Some of the images created in this fashion are shown below, and the imperfect co
 ![Image_85](/agneev-blog/assets/img/img_1_85.png?raw=true){: width="80", height="80" }
 
 <br/><br/>
-
 ## Conclusion
 
 So that's it, we have seen the various methods I used to create the YARoMNIST dataset. Next week we will look at evaluating this dataset using a cut-off Resnet50, as used in the competition, as well as full Resnet versions. So long!

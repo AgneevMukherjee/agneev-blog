@@ -128,3 +128,33 @@ The Chars74K dataset contains 3410 handwritten English characters, with 55 sampl
 The parent images were combined using OpenCV methods into the different numerals. The parent numerals were shifted to the left or the right, and the images were then superimposed. For instance, for creating the number 7, a ‘v’ was shifted to the left, an ‘i’ slightly to the right, and another ‘i’ way to the right. White rectangles were added to cover up the area of the shift, before these images were superimposed (see figure below). To maintain realism, only numerals from the same writer were combined in an image. For example, block letters ‘v’ and ‘i’ from volunteer 23 would only be combined with each other, not with those of any other writer.
 
 As the Chars74K dataset images were composed of thick black lines on a white background, to make them more realistic, I added random levels of Gaussian, uniform and impulse noise to the images, and also dilated them randomly to reduce the letter thickness. Additionally, I manually added horizontal strokes to some capital v’s and x’s to make them more realistic. The original images are large and high quality (1200x900), and these were downsized after modification to 32x32, both to reduce the file sizes and since this would anyway be done prior to feeding to the CNN. The images below show the sequence of making the number 7:
+
+![Image_42](/agneev-blog/assets/img/img_1_42.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_43](/agneev-blog/assets/img/img_1_43.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_44](/agneev-blog/assets/img/img_1_44.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_45](/agneev-blog/assets/img/img_1_45.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_46](/agneev-blog/assets/img/img_1_46.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_47](/agneev-blog/assets/img/img_1_47.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_48](/agneev-blog/assets/img/img_1_48.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_49](/agneev-blog/assets/img/img_1_49.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_50](/agneev-blog/assets/img/img_1_50.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_51](/agneev-blog/assets/img/img_1_51.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_52](/agneev-blog/assets/img/img_1_52.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_53](/agneev-blog/assets/img/img_1_53.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_54](/agneev-blog/assets/img/img_1_54.png?raw=true){: width="125", height="100" }
+
+The originals were thus modified and combined into the different numbers as shown in the examples below:
+
+![Image_55](/agneev-blog/assets/img/img_1_55.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_56](/agneev-blog/assets/img/img_1_56.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_57](/agneev-blog/assets/img/img_1_57.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_58](/agneev-blog/assets/img/img_1_58.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_59](/agneev-blog/assets/img/img_1_59.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_60](/agneev-blog/assets/img/img_1_60.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_61](/agneev-blog/assets/img/img_1_61.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_62](/agneev-blog/assets/img/img_1_62.png?raw=true){: width="125", height="100" }
+
+As can be seen, the results obtained were passable copies of the numbers, without being so realistic as to obviate the need for real data. The random addition of noise and dilation made some samples unusable – these were discarded and fresh samples created in their place. Examples:
+
+![Image_63](/agneev-blog/assets/img/img_1_63.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_64](/agneev-blog/assets/img/img_1_64.png?raw=true){: width="125", height="100" }

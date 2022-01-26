@@ -2,8 +2,7 @@
 layout: post
 title:  "1. YARoMNIST dataset – the preparation"
 date:   2022-01-24 12:00:00 +0100
-category: data science
-categories:
+category: ['data science', 'computer vision', 'python']
 ---
 ## A novel data science competition...
 

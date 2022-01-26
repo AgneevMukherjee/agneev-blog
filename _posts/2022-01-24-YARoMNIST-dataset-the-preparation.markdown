@@ -160,3 +160,34 @@ As can be seen, the results obtained were passable copies of the numbers, withou
 ![Image_64](/agneev-blog/assets/img/img_1_64.png?raw=true){: width="125", height="100" }
 
 The imperfect code can be found [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/chars74k-roman-numbers.ipynb).
+
+### EMNIST dataset
+
+The EMNIST (Extended MNIST) dataset has over 800,000 images in an MNIST-like format, making it an attractive option for this task. The dataset has six different splits, of which the ‘By Class’ split was used. There are 62 classes in this split, containing an uneven number of samples per class. I again was only interested in only 6 classes (block and small i, v and x), each of which has over 2000 samples in the EMNIST dataset.
+
+The procedure used for these images was a little different from that used for the previous dataset. The images had to first be rotated and colour-inverted. Since, unlike the earlier dataset, the EMNIST images are square (28x28), for numbers like 7 and 8, the x-dimension of the images had to be increased to ensure the final figure fit into the image. After this, the parent numbers were shifted left or right as described above, and superimposed. Small amounts of Gaussian, uniform and impulse noise were added. As the combined image was initially very faint due to masking applied, a darkening method, converting pixels below 200 in intensity to 50, was applied before conversion to 3 channels. Finally, as the images were already small, they were not resized. The sequence can be seen below for a number 8:
+
+![Image_65](/agneev-blog/assets/img/img_1_65.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_66](/agneev-blog/assets/img/img_1_66.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_67](/agneev-blog/assets/img/img_1_67.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_68](/agneev-blog/assets/img/img_1_68.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_69](/agneev-blog/assets/img/img_1_69.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_70](/agneev-blog/assets/img/img_1_70.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_71](/agneev-blog/assets/img/img_1_71.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_72](/agneev-blog/assets/img/img_1_72.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_73](/agneev-blog/assets/img/img_1_73.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_74](/agneev-blog/assets/img/img_1_74.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_75](/agneev-blog/assets/img/img_1_75.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_76](/agneev-blog/assets/img/img_1_76.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_77](/agneev-blog/assets/img/img_1_77.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_78](/agneev-blog/assets/img/img_1_78.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_79](/agneev-blog/assets/img/img_1_79.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_80](/agneev-blog/assets/img/img_1_80.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_81](/agneev-blog/assets/img/img_1_81.png?raw=true){: width="100", height="100" }
+
+Some of the images created in this fashion are shown below:
+
+![Image_82](/agneev-blog/assets/img/img_1_82.png?raw=true){: width="80", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_83](/agneev-blog/assets/img/img_1_83.png?raw=true){: width="80", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_84](/agneev-blog/assets/img/img_1_84.png?raw=true){: width="80", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_85](/agneev-blog/assets/img/img_1_85.png?raw=true){: width="80", height="80" }

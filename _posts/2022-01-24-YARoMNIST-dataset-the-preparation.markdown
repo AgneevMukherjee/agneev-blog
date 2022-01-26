@@ -158,3 +158,5 @@ As can be seen, the results obtained were passable copies of the numbers, withou
 
 ![Image_63](/agneev-blog/assets/img/img_1_63.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_64](/agneev-blog/assets/img/img_1_64.png?raw=true){: width="125", height="100" }
+
+The imperfect code can be found [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/chars74k-roman-numbers.ipynb).

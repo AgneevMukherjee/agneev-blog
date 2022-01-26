@@ -218,7 +218,6 @@ Some of the images created in this fashion are shown below, and the imperfect co
 ![Image_83](/agneev-blog/assets/img/img_1_83.png?raw=true){: width="80", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_84](/agneev-blog/assets/img/img_1_84.png?raw=true){: width="80", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_85](/agneev-blog/assets/img/img_1_85.png?raw=true){: width="80", height="80" }
-
 <br/><br/>
 ## Conclusion
 

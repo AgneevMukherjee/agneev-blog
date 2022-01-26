@@ -36,7 +36,7 @@ While deciding on which image to remove, one must be careful not to make the ima
 
 ## Gathering own data
 
-Eliminating all the bad images left something like 2500 images in all, well below the max limit of 10,000. In general, deep learning systems tend to perform better with more data, which meant that gathering more images snapped in different settings would be a good way to make the dataset more diverse and robust. My way of doing this was relatively straightforward – I clicked pictures of numbers I wrote myself in a variety of styles and conditions, and asked as many relatives and friends as I could, without their thinking I was crazy, to send me their handwritten Roman numerals. Chopping the images into the individual numbers was a surprisingly time-consuming and laborious task, and one which made me appreciate afresh the challenges in gathering good quality data. Nevertheless, I was able to gather 300+ images for each number. At the time, I didn’t know whether these resembled the test data or not (spoiler: they didn't), but I anyway attempted to gather the most diverse set of images possible. Some samples are given below.
+Eliminating all the bad images left something like 2500 images in all, well below the max limit of 10,000. In general, deep learning systems tend to perform better with more data, which meant that gathering more images snapped in different settings would be a good way to make the dataset more diverse and robust. My way of doing this was relatively straightforward – I clicked pictures of numbers I wrote myself in a variety of styles and conditions, and asked as many relatives and friends as I could, without their thinking I was crazy, to send me their handwritten Roman numerals (thanks everyone!). Chopping the images into the individual numbers was a surprisingly time-consuming and laborious task, and one which made me appreciate afresh the challenges in gathering good quality data. Nevertheless, I was able to gather 300+ images for each number. At the time, I didn’t know whether these resembled the test data or not (spoiler: they didn't), but I anyway attempted to gather the most diverse set of images possible. Some samples are given below.
 
 ![Image_9](/agneev-blog/assets/img/img_1_9.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_10](/agneev-blog/assets/img/img_1_10.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -129,20 +129,21 @@ The parent images were combined using OpenCV methods into the different numerals
 
 As the Chars74K dataset images were composed of thick black lines on a white background, to make them more realistic, I added random levels of Gaussian, uniform and impulse noise to the images, and also dilated them randomly to reduce the letter thickness. Additionally, I manually added horizontal strokes to some capital v’s and x’s to make them more realistic. The original images are large and high quality (1200x900), and these were downsized after modification to 32x32, both to reduce the file sizes and since this would anyway be done prior to feeding to the CNN. The images below show the sequence of making the number 7:
 
-![Image_42](/agneev-blog/assets/img/img_1_42.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_43](/agneev-blog/assets/img/img_1_43.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_44](/agneev-blog/assets/img/img_1_44.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_45](/agneev-blog/assets/img/img_1_45.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_46](/agneev-blog/assets/img/img_1_46.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_47](/agneev-blog/assets/img/img_1_47.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_48](/agneev-blog/assets/img/img_1_48.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_49](/agneev-blog/assets/img/img_1_49.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_50](/agneev-blog/assets/img/img_1_50.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_51](/agneev-blog/assets/img/img_1_51.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_52](/agneev-blog/assets/img/img_1_52.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_53](/agneev-blog/assets/img/img_1_53.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_42](/agneev-blog/assets/img/img_1_42.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_43](/agneev-blog/assets/img/img_1_43.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_44](/agneev-blog/assets/img/img_1_44.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_45](/agneev-blog/assets/img/img_1_45.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_46](/agneev-blog/assets/img/img_1_46.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_47](/agneev-blog/assets/img/img_1_47.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_48](/agneev-blog/assets/img/img_1_48.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_49](/agneev-blog/assets/img/img_1_49.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_50](/agneev-blog/assets/img/img_1_50.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_51](/agneev-blog/assets/img/img_1_51.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_52](/agneev-blog/assets/img/img_1_52.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_53](/agneev-blog/assets/img/img_1_53.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_54](/agneev-blog/assets/img/img_1_54.png?raw=true){: width="125", height="100" }
 
+<br/><br/>
 The originals were thus modified and combined into the different numbers as shown in the examples below:
 
 ![Image_55](/agneev-blog/assets/img/img_1_55.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -154,12 +155,14 @@ The originals were thus modified and combined into the different numbers as show
 ![Image_61](/agneev-blog/assets/img/img_1_61.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_62](/agneev-blog/assets/img/img_1_62.png?raw=true){: width="125", height="100" }
 
-As can be seen, the results obtained were passable copies of the numbers, without being so realistic as to obviate the need for real data. The random addition of noise and dilation made some samples unusable – these were discarded and fresh samples created in their place. Examples:
+<br/><br/>
+As can be seen, the results obtained were passable copies of the numbers, without being so realistic as to eliminate the need for real data. The random addition of noise and dilation made some samples unusable – these were discarded and fresh samples created in their place. Examples:
 
 ![Image_63](/agneev-blog/assets/img/img_1_63.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_64](/agneev-blog/assets/img/img_1_64.png?raw=true){: width="125", height="100" }
 
-The imperfect code can be found [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/chars74k-roman-numbers.ipynb).
+<br/><br/>
+The imperfect code for carrying out the above can be found [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/chars74k-roman-numbers.ipynb). Now on to the EMNIST dataset...
 
 ### EMNIST dataset
 

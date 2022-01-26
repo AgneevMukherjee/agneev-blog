@@ -37,7 +37,7 @@ The first thing one could see while looking at the images provided was that many
 ![Image_7](/agneev-blog/assets/img/img_1_7.png?raw=true){: width="125", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_8](/agneev-blog/assets/img/img_1_8.png?raw=true){: width="125", height="100"}
 
-It was clear that these had to go. However, while deciding on which image to remove, I had to be careful not to make the images left behind _too_ clean – after all, the model must learn to recognise images even if they are not squeaky clean and perfectly written. A good thumb rule, therefore, is to remove images that you yourself are unable to recognise, and keep the rest. The pix shown above are clearly undesirable, and so these, and similar images, were removed. There were also several instances of images being in the wrong folder (e.g. 5 or 10 in the folder for 2), and these were put in the right place.
+It was clear that these had to go. However, while deciding on which image to remove, I had to be careful not to make the images left behind _too_ clean – after all, the model must learn to recognise images even if they are not squeaky clean and perfectly written. A good thumb rule in these cases is to remove images that you yourself are unable to recognise, and keep the rest. The pix shown above are clearly undesirable, and so these, and similar images, were removed. There were also several instances of images being in the wrong folder (e.g. 5 or 10 in the folder for 2), and I put these in the right place.
 {: style="text-align: justify"}
 
 ## Gathering own data

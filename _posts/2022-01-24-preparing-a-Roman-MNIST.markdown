@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "1. YARoMNIST dataset – the preparation"
+title:  "1. Preparing a handwritten Roman numerals dataset"
 date:   2022-01-24 12:00:00 +0100
 category: ['data science', 'computer vision', 'python']
 ---
@@ -16,12 +16,12 @@ If you have ever been involved in data science (DS) or machine learning (ML), ev
 In June 2021, [Andrew Ng](https://en.wikipedia.org/wiki/Andrew_Ng) announced a [Data-Centric AI competition](https://https-deeplearning-ai.github.io/data-centric-comp/), which turned the problem on its head. Here, the model (a modified ResNet50, which is a convolutional neural network – more on these in a later post...) was kept fixed, and the competitors were asked to modify the image data provided in any way they saw fit, subject to a maximum of 10,000 images. This was an interesting challenge, and in line with Dr. Ng's philosophy that ML technology like neural networks have progressed far enough that major future advances in their application must come not via finetuning their architectures but through improvements in the data fed to these models, an area that has been neglected so far.
 {: style="text-align: justify"}
 
-So what was the challenge itself? It was to enable the model provided to recognise hand-written Roman numerals. In other words, the competitors had to create a Roman numerals version of the famous [Modified National Institute of Standards and Technology (MNIST)](https://en.wikipedia.org/wiki/MNIST_database) dataset. The winners were selected on two tracks - the best overall leaderboard score, and the most innovative approach, as decided by a jury. Unfortunately, my entries did not finish in the top three in either category, but no matter – it was a great learning experience! I wound up creating a pretty interesting dataset, which I named the Yet Another Roman MNIST (YARoMNIST) dataset, to distinguish it from all the other Roman MNIST datasets floating around, created by other participants in this competition! This blog post will focus on the dataset preparation, while next week we will look at training the model and evaluating the dataset.
+So what was the challenge itself? It was to enable the model provided to recognise hand-written Roman numerals. In other words, the competitors had to create a Roman numerals version of the famous [Modified National Institute of Standards and Technology (MNIST)](https://en.wikipedia.org/wiki/MNIST_database) dataset. The winners were selected on two tracks - the best overall leaderboard score, and the most innovative approach, as decided by a jury. Unfortunately, my entries did not finish in the top three in either category, but no matter – it was a great learning experience! This blog post will focus on the methods I used for the dataset preparation, while next time we will look at training a model on some such datasets.
 {: style="text-align: justify"}
 
 ## The data provided
 
-As mentioned above, the competition organisers provided some data to get started. This data was grouped into two folders – train and val, i.e., training and validation – we will look at these in greater detail next week. Each folder have ten sub-folders – i to x. As you can guess, each subfolder contained images of handwritten Roman numerals, from 1 to 10. The number of images in each folder varied – for the training folders, from 157 to 281, and for the validation folders, from 77 to 84. As part of the challenge, we were free to move images from the training to validation folders or vice versa, as desired, augment or curtail the number of images, or do anything else one saw fit, as long as the _total_ number of images remained below 10,000. A quick glance at the data, though, made clear what the very first step ought to be...
+As mentioned above, the competition organisers provided some data to get started. This data was grouped into two folders – train and val, i.e., [training and validation](https://en.wikipedia.org/wiki/Training,_validation,_and_test_sets). Each folder have ten sub-folders – i to x. As you can guess, each subfolder contained images of handwritten Roman numerals, from 1 to 10. The number of images in each folder varied – for the training folders, from 157 to 281, and for the validation folders, from 77 to 84. As part of the challenge, we were free to move images from the training to validation folders or vice versa, as desired, augment or curtail the number of images, or do anything else one saw fit, as long as the _total_ number of images remained below 10,000. A quick glance at the data, though, made clear what the very first step ought to be...
 {: style="text-align: justify"}
 
 ## Removing bad data
@@ -221,5 +221,5 @@ Some of the images created in this fashion are shown below, and the imperfect co
 <br/><br/>
 ## Conclusion
 
-So that's it, we have seen the various methods I used to create the YARoMNIST dataset. Next time we will look at evaluating this dataset using a cut-off Resnet50, as used in the competition, as well as full Resnet versions. So long!
+So that's it, we have seen the various methods I used to create my submissions. Next time we will look at evaluating some of my created datasets using a cut-off Resnet50, as used in the competition, as well as full Resnet versions. So long!
 {: style="text-align: justify"}

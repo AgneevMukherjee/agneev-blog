@@ -28,7 +28,7 @@ url: "https://AgneevMukherjee.github.io" # the base hostname & protocol for your
 destination: ./docs
 twitter_username:
 github_username:  AgneevMukherjee
-linkedin: agneevmukherjee
+linkedin_username: agneevmukherjee
 
 permalink: /:title/
 

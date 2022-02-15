@@ -3,7 +3,7 @@
 
 @import "minima";
 
-pre.highlight {
-  max-height: 200px; /* Change to your desired max height */
+.highlight { background: #fff;
+  max-height: 300px; /* Change to your desired max height */
   overflow-y: scroll;
 }

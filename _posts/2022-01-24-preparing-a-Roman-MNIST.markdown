@@ -4,14 +4,13 @@ title:  "1. Preparing a handwritten Roman numerals dataset"
 date:   2022-01-24 12:00:00 +0100
 category: ['data science', 'computer vision', 'python']
 ---
-## A novel data science competition...
+## A novel data science competition... <a id="novel"></a>
 
 If you have ever been involved in data science (DS) or machine learning (ML), even briefly or tangentially, you will be well aware of data science competitions. These competitions are an invaluable learning experience for beginning data scientists, while even seasoned professionals often continue participating in these to keep their skills fresh, learn new tricks, interact with fellow competitors, or simply for the fun of it. Oh, and many competitions offer a fair amount of cash to further sweeten the deal...:wink:
 {: style="text-align: justify"}
 
 [Kaggle](https://www.kaggle.com/competitions) is the largest and most famous DS/ML competition platform, although there are tons of others - [DrivenData](https://www.drivendata.org/competitions/), [AIcrowd](https://www.aicrowd.com/challenges), [Xeek](https://xeek.ai/challenges), [Zindi](https://zindi.africa/competitions), etc. Most of the competitions held by these platforms follow a similar pattern – the competitors are provided with a dataset and asked to make a model that provides the most accurate predictions for the target variable(s). In other words, the data is held constant, and the models tuned to fit the data.
 {: style="text-align: justify"}
-<!--{: style="color:gray; font-size: 80%; text-align: center;"} -->
 
 In June 2021, [Andrew Ng](https://en.wikipedia.org/wiki/Andrew_Ng) announced a [Data-Centric AI competition](https://https-deeplearning-ai.github.io/data-centric-comp/), which turned the problem on its head. Here, the model (a modified ResNet50, which is a convolutional neural network – more on these in a later post...) was kept fixed, and the competitors were asked to modify the image data provided in any way they saw fit, subject to a maximum of 10,000 images. This was an interesting challenge, and in line with Dr. Ng's philosophy that ML technology like neural networks have progressed far enough that major future advances in their application must come not via finetuning their architectures but through improvements in the data fed to these models, an area that has been neglected so far.
 {: style="text-align: justify"}
@@ -19,12 +18,12 @@ In June 2021, [Andrew Ng](https://en.wikipedia.org/wiki/Andrew_Ng) announced a [
 So what was the challenge itself? It was to enable the model provided to recognise hand-written Roman numerals. In other words, the competitors had to create a Roman numerals version of the famous [Modified National Institute of Standards and Technology (MNIST)](https://en.wikipedia.org/wiki/MNIST_database) dataset. The winners were selected on two tracks - the best overall leaderboard score, and the most innovative approach, as decided by a jury. Unfortunately, my entries did not finish in the top three in either category, but no matter – it was a great learning experience! This blog post will focus on the methods I used for the dataset preparation, while next time we will look at training a model on some such datasets.
 {: style="text-align: justify"}
 
-## The data provided
+## The data provided <a id="provided"></a>
 
 As mentioned above, the competition organisers provided some data to get started. This data was grouped into two folders – train and val, i.e., [training and validation](https://en.wikipedia.org/wiki/Training,_validation,_and_test_sets). Each folder have ten sub-folders – i to x. As you can guess, each subfolder contained images of handwritten Roman numerals, from 1 to 10. The number of images in each folder varied – for the training folders, from 157 to 281, and for the validation folders, from 77 to 84. As part of the challenge, we were free to move images from the training to validation folders or vice versa, as desired, augment or curtail the number of images, or do anything else one saw fit, as long as the _total_ number of images remained below 10,000. A quick glance at the data, though, made clear what the very first step ought to be...
 {: style="text-align: justify"}
 
-## Removing bad data
+## Removing bad data <a id="remove"></a>
 
 The first thing one could see while looking at the images provided was that many of them were...strange. Have a look:
 
@@ -40,7 +39,7 @@ The first thing one could see while looking at the images provided was that many
 It was clear that these had to go. However, while deciding on which image to remove, I had to be careful not to make the images left behind _too_ clean – after all, the model must learn to recognise images even if they are not squeaky clean and perfectly written. A good thumb rule in these cases is to remove images that you yourself are unable to recognise, and keep the rest. The pix shown above are clearly undesirable, and so these, and similar images, were removed. There were also several instances of images being in the wrong folder (e.g. 5 or 10 in the folder for 2), and I put these in the right place.
 {: style="text-align: justify"}
 
-## Gathering own data
+## Gathering own data <a id="gather"></a>
 
 Eliminating all the bad images left something like 2500 images in all, well below the max limit of 10,000. In general, deep learning systems tend to perform better with more data, which meant that gathering more images snapped in different settings would be a good way to make the dataset more diverse and robust. My way of doing this was relatively straightforward – I clicked pictures of numbers I wrote myself in a variety of styles and conditions, and asked as many relatives and friends as I could, without their thinking I was crazy, to send me their handwritten Roman numerals (thanks everyone!). Chopping the images into the individual numbers was a surprisingly time-consuming and laborious task, and one which made me appreciate afresh the challenges in gathering good quality data. Nevertheless, I was able to gather 300+ images for each number. At the time, I didn’t know whether these resembled the test data or not (spoiler: they didn't), but I anyway attempted to gather the most diverse set of images possible. Some samples are given below.
 {: style="text-align: justify"}
@@ -55,7 +54,7 @@ Eliminating all the bad images left something like 2500 images in all, well belo
 ![Image_16](/agneev-blog/assets/img/img_1_16.png?raw=true){: width="125", height="100" }
 <br/><br/>
 
-## Data quantisation
+## Data quantisation <a id="quant"></a>
 
 The organisers provided a script for optionally processing the added images so as to make them more similar to data already provided. The script below, which uses the [OpenCV library](https://en.wikipedia.org/wiki/OpenCV), loads the images in grayscale mode and converts all the pixels that aren't very dark (brightness of 43 or less) to white. The results can be seen below, with an original image to the left, and the quantised image to the right.
 {: style="text-align: justify"}
@@ -78,7 +77,7 @@ def convert_images(input_folder, output_folder):
 Although this was optional, I chose to undertake this conversion anyway. Since the data provided was in black and white, I felt the test data was unlikely to be in colour, and so would probably resemble the processed images more than the original colour versions (this turned out to be true, btw).
 {: style="text-align: justify"}
 
-## Data manipulation for augmentation
+## Data manipulation for augmentation <a id="manip"></a>
 
 Now, even after gathering my own data, I ended up with less than 6000 images. How to boost the numbers further? One method is via manipulating the existing images. An easy way to do this is flipping the images using OpenCV's flip method. The small versions of 1, 2, 3 and 10 can be flipped horizontally, while their capital versions can be flipped either horizontally and vertically. For 5, only the horizontal flip is meaningful, while for 9, only the capital 9 can be flipped vertically. Examples:
 {: style="text-align: justify"}
@@ -122,7 +121,7 @@ Unfortunately, no sensible flips are possible for the numbers 7 and 8, and so th
 Overall, while the flipping and manual modification methods worked, they did not add all that much diversity to the dataset, and the manual manipulation in particular was very time consuming. I therefore used another method to generate some more images.
 {: style="text-align: justify"}
 
-## Generate synthetic data
+## Generate synthetic data <a id="syn"></a>
 
 In the absence of enough 'real' or 'augmented' data, synthetic data is a plausible means of increasing data availability, provided the synthetic data is similar enough to the real data. I therefore decided to see how to generate artificial images to boost the number of images. For this, [Generative Adversarial Networks (GANs)](https://en.wikipedia.org/wiki/Generative_adversarial_network) seemed to be the ideal choice, and hence I first tried them. However, the numbers generated were either virtually identical to those fed, defeating the purpose, or were unrecognisable.
 {: style="text-align: justify"}
@@ -130,7 +129,7 @@ In the absence of enough 'real' or 'augmented' data, synthetic data is a plausib
 I then decided on a different technique. The Roman numbers in question are all composed of three letters – i, v and x – and hence I decided to compose synthetic numerals based on open-source handwritten datasets. I tried different datasets, including the [HASYv2 dataset](https://www.kaggle.com/martinthoma/hasyv2-dataset-friend-of-mnist) and the [T-H-E dataset](https://github.com/bartosgaye/thedataset), but after a trial and error process settled on the [Chars74K](http://www.ee.surrey.ac.uk/CVSSP/demos/chars74k/) and the [EMNIST](https://arxiv.org/abs/1702.05373v1) datasets. This was because I felt that these datasets possessed diverse and realistic letters, while also being relatively easy to manipulate into the different numbers.
 {: style="text-align: justify"}
 
-### Chars74K dataset
+### Chars74K dataset <a id="chars"></a>
 
 The Chars74K dataset contains 3410 handwritten English characters, with 55 samples each of 62 classes. The authors enlisted 55 volunteers to create the images, so, for instance, the 41st small ‘v’ and the 41st block ‘i’ would have been created by the same individual, something that is of importance when combining the images. Of the 62 classes, only 6 classes (small and block i, v and x) are of interest to us. Samples of the original images are:
 {: style="text-align: justify"}
@@ -185,7 +184,7 @@ As can be seen, the results obtained were passable copies of the numbers, withou
 The imperfect code for carrying out the above can be found [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/chars74k-roman-numbers.ipynb). Now on to the EMNIST dataset...
 {: style="text-align: justify"}
 
-### EMNIST dataset
+### EMNIST dataset <a id="emnist"></a>
 
 The EMNIST (Extended MNIST) dataset has over 800,000 images in an MNIST-like format, making it an attractive option for this task. The dataset has six different splits, of which I decided to use the ‘By Class’ split, as this contains the complete set of samples, unlike four of the other splits, and has the small and capital i, v and x kept separately, not merged into a single letter class like the 'By Merge' split. There are 62 classes in this split, containing an uneven number of samples per class. I was obviously only interested in only 6 classes (block and small i, v and x), each of which has over 2000 samples in the EMNIST dataset.
 {: style="text-align: justify"}
@@ -219,7 +218,7 @@ Some of the images created in this fashion are shown below, and the imperfect co
 ![Image_84](/agneev-blog/assets/img/img_1_84.png?raw=true){: width="80", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![Image_85](/agneev-blog/assets/img/img_1_85.png?raw=true){: width="80", height="80" }
 <br/><br/>
-## Conclusion
+## Conclusion <a id="conc"></a>
 
 So that's it, we have seen the various methods I used to create my submissions. Next time we will look at evaluating some of my created datasets using a cut-off Resnet50, as used in the competition, as well as full Resnet versions. So long!
 {: style="text-align: justify"}

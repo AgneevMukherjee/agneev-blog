@@ -618,7 +618,7 @@ For the EMNIST dataset, we have virtually perfect accuracy values, but the run t
 
 ![Image_5](/agneev-blog/assets/img/img_2_5.png?raw=true){: width="800", height="600" }
 
-Neither the very high accuracy nor the long run time are actually surprising. The images in the EMNIST-based dataset are very similar to each other, and hence learning to recognise these is rather trivial, which explains the accuracy numbers. The long run time is because of the much greater number of images (almost 7,000 in the training set) necessitating 862 training batches.
+Neither the very high accuracy nor the long run time is actually surprising. The images in the EMNIST-based dataset are very similar to each other, and hence learning to recognise these is rather trivial, which explains the accuracy numbers. The long run time is because of the much greater number of images (almost 7,000 in the training set) necessitating 862 training batches.
 {: style="text-align: justify"}
 
 If we look at the training and validation curves, we see they both reach very high accuracies within 5 epochs, with the main difference being that the validation curves are again much 'jumpier' than the training curves.

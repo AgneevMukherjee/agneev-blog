@@ -120,7 +120,7 @@ We see that the results are different for the three datasets, but are rather dis
 
 ## Simple CNN  <a id="simple"></a>
 
-What about a simpler network? Let us build a simple CNN and see how it performs.
+What about a simpler network? Let us build a simple, no-frills CNN from scratch and see how it performs.
 
 First the CNN itself is built as per the following code:
 

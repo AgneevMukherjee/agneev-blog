@@ -7,7 +7,7 @@ category: ['data science', 'computer vision', 'python']
 
 Welcome to part 2 of evaluating the Roman numerals datasets - you can read the background about the reason behind creating this dataset [here](https://agneevmukherjee.github.io/agneev-blog/preparing-a-Roman-MNIST/). In the [previous part](https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-part-1/), we saw that a cut-off ResNet50 overfit on the three datasets we created and tested it on. In this post, let's see how a full ResNet and a simple CNN perform on these datasets, before the winner is tested on a dataset combining samples from the three datasets. As a reminder, we will only look at running the models on CPU here - GPU and TPU runs will be looked at in future posts.
 
-### Early stopping  <a id="stop"></a>
+## Early stopping  <a id="stop"></a>
 
 The second part of each notebook I linked to in the previous post ([this](https://github.com/AgneevMukherjee/agneev-blog/blob/main/roman-datasets-evaluation-1.ipynb), [this](https://github.com/AgneevMukherjee/agneev-blog/blob/main/roman-datasets-evaluation-2.ipynb) and [this](https://github.com/AgneevMukherjee/agneev-blog/blob/main/roman-datasets-evaluation-3.ipynb)) have the full ResNet50 operating. Before we get to looking at that, however, we might recollect one point from all the graphs seen in the previous post- the accuracy values reach a particular level pretty quickly, and then plateau. In the competition organisers' code that I used, however, the model continues running until the 100 epochs asked for have finished. It would be nice if we could stop the training once no further progress is being made - this would surely be a timesaver! We can accomplish this using an [early stopping callback](https://keras.io/api/callbacks/early_stopping/), which is implemented in the code below. Alongside, we have another callback saving the best model as a checkpoint – this had been implemented in the organisers' code as well.
 {: style="text-align: justify"}
@@ -36,8 +36,7 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
 The two important parameters to note in the early stopping callback are 'min_delta' and 'patience'. Min_delta refers to the minimum change in the monitored quantity required for it to qualify as an improvement. For example, if we are monitoring validation accuracy, we can specify 'min_delta = 0.01', which would mean that the validation accuracy would have to improve by at least 0.01 for it to count. Here I have just kept it at the default value of 0 for simplicity. 'Patience' is the number of epochs of no improvement after which training will be stopped. The default for this is also 0, which means that the instant no improvement is observed, training will stop. In practice, this is usually sub-optimal, as the accuracy fluctuates, and hence one bad round does not imply that no further improvement is possible. We should therefore be 'patient' for a few epochs to see if the results improve before terminating the model. Here I have set the 'patience' parameter at 10, which is a very conservative value - I think it is safe to say that if no further improvement is obtained even after 10 epochs, then it is very unlikely that any further rounds will be helpful.
 {: style="text-align: justify"}
 
-<br>
-### Full ResNet50  <a id="full"></a>
+## Full ResNet50  <a id="full"></a>
 
 OK, so then let's run the full ResNet50, as per the code below:
 
@@ -119,8 +118,7 @@ Arguably the worst results are obtained for this dataset, with test accuracy bei
 We see that the results are different for the three datasets, but are rather discouraging overall. Now, we can undoubtedly improve the performance of the full ResNet - we have not applied any regularisation, BatchNormalization, Dropout, transfer learning weights, etc., etc. As a first pass, though, we can conclude that using the full ResNet50 on what are at the end of the day are fairly simple images is unlikely to lead to accuracy improvements that will be worth the added complexity and run times.
 {: style="text-align: justify"}
 
-<br>
-### Simple CNN  <a id="simple"></a>
+## Simple CNN  <a id="simple"></a>
 
 What about a simpler network? Let us build a simple CNN and see how it performs.
 
@@ -177,8 +175,7 @@ So we can conclude that the cut-off ResNet50 used by the competition organisers 
 But wait, I hear some of you say - what about run time? Isn't the simple CNN much faster than the cut-off ResNet? Well yes, but remember that we did _not_ use early stopping for the cut-off ResNet. We can [see what happens](https://github.com/AgneevMukherjee/agneev-blog/blob/main/chars74k-cutoff-resnet50-early-stopping.ipynb) if we apply early stopping and run the cut-off ResNet on the Chars74K-based dataset - we get both lower run time (154 s against 198 s) and higher test accuracy (~53% against ~47%) for the cut-off ResNet. So the organisers certainly knew what they were doing when they selected this particular network!
 {: style="text-align: justify"}
 
-<br>
-### Combined dataset  <a id="combo"></a>
+## Combined dataset  <a id="combo"></a>
 
 All right, so we are now ready for the final part of this particular journey. I mentioned earlier that we will be testing the best performing network on a combined dataset. Now that we have selected the winning network, let us see how it does on the final dataset.
 {: style="text-align: justify"}
@@ -197,8 +194,7 @@ As per the usual procedure, let us see the accuracy values and the training curv
 Not bad! We got a test accuracy of ~85%, while the training curves are also reasonably smooth, although some evidence of overfitting is present.
 {: style="text-align: justify"}
 
-<br>
-### Data augmentation  <a id="aug"></a>
+## Data augmentation  <a id="aug"></a>
 
 Now, as the final touch, let us see if we can improve the results a little further by using [image augmentation](https://machinelearningmastery.com/how-to-configure-image-data-augmentation-when-training-deep-learning-neural-networks/). Image augmentation is an easy way to generate subtly modified images on the fly, enhancing the number of images available for training. It also makes the model more robust against overfitting by teaching the model to recognise images despite changes such as distortions or orientation shifts. We will look at image augmentation in greater depth in the future, but for now let us just [dip our toes](https://github.com/AgneevMukherjee/agneev-blog/blob/main/augment-combined-ds-cutoff-resnet50-early-stopping.ipynb).
 {: style="text-align: justify"}

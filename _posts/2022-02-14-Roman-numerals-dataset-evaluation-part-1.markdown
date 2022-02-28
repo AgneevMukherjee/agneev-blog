@@ -9,11 +9,14 @@ category: ['data science', 'computer vision', 'python']
 [Last time](https://agneevmukherjee.github.io/agneev-blog/preparing-a-Roman-MNIST/) we saw the methods I used to create my submissions for the [Data-Centric AI competition](https://https-deeplearning-ai.github.io/data-centric-comp/). You may have noticed that at the end I mentioned 'we will look at evaluating some of my created datasets', and wondered, why are there multiple datasets?
 {: style="text-align: justify"}
 
-Well, like I explained, I used several data augmentation methods to increase the number of images. The images obtained by these methods could be combined in any ratio, obtaining different datasets. This begs the question- what is the 'best' ratio in which to combine the different types of images? There is no one answer to that question. The best training dataset for any task is one that will replicate the test or real-life data that the model trained on it will be used on. My submissions to the competition were judged based on the test set found [here](https://worksheets.codalab.org/bundles/0x0b792c7dbeb14c82bf98978389a8eb85). As you can see, the images in question were black ink on white background, and optimising for recognising these images will differ from recognising colourful images taken in real life settings, for example.
+Well, like I explained, I used several data augmentation methods to increase the number of images. The images obtained by these methods could be combined in any ratio, obtaining different datasets. This begs the question - what is the 'best' ratio in which to combine the different types of images? There is no one answer to that question. The best training dataset for any task is one that will replicate the test or real-life data that the model trained on it will be used on. My submissions to the competition were judged based on the test set found [here](https://worksheets.codalab.org/bundles/0x0b792c7dbeb14c82bf98978389a8eb85). As you can see, the images in question were black ink on white background, and optimising for recognising these images will differ from recognising colourful images taken in real life settings, for example.
 {: style="text-align: justify"}
 
 So an _ideal_ handwritten Roman numerals dataset does not exist. What we will do here is look at three different datasets and how a cut-off ResNet50 performs on these.
 In Part 2, we will apply both a full ResNet50 and a simple convolutional neural network (CNN) on the datasets and compare their performance with the cut-off ResNet50. Afterwards we will apply the best model on a combined dataset.
+{: style="text-align: justify"}
+
+One small additional note: for simplicity, I will only be using CPU here to run all the models. We will look at running models on GPUs and TPUs in later posts.
 {: style="text-align: justify"}
 
 ## The raw images dataset <a id="raw"></a>
@@ -592,7 +595,7 @@ We can see that the training accuracy rises sharply for the first 15 epochs or s
 These curves are pretty much stereotypical [overfitting curves](https://machinelearningmastery.com/learning-curves-for-diagnosing-machine-learning-model-performance/). This means that the model is memorising the training data, thereby obtaining almost perfect results on the training set, while the results on the validation and  test sets are considerably weaker. This is all the more concerning considering that the validation and test data in this case are very similar to the training data, which does not bode well for the generalisability of the model to real-world data. Methods for dealing with overfitting include getting more data and [regularisation](https://machinelearningmastery.com/introduction-to-regularization-to-reduce-overfitting-and-improve-generalization-error/), which we will look at in the future. For now, we can be fairly satisfied with the accuracy values obtained, and move on to the next dataset.
 {: style="text-align: justify"}
 
-## The synthesised images dataset  <a id="syn"></a>
+## The synthesised images datasets  <a id="syn"></a>
 
 I described in [my previous post](https://agneevmukherjee.github.io/agneev-blog/preparing-a-Roman-MNIST/#syn) how I created the synthetic data using the [Chars74K](http://www.ee.surrey.ac.uk/CVSSP/demos/chars74k/) and [EMNIST](https://arxiv.org/abs/1702.05373v1) datasets. Again as a reminder, the Chars74K-based figures looked like this:
 {: style="text-align: justify"}

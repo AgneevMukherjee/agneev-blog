@@ -166,7 +166,7 @@ If you have followed the previous runs on this dataset, you might have already g
 
 ![Image_18](/agneev-blog/assets/img/img_3_18.png?raw=true){: width="400", height="300" }
 
-In one sense, the results obtained are better than that which had been obtained for the cut-off ResNet - the validation loss curve is much smoother than what we saw last time. Although a good thing in itself, as too much fluctuation in the loss values are a sign of instability in training, ultimately it does not in this case lead to a higher, or even comparable, test accuracy, which is what really counts.
+In one sense, the results obtained are better than that which had been obtained for the cut-off ResNet - the validation loss curve is much smoother than what we saw last time. Although a good thing in itself, as too much fluctuation in the loss values is a sign of instability in training, ultimately it does not in this case lead to a higher, or even comparable, test accuracy, which is what really counts.
 {: style="text-align: justify"}
 
 So we can conclude that the cut-off ResNet50 used by the competition organisers is in fact the best choice for this problem.

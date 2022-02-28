@@ -135,7 +135,6 @@ model_3 = tf.keras.models.Sequential([
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(512, activation='relu'),
     tf.keras.layers.Dense(10, activation='softmax')
-
 ])
 {% endhighlight %}
 

@@ -1,0 +1,4 @@
+https://agneevmukherjee.github.io/agneev-blog/the-beginning/
+https://agneevmukherjee.github.io/agneev-blog/preparing-a-Roman-MNIST/
+https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-part-1/
+https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-part-2/

@@ -15,7 +15,8 @@ How did I do in this competition? Well, I at least made it to the list of [final
 {: style="text-align: justify"}
 
 With that said, let's go!
-
+{: style="text-align: justify"}
+<br>
 ## The problem  <a id="prob"></a>
 
 The competition was hosted by the Italian multiutility [Acea SpA](https://en.wikipedia.org/wiki/Acea_(company)), which is involved in the water, energy and environmental sectors. As a water utility, one of the challenges they face is forecasting water body levels, which is important both in terms of ensuring water body health and adequately meeting water demand. This is made harder by the fact that they are in charge of different types of water bodies, with each type having unique characteristics, and so making generalisable models for predicting water levels is very difficult.
@@ -23,7 +24,7 @@ The competition was hosted by the Italian multiutility [Acea SpA](https://en.wik
 
 What the organisers wanted from the competitors therefore were four models that could be applied to one of the four categories of water bodies presented. A total of nine water bodies were present in the data - four aquifers, three water springs, one river and one lake. The aim was to determine how the particular features of a water body category influence the water availability. I will describe every water body and the corresponding features in detail when discussing their modelling next time, as the features are directly related to the model built for that water body type. This post, as I said, will focus instead on the methodology used for the modelling.
 {: style="text-align: justify"}
-
+<br>
 ## Why it matters  <a id="matter"></a>
 
 Before heading into the methodological details, however, I think it might be worth explaining why I decided to enter this competition. Firstly, an analytics competition was appealing since it avoids my pet peeve about Kaggle competitions - a horde of competitors doing whatever it takes to get a 0.01% improvement on the target metric. I might rant on that some other time, but suffice to say that this competition allowed the rather unusual prospect of models being judged on their elegance and real-world applicability. The flip side, of course, was the inherent subjectivity of the evaluation, but then again, this is certainly the case in real life as well.
@@ -40,7 +41,7 @@ Globally, the answer to this question thus far has usually been to simply overex
 
 I think the above paragraph, though depressing, has made its point - sustainable use of our water resources is no trifling matter, but ranks among the biggest challenges facing us today. While water conservation measures will no doubt have a huge role to play, proper management on the supply side is no less important. Another less obvious point from the above is that management of water resources is a complex subject not just because of the associated socio-economic considerations, but also because the dynamics of water extraction, replenishment, and the interplay between the various water resources is very complex. Consider an aquifer. The aquifer may be replenished by rainfall, but depending on the geology, there may be a time lag before its water levels rise due to the rain. The aquifer may feed or be fed by surface water sources like rivers or lakes - perhaps both. It may be connected to other underground aquifers, with the flows through this system determined by the levels of the components. The aquifer system may also change with time, due to environmental changes or other factors. This means that proper water resource management requires both an understanding of the factors affecting the resources and a model that can employ these factors to tell us how to optimally utilise the resources. In other words, it's a problem that calls for interpretable machine learning.
 {: style="text-align: justify"}
-
+<br>
 ## Methodology  <a id="method"></a>
 
 Based on the above, I decided to develop four interpretable machine learning models to forecast water levels for the nine different water bodies in the competition dataset. The guiding principles behind the model creation were simplicity, generalisability and robustness, while also attempting to predict as accurately as possible within these constraints.
@@ -113,7 +114,7 @@ I have already stated that model interpretability is very important in ML, and t
 
 While permutation importance can be and has been used here for the tree-based methods, the LSTM is a <a href='https://www.kdnuggets.com/2017/04/ai-machine-learning-black-boxes-transparency-accountability.html'>'black box model'</a>, and therefore requires a different interpretation mechanism. Several interpretation methods have been proposed in recent years, of which SHAP (SHapely Additive exPlanations) and LIME (Local Interpretable Model-agnostic Explanations) are perhaps the two most prominent (see <a href= 'https://www.kdnuggets.com/2020/01/explaining-black-box-models-ensemble-deep-learning-lime-shap.html'>here</a> and <a href='https://www.kdnuggets.com/2019/12/interpretability-part-3-lime-shap.html'>here</a> for detailed explanations). While neither is perfect, the main advantage of LIME <a href='https://medium.com/analytics-vidhya/explain-your-model-with-lime-5a1a5867b423'>appears to be speed</a>, while SHAP appears to be a better overall <a href='https://towardsdatascience.com/whats-wrong-with-lime-86b335f34612'>choice for model interpretation</a>, especially if one is trying to <a href='https://python-bloggers.com/2020/12/lime-vs-shap-which-is-better-for-explaining-machine-learning-models/'>explain the entire model rather than a single prediction</a>. While I initially tried using both simultaneously, this became unwieldy and hard to work with when applied to all the models, and hence decided to stick with SHAP, which I applied to all the models, including the tree-based ones. The details of the SHAP mechanisms can be better understood when we look at the actual runs, and will therefore be provided there.
 {: style="text-align: justify"}
-
+<br>
 ## Conclusion  <a id="conc"></a>
 
 OK, so this was a text-heavy post where I covered the methodology in plenty of depth. I think, though, that this detailed background was necessary to understand why I made the modelling choices I did. With that out of the way, next time we will see the actual modelling of the water bodies. So long!

@@ -6,6 +6,7 @@ category: ['data science', 'computer vision', 'python']
 ---
 
 Welcome to part 2 of evaluating the Roman numerals datasets - you can read the background about the reason behind creating this dataset [here](https://agneevmukherjee.github.io/agneev-blog/preparing-a-Roman-MNIST/). In the [previous part](https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-part-1/), we saw that a cut-off ResNet50 overfit on the three datasets we created and tested it on. In this post, let's see how a full ResNet and a simple CNN perform on these datasets, before the winner is tested on a dataset combining samples from the three datasets. As a reminder, we will only look at running the models on CPU here - GPU and TPU runs will be looked at in future posts.
+{: style="text-align: justify"}
 
 ## Early stopping  <a id="stop"></a>
 

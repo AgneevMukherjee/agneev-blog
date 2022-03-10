@@ -5,7 +5,7 @@ date:   2022-03-07 12:00:00 +0100
 category: ['data science', 'time series', 'environment', 'water']
 ---
 
-Welcome back. The last time we saw the details of the methodology that I used to tackle the [Acea Smart Water Analytics](https://www.kaggle.com/c/acea-water-prediction/overview) competition. Now, let's see the actual modelling of the water bodies. While the notebook containing all the code (available [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb)) deals with all the waterbodies, the procedure is repetitive, and so we will look in detail in this post at only one representative water body. As you will see, there's plenty to unpack for that one!
+Welcome back. The [last time](https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-1/) we saw the details of the methodology that I used to tackle the [Acea Smart Water Analytics](https://www.kaggle.com/c/acea-water-prediction/overview) competition. Now, let's see the actual modelling of the water bodies. While the notebook containing all the code (available [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb)) deals with all the waterbodies, the procedure is repetitive, and so we will look in detail in this post at only one representative water body. As you will see, there's plenty to unpack for that one!
 {: style="text-align: justify"}
 
 ## Aquifer Petrignano  <a id="Petrignano"></a>

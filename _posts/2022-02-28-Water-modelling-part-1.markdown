@@ -22,7 +22,7 @@ With that said, let's go!
 The competition was hosted by the Italian multiutility [Acea SpA](https://en.wikipedia.org/wiki/Acea_(company)), which is involved in the water, energy and environmental sectors. As a water utility, one of the challenges they face is forecasting water body levels, which is important both in terms of ensuring water body health and adequately meeting water demand. This is made harder by the fact that they are in charge of different types of water bodies, with each type having unique characteristics, and so making generalisable models for predicting water levels is very difficult.
 {: style="text-align: justify"}
 
-What the organisers wanted from the competitors therefore were four models that could be applied to one of the four categories of water bodies presented. A total of nine water bodies were present in the data - four aquifers, three water springs, one river and one lake. The aim was to determine how the particular features of a water body category influence the water availability. I will describe every water body and the corresponding features in detail when discussing their modelling next time, as the features are directly related to the model built for that water body type. This post, as I said, will focus instead on the methodology used for the modelling.
+What the organisers wanted from the competitors therefore were four models that could be applied to one of the four categories of water bodies presented. A total of nine water bodies were present in the data - four aquifers, three water springs, one river and one lake. The aim was to determine how the particular features of a water body category influence the water availability. In reality, the modelling procedure follows a similar pattern for all the water bodies. We will look at that procedure next time - this post, as I said, will focus instead on the methodology used for the modelling.
 {: style="text-align: justify"}
 <br>
 ## Why it matters  <a id="matter"></a>
@@ -47,7 +47,7 @@ I think the above paragraph, though depressing, has made its point - sustainable
 Based on the above, I decided to develop four interpretable machine learning models to forecast water levels for the nine different water bodies in the competition dataset. The guiding principles behind the model creation were simplicity, generalisability and robustness, while also attempting to predict as accurately as possible within these constraints.
 {: style="text-align: justify"}
 
-The first thing to do when tackling any machine learning problem is to define the type of the problem. This problem was clearly an example of time series modelling - we were provided with features as a function of time, and asked to predict water volumes over a time interval. This brings us to the next question - what is the best approach to solve this problem?
+The first thing to do when tackling any machine learning problem is to define the type of the problem. This problem was clearly an example of time series modelling - we were provided with features as a function of time, and asked to predict water volumes over a time interval (often multiple volumes, as we shall see next time). This brings us to the next question - what is the best approach to solve this problem?
 {: style="text-align: justify"}
 
 ### Classical methods  <a id="classical"></a>

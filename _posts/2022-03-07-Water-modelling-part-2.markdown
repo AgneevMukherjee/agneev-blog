@@ -553,6 +553,7 @@ if len(depths)>0:
 
 {% endhighlight %}
 
+<br>
 It must be said that the plot showing the imputed data (below, right) is not the best advertisement for MissForest, as there are some fitted points above and below the actual values. Overall, though, I found MissForest to be the most reliable and generalisable of all the imputation methods I tried on all the different depth of groundwater series, and hence decided to stick with it.
 {: style="text-align: justify"}
 

@@ -22,7 +22,14 @@ With that said, let's go!
 The competition was hosted by the Italian multiutility [Acea SpA](https://en.wikipedia.org/wiki/Acea_(company)), which is involved in the water, energy and environmental sectors. As a water utility, one of the challenges they face is forecasting water body levels, which is important both in terms of ensuring water body health and adequately meeting water demand. This is made harder by the fact that they are in charge of different types of water bodies, with each type having unique characteristics, and so making generalisable models for predicting water levels is very difficult.
 {: style="text-align: justify"}
 
-What the organisers wanted from the competitors therefore were four models that could be applied to one of the four categories of water bodies presented. A total of nine water bodies were present in the data - four aquifers, three water springs, one river and one lake. The aim was to determine how the particular features of a water body category influence the water availability. In reality, the modelling procedure follows a similar pattern for all the water bodies. We will look at that procedure next time - this post, as I said, will focus instead on the methodology used for the modelling.
+What the organisers wanted from the competitors therefore were four models that could be applied to one of the four categories of water bodies presented. A total of nine water bodies were present in the data - four aquifers, three water springs, one river and one lake. The aim was to determine how the particular features of a water body category influence the water availability. The organisers helpfully provided the following figure to explain what they were looking for:
+{: style="text-align: justify"}
+
+<br>
+![Image_1](/agneev-blog/assets/img/img_4_1.png?raw=true){: width="600", height="400" }
+
+<br>
+In reality, the modelling procedure follows a similar pattern for all the water bodies. We will look at that procedure next time - this post, as I said, will focus instead on the methodology used for the modelling.
 {: style="text-align: justify"}
 <br>
 ## Why it matters  <a id="matter"></a>
@@ -67,7 +74,7 @@ The term 'neural networks' has become so popular in recent years as to become al
 {: style="text-align: justify"}
 
 <br>
-![Image_1](/agneev-blog/assets/img/img_4_1.jpg?raw=true){: width="500", height="100" }
+![Image_2](/agneev-blog/assets/img/img_4_2.jpg?raw=true){: width="500", height="100" }
 
 Advantage of neural networks (based on Andrew Ng's talk available <a href="https://www.youtube.com/watch?v=F1ka6a13S9I&feature=youtu.be">here</a>)
 

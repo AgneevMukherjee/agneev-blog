@@ -8,6 +8,14 @@ category: ['data science', 'time series', 'environment', 'water']
 Welcome back. The [last time](https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-1/) we saw the details of the methodology that I used to tackle the [Acea Smart Water Analytics](https://www.kaggle.com/c/acea-water-prediction/overview) competition. Now, let's see the actual modelling of the water bodies. While the notebook containing all the code (available [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb)) deals with all the waterbodies, the procedure is repetitive, and so we will look in detail in this post at only one representative water body. As you will see, there's plenty to unpack for that one!
 {: style="text-align: justify"}
 
+Before we start, the competition's [data page](https://www.kaggle.com/c/acea-water-prediction/data) helpfully points out one of the challenges involved in the modelling:
+{: style="text-align: justify"}
+
+>It is of the utmost importance to notice that some features like rainfall and temperature, which are present in each dataset, don’t go alongside the date. Indeed, both rainfall and temperature affect features like level, flow, depth to groundwater and hydrometry some time after it fell down. This means, for instance, that rain fell on 1st January doesn’t affect the mentioned features right the same day but some time later. As we don’t know how many days/weeks/months later rainfall affects these features, this is another aspect to keep into consideration when analyzing the dataset.
+{: style="text-align: justify"}
+
+OK, keeping that in mind, let us get to the modelling.
+
 ## Aquifer Petrignano  <a id="Petrignano"></a>
 
 The water body I have selected to demonstrate the modelling here is Aquifer Petrignano, one of the four aquifers present in the dataset. As per the stated goal of the competition, this 'aquifer' model I built is applicable to each aquifer. Only the initial [data wrangling](https://expressanalytics.com/blog/what-is-data-wrangling-what-are-the-steps-in-data-wrangling/) portion requires some manual intervention, while the rest of the process is automated and identical for each aquifer.
@@ -1002,7 +1010,7 @@ mean_absolute_error(avg_preds_1, y_targets, multioutput='raw_values')
 
 ![Image_22](/agneev-blog/assets/img/img_5_22.png?raw=true){: width="300", height="100" }
 
-We see that the ensemble produces results that are slightly inferior to the best model here, the LSTM. Two comments can be made on this. Firstly, we have used a simple average of the predictions here. Using a [meta model to stack these predictions](https://machinelearningmastery.com/stacking-ensemble-machine-learning-with-python/) will [almost certainly result](https://blogs.sas.com/content/subconsciousmusings/2017/05/18/stacked-ensemble-models-win-data-science-competitions/) in more accurate predictions. The downside is that stacked models are [significantly slower and more computationally expensive](https://towardsdatascience.com/a-practical-guide-to-stacking-using-scikit-learn-91e8d021863d). As I had already developed some very elaborate models that took a fair amount of time to run, I decided that a simple average would suffice here instead of adding further complications. The other point is that the benefit of ensembling will be more clearly brought out when I touch upon Aquifer Doganella.
+We see that the ensemble produces results that are slightly inferior to the best model here, the LSTM. Two comments can be made on this. Firstly, we have used a simple average of the predictions here. Using a [meta model to stack these predictions](https://machinelearningmastery.com/stacking-ensemble-machine-learning-with-python/) will [almost certainly result](https://blogs.sas.com/content/subconsciousmusings/2017/05/18/stacked-ensemble-models-win-data-science-competitions/) in more accurate predictions. The downside is that stacked models are [significantly slower and more computationally expensive](https://towardsdatascience.com/a-practical-guide-to-stacking-using-scikit-learn-91e8d021863d). As I had already developed some very elaborate models that took a fair amount of time to run, I decided that a simple average would suffice here instead of adding further complications. The other point is that the benefit of ensembling will be more clearly brought out when I touch upon some of the other water bodies next time.
 {: style="text-align: justify"}
 
 <br>
@@ -1016,5 +1024,5 @@ I reran all the code for a forecast period of 30 days - everything remaining ide
 <br>
 ## Conclusion  <a id="Conc"></a>
 
-This has been a very long post, since I had a lot to go over, and so I will leave it here for the moment. The next time, we will take a brief look at some of the interesting points in the modelling of the other water bodies to wind up this series! So long!
+This has been a very long post, since I had a lot to go over, and so I will leave it here for the moment. The next time, we will take a brief look at some of the interesting points in the modelling of the other water bodies to wind up this series. So long!
 {: style="text-align: justify"}

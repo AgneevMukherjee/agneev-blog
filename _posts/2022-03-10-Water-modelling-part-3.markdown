@@ -122,6 +122,7 @@ Another important aspect is the ensembling. Let us look at the results of the th
 Here we see the benefit of using a range of models. The LSTM, which had given the best predictions for Petrignano, gives the worst results for Auser, but ensembling enables us to mitigate the inaccuracy, even if the final predictions are still worse than those given by the tree-based methods.
 {: style="text-align: justify"}
 
+<br>
 ## Aquifer Doganella  <a id="Doganella"></a>
 
 >The wells field Doganella is fed by two underground aquifers not fed by rivers or lakes but fed by meteoric infiltration. The upper aquifer is a water table with a thickness of about 30m. The lower aquifer is a semi-confined artesian aquifer with a thickness of 50m and is located inside lavas and tufa products. These aquifers are accessed through wells called Well 1, ..., Well 9. Approximately 80% of the drainage volumes come from the artesian aquifer. The aquifer levels are influenced by the following parameters: rainfall, humidity, subsoil, temperatures and drainage volumes.
@@ -160,6 +161,7 @@ mean_absolute_error(avg_preds_1, y_targets, multioutput='uniform_average')
 
 ![Image_7](/agneev-blog/assets/img/img_6_7.png?raw=true){: width="150", height="100" }
 
+<br>
 ## Aquifer Luco  <a id="Luco"></a>
 
 >The Luco wells field is fed by an underground aquifer. This aquifer not fed by rivers or lakes but by meteoric infiltration at the extremes of the impermeable sedimentary layers. Such aquifer is accessed through wells called Well 1, Well 3 and Well 4 and is influenced by the following parameters: rainfall, depth to groundwater, temperature and drainage volumes.
@@ -177,6 +179,7 @@ Imputing with MissForest gives:
 This looks fairly reasonable, but is it? The large chunks of missing data means there is no way to tell. Imputing over such a large span of time is unwise, and should be avoided unless there is no alternative. In either case, the lack of data for these terms made forecasting for this water body difficult, with the best error obtained (0.466 for the ensemble) amounting to well over 5% error.
 {: style="text-align: justify"}
 
+<br>
 ## Water spring Amiata  <a id="Amiata"></a>
 
 >The Amiata waterbody is composed of a volcanic aquifer not fed by rivers or lakes but fed by meteoric infiltration. This aquifer is accessed through Ermicciolo, Arbure, Bugnano and Galleria Alta water springs. The levels and volumes of the four sources are influenced by the parameters: rainfall, depth to groundwater, hydrometry, temperatures and drainage volumes.
@@ -204,6 +207,7 @@ if len(flows)>0:
 
 There isn't much else that is different here, so let's move on to the next water body.
 
+<br>
 ## Water spring Lupa  <a id="Lupa"></a>
 
 >This water spring is located in the Rosciano Valley, on the left side of the Nera river. The waters emerge at an altitude of about 375 meters above sea level through a long draining tunnel that crosses, in its final section, lithotypes and essentially calcareous rocks. It provides drinking water to the city of Terni and the towns around it.
@@ -276,6 +280,7 @@ What about the other term, the one we are supposed to predict for?
 
 I think you can see why this waterbody was the cause of a lot of anguished comments on the competition forums...
 
+<br>
 ## Water spring Madonna di Canneto  <a id="Madonna"></a>
 
 >The Madonna di Canneto spring is situated at an altitude of 1010m above sea level in the Canneto valley. It does not consist of an aquifer and its source is supplied by the water catchment area of the river Melfa.
@@ -293,6 +298,7 @@ That's not too bad, but this...
 I am actually quite fond of this graph, as it is something I like to present as an 'Exhibit A' of bad data...
 {: style="text-align: justify"}
 
+<br>
 ## River Arno  <a id="Arno"></a>
 
 >Arno is the second largest river in peninsular Italy and the main waterway in Tuscany and it has a relatively torrential regime, due to the nature of the surrounding soils (marl and impermeable clays). Arno results to be the main source of water supply of the metropolitan area of Florence-Prato-Pistoia. The availability of water for this waterbody is evaluated by checking the hydrometric level of the river at the section of Nave di Rosano.
@@ -303,6 +309,7 @@ This is the only river in the competition, and is actually entirely unremarkable
 
 ![Image_18](/agneev-blog/assets/img/img_6_18.png?raw=true){: width="400", height="200" }
 
+<br>
 ## Lake Bilancino  <a id="Bilancino"></a>
 
 > Bilancino lake is an artificial lake located in the municipality of Barberino di Mugello (about 50 km from Florence). It is used to refill the Arno river during the summer months. Indeed, during the winter months, the lake is filled up and then, during the summer months, the water of the lake is poured into the Arno river.
@@ -323,6 +330,7 @@ It exhibits a distinct degree of seasonality, and hence I used seasonal interpol
 The above shows the flow rate, which, as I said, is different from what it meant in the water springs. Here it refers to the flow rate at the water withdrawal station, and hence is comparable with the volume term in the aquifers. In other words, it can be 0, and therefore imputation can only be done by filling with 0s.
 {: style="text-align: justify"}
 
+<br>
 ## Conclusion  <a id="Conc"></a>
 
 And that's it! It's been a long trip through the different water bodies and the quirks associated with their modelling, but worthwhile, I hope. One of the frustrations of this competition was that the winning submissions were never released, preventing people from learning from these. Oh well, I hope at least the organisers got what they wanted. I will leave you with my final words from my competition entry, which I think still sum up my feelings well:

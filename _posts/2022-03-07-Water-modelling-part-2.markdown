@@ -2,8 +2,31 @@
 layout: post
 title:  "5. Modelling water bodies - 2"
 date:   2022-03-07 12:00:00 +0100
-category: ['data science', 'time series', 'environment', 'water']
+category: ['Data Science', 'Machine Learning', 'Python', 'Time series', 'Tabular']
+tag: ['Environment', 'Water', 'Pandas', 'Kaggle', 'Competition', 'Random Forest', 'LightGBM', 'LSTM', 'Imputation', 'SHAP', 'Matplotlib', 'Ensemble']
 ---
+
+<span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
+<div class="post-categories">
+<p style="font-size:20px">
+  {% if post %}
+    {% assign categories = post.categories %}
+  {% else %}
+    {% assign categories = page.categories %}
+  {% endif %}
+  {% for category in categories %}
+  <a href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
+  {% unless forloop.last %}&nbsp;{% endunless %}
+  {% endfor %}
+  </p>
+</div>
+<br/>
+
+<span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br/>
+<p style="font-size:18px">
+{{page.tag | join: ', ' }}
+</p>
+<br/>
 
 Welcome back. The [last time](https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-1/) we saw the details of the methodology that I used to tackle the [Acea Smart Water Analytics](https://www.kaggle.com/c/acea-water-prediction/overview) competition. Now, let's see the actual modelling of the water bodies. While the notebook containing all the code (available [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb)) deals with all the waterbodies, the procedure is repetitive, and so we will look in detail in this post at only one representative water body. As you will see, there's plenty to unpack for that one!
 {: style="text-align: justify"}
@@ -33,7 +56,7 @@ The reason I chose this aquifer to demonstrate is since it has all the column ty
 
 <br>
 ## Data loading and visualisation  <a id="visual"></a>
-The first thing to do is to load the dataset. For every water body I loaded the csv file in an identical fashion, to keep things general.
+The first thing to do is to load the dataset. For every water body I loaded the csv file in an identical fashion, to keep things general. As is customary for dealing with tabular data in Python, the [pandas](https://pandas.pydata.org/) library has been used for all the data loading.
 {: style="text-align: justify"}
 
 {% highlight python %}
@@ -288,7 +311,7 @@ hydro_df.insert(0, column = 'Date', value = train['Date'])
 {% endhighlight %}
 
 <br>
-Now let us plot the different variables. You will notice that all the plot codes are contained inside a if statement that checks if the particular type of variable exists. If, for instance, there is no hydrometry term, the length of the hydrometry list created earlier will be 0, and the code will not run. This takes care of different datasets not having all the different variable types (a recurrent problem), ensuring that the model runs smoothly and automatically for every dataset.
+Now let us plot the different variables (using [Matplotlib](https://matplotlib.org/), as ever). You will notice that all the plot codes are contained inside a if statement that checks if the particular type of variable exists. If, for instance, there is no hydrometry term, the length of the hydrometry list created earlier will be 0, and the code will not run. This takes care of different datasets not having all the different variable types (a recurrent problem), ensuring that the model runs smoothly and automatically for every dataset.
 {: style="text-align: justify"}
 
 First, the rainfall:

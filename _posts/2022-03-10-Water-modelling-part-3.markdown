@@ -2,8 +2,31 @@
 layout: post
 title:  "6. Modelling water bodies - 3"
 date:   2022-03-10 12:00:00 +0100
-category: ['data science', 'time series', 'environment', 'water']
+category: ['Data Science', 'Machine Learning', 'Python', 'Time series', 'Tabular']
+tag: ['Environment', 'Water', 'Kaggle', 'Competition', 'Matplotlib']
 ---
+
+<span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
+<div class="post-categories">
+<p style="font-size:20px">
+  {% if post %}
+    {% assign categories = post.categories %}
+  {% else %}
+    {% assign categories = page.categories %}
+  {% endif %}
+  {% for category in categories %}
+  <a href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
+  {% unless forloop.last %}&nbsp;{% endunless %}
+  {% endfor %}
+  </p>
+</div>
+<br/>
+
+<span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br/>
+<p style="font-size:18px">
+{{page.tag | join: ', ' }}
+</p>
+<br/>
 
 Welcome to the last post in the water body modelling series! The [last time](https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-2/) we saw the modelling of the Aquifer Petrignano using a Random Forest, a LightGBM and an LSTM model, for two different forecast periods. We also saw how to analyse their feature importance via permutation importance and SHAP. It would be redundant (and boring!) to look at all that again for each of the nine water bodies, and so in this post I will just highlight some of the interesting points that arose for the other water bodies. As a reminder, you can find all the code [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb).
 {: style="text-align: justify"}

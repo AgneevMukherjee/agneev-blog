@@ -2,8 +2,31 @@
 layout: post
 title:  "2. Evaluating handwritten Roman numerals datasets - 1"
 date:   2022-02-14 12:00:00 +0100
-category: ['data science', 'computer vision', 'python']
+category: ['Machine Learning', 'Computer Vision', 'Python']
+tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Competition']
 ---
+<span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
+<div class="post-categories">
+<p style="font-size:20px">
+  {% if post %}
+    {% assign categories = post.categories %}
+  {% else %}
+    {% assign categories = page.categories %}
+  {% endif %}
+  {% for category in categories %}
+  <a href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
+  {% unless forloop.last %}&nbsp;{% endunless %}
+  {% endfor %}
+  </p>
+</div>
+<br/>
+
+<span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br/>
+<p style="font-size:18px">
+{{page.tag | join: ', ' }}
+</p>
+<br/>
+
 ## Evaluating the datasets <a id="eval"></a>
 
 [Last time](https://agneevmukherjee.github.io/agneev-blog/preparing-a-Roman-MNIST/) we saw the methods I used to create my submissions for the [Data-Centric AI competition](https://https-deeplearning-ai.github.io/data-centric-comp/). You may have noticed that at the end I mentioned 'we will look at evaluating some of my created datasets', and wondered, why are there multiple datasets?
@@ -33,7 +56,7 @@ The first dataset (available [here](https://www.kaggle.com/agneev/yaromnist-data
 ![Image_1_16](/agneev-blog/assets/img/img_1_16.png?raw=true){: width="125", height="100" }
 
 <br>
-You can see the entire notebook [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/roman-datasets-evaluation-1.ipynb), but let us see the important bits individually below.
+You can see the entire notebook [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/roman-datasets-evaluation-1.ipynb), but let us see the important bits individually below. The code has been built in [TensorFlow 2](https://www.tensorflow.org/tutorials/quickstart/beginner) and [Keras](https://keras.io/).
 {: style="text-align: justify"}
 
 The first thing to note is that the notebooks dealing with the different datasets are actually the same, and if run interactively, the user has a choice of selecting which dataset to run on.

@@ -2,8 +2,31 @@
 layout: post
 title:  "4. Modelling water bodies - 1"
 date:   2022-02-28 12:00:00 +0100
-category: ['data science', 'time series', 'environment', 'water']
+category: ['Data Science', 'Machine Learning', 'Python', 'Time series']
+tag: ['Environment', 'Water', 'Kaggle', 'Competition']
 ---
+
+<span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
+<div class="post-categories">
+<p style="font-size:20px">
+  {% if post %}
+    {% assign categories = post.categories %}
+  {% else %}
+    {% assign categories = page.categories %}
+  {% endif %}
+  {% for category in categories %}
+  <a href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
+  {% unless forloop.last %}&nbsp;{% endunless %}
+  {% endfor %}
+  </p>
+</div>
+<br/>
+
+<span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br/>
+<p style="font-size:18px">
+{{page.tag | join: ', ' }}
+</p>
+<br/>
 
 Hello again! The last few weeks, we have seen the creation and evaluation of handwritten Roman numerals datasets. This time, let us turn our attention to something different - the modelling of water levels in different water bodies.
 {: style="text-align: justify"}

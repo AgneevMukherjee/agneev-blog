@@ -2,8 +2,31 @@
 layout: post
 title:  "1. Preparing a handwritten Roman numerals dataset"
 date:   2022-01-24 12:00:00 +0100
-category: ['data science', 'computer vision', 'python']
+category: ['Machine Learning', 'Computer Vision', 'Python', 'Data-centric']
+tag: ['OpenCV', 'Matplotlib', 'Synthetic Data', 'Competition', 'Created dataset']
 ---
+<span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
+<div class="post-categories">
+<p style="font-size:20px">
+  {% if post %}
+    {% assign categories = post.categories %}
+  {% else %}
+    {% assign categories = page.categories %}
+  {% endif %}
+  {% for category in categories %}
+  <a href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
+  {% unless forloop.last %}&nbsp;{% endunless %}
+  {% endfor %}
+  </p>
+</div>
+<br/>
+
+<span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br/>
+<p style="font-size:18px">
+{{page.tag | join: ', ' }}
+</p>
+<br/>
+
 ## A novel data science competition... <a id="novel"></a>
 
 If you have ever been involved in data science (DS) or machine learning (ML), even briefly or tangentially, you will be well aware of data science competitions. These competitions are an invaluable learning experience for beginning data scientists, while even seasoned professionals often continue participating in these to keep their skills fresh, learn new tricks, interact with fellow competitors, or simply for the fun of it. Oh, and many competitions offer a fair amount of cash to further sweeten the deal...:wink:

@@ -2,10 +2,33 @@
 layout: post
 title:  "3. Evaluating handwritten Roman numerals datasets - 2"
 date:   2022-02-21 12:00:00 +0100
-category: ['data science', 'computer vision', 'python']
+category: ['Machine Learning', 'Computer Vision', 'Python']
+tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Competition']
 ---
 
-Welcome to part 2 of evaluating the Roman numerals datasets - you can read the background about the reason behind creating this dataset [here](https://agneevmukherjee.github.io/agneev-blog/preparing-a-Roman-MNIST/). In the [previous part](https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-part-1/), we saw that a cut-off ResNet50 overfit on the three datasets we created and tested it on. In this post, let's see how a full ResNet and a simple CNN perform on these datasets, before the winner is tested on a dataset combining samples from the three datasets. As a reminder, we will only look at running the models on CPU here - GPU and TPU runs will be looked at in future posts.
+<span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
+<div class="post-categories">
+<p style="font-size:20px">
+  {% if post %}
+    {% assign categories = post.categories %}
+  {% else %}
+    {% assign categories = page.categories %}
+  {% endif %}
+  {% for category in categories %}
+  <a href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
+  {% unless forloop.last %}&nbsp;{% endunless %}
+  {% endfor %}
+  </p>
+</div>
+<br/>
+
+<span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br/>
+<p style="font-size:18px">
+{{page.tag | join: ', ' }}
+</p>
+<br/>
+
+Welcome to part 2 of evaluating the Roman numerals datasets - you can read the background about the reason behind creating this dataset [here](https://agneevmukherjee.github.io/agneev-blog/preparing-a-Roman-MNIST/). In the [previous part](https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-part-1/), we saw that a cut-off ResNet50 overfit on the three datasets we created and tested it on. In this post, let's see how a full ResNet and a simple CNN perform on these datasets, before the winner is tested on a dataset combining samples from the three datasets. As a reminder, we will only look at running the models on CPU here - GPU and TPU runs will be looked at in future posts. As in the previous post, we will be dealing with [TensorFlow 2](https://www.tensorflow.org/tutorials/quickstart/beginner) and [Keras](https://keras.io/)-based models here.
 {: style="text-align: justify"}
 
 ## Early stopping  <a id="stop"></a>

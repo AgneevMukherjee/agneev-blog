@@ -5,3 +5,4 @@ https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-
 https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-1/
 https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-2/
 https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-3/
+https://agneevmukherjee.github.io/agneev-blog/Archie-comics-multiclass-dataset-intro/

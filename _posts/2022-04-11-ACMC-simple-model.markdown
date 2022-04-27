@@ -370,7 +370,7 @@ sns.regplot(data=df_from_arr, x="No. of samples", y="True positives")
  Image 9: True positive rate versus number of samples in class
 </p>
 
-We see that there is plenty of scatter towards the left-hand side of the plot, with some minor classes having a very low true positive rate and others very high values. We have already seen one possible cause of this - the fact that random selection means that there may be few examples of the classes in the training or validation sets. Another may be that the image quality or other factors could make certain classes easier to recognise. And finally, some characters may simply be easier to recognise than others!
+We see that there is plenty of scatter towards the left-hand side of the plot, with some minor classes having a very low true positive rate and others very high values. We have already seen one possible cause of this - the fact that random selection means that there may be few examples of the classes in the training or validation sets. Another may be that the image quality or other factors could make certain classes easier to classify. And finally, some characters may simply be easier to recognise than others!
 {: style="text-align: justify"}
 
 On the whole, though, the trend is clear - there is a clear upward trend, indicating that the characters with more images available are classified more accurately than those with fewer, which is what we would expect. For Archie pix, we have a TPR of 0.84, which is quite impressive, while Jughead and Betty also have a TPR of over 0.7, Veronica and Reggie getting 0.67 and 0.61 respectively.

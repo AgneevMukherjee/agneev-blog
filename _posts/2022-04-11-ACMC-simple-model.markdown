@@ -320,7 +320,7 @@ Since we saw that using the Imagenet weights gives smoother training curves and 
 We see here in the normalised confusion matrix that perfect results were obtained for the setosa and virginica irises, while for the versicolor, 62% were correctly classified, the rest all being misclassified as virginica.
 {: style="text-align: justify"}
 
-For the final run on our dataset, the normalised confusion matrix looks like this (note: the image looks much better on Firefox than Chrome, due to a well-known problem Chrome has with downscaling images):
+For the final run on our dataset, the normalised confusion matrix looks like the image below. _(Note: the image looks much better on Firefox than Chrome, due to a well-known problem Chrome has with downscaling images. You can open the image in a new tab and zoom it to make it easier to read)_
 {: style="text-align: justify"}
 
 ![Image_7](/agneev-blog/assets/img/img_8_7.png?raw=true){: width="800", height="400" }

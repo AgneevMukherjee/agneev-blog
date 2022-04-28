@@ -320,10 +320,10 @@ Since we saw that using the Imagenet weights gives smoother training curves and 
 We see here in the normalised confusion matrix that perfect results were obtained for the setosa and virginica irises, while for the versicolor, 62% were correctly classified, the rest all being misclassified as virginica.
 {: style="text-align: justify"}
 
-For the final run on our dataset, the confusion matrix looks like this:
+For the final run on our dataset, the normalised confusion matrix looks like this (note: the image looks much better on Firefox than Chrome, due to a well-known problem Chrome has with downscaling images):
 {: style="text-align: justify"}
 
-![Image_7](/agneev-blog/assets/img/img_8_7.png?raw=true)
+![Image_7](/agneev-blog/assets/img/img_8_7.png?raw=true){: width="800", height="400" }
 
 <p style="color:grey;font-size:100%;text-align: center;">
  Image 7: Normalised confusion matrix
@@ -335,7 +335,7 @@ Hmmm, we see that the performance is all over the place, and that for some class
 To better understand the model performance, however, we may want to also have a look at the non-normalised confusion matrix. Here it is:
 {: style="text-align: justify"}
 
-![Image_8](/agneev-blog/assets/img/img_8_8.png?raw=true)
+![Image_8](/agneev-blog/assets/img/img_8_8.png?raw=true){: width="800", height="400" }
 
 <p style="color:grey;font-size:100%;text-align: center;">
  Image 8: Non-normalised confusion matrix

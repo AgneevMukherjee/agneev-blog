@@ -323,7 +323,7 @@ We see here in the normalised confusion matrix that perfect results were obtaine
 For the final run on our dataset, the confusion matrix looks like this:
 {: style="text-align: justify"}
 
-![Image_7](/agneev-blog/assets/img/img_8_7.png?raw=true){: width="800", height="400" }
+![Image_7](/agneev-blog/assets/img/img_8_7.png?raw=true)
 
 <p style="color:grey;font-size:100%;text-align: center;">
  Image 7: Normalised confusion matrix
@@ -335,7 +335,7 @@ Hmmm, we see that the performance is all over the place, and that for some class
 To better understand the model performance, however, we may want to also have a look at the non-normalised confusion matrix. Here it is:
 {: style="text-align: justify"}
 
-![Image_8](/agneev-blog/assets/img/img_8_8.png?raw=true){: width="800", height="400" }
+![Image_8](/agneev-blog/assets/img/img_8_8.png?raw=true)
 
 <p style="color:grey;font-size:100%;text-align: center;">
  Image 8: Non-normalised confusion matrix

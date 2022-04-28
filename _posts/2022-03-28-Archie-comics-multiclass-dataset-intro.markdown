@@ -49,10 +49,10 @@ So let's look at the dataset, which can be found [here](https://www.kaggle.com/d
 
 An example of multi-class image classification is this:
 
- ![Image_1](/agneev-blog/assets/img/img_7_1.png?raw=true){: width="150", height="80" }
- <p> &emsp;  &emsp;   &emsp; Cat</p>
+ ![Image_1](/agneev-blog/assets/img/img_7_1.png?raw=true){: width="200", height="100" }
+ <p> &emsp;  &emsp;   &emsp; &emsp;  Cat</p>
  ![Image_2](/agneev-blog/assets/img/img_7_2.png?raw=true){: width="200", height="100" }
-<p> &emsp;  &emsp;   &emsp; Dog</p>
+<p> &emsp;  &emsp;   &emsp; &emsp; Dog</p>
  <p style="color:grey;font-size:80%;">
 © 2022 Agneev Mukherjee
 </p>

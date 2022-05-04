@@ -3,7 +3,7 @@ layout: post
 title:  "8. Diving into the Archie Comics Multiclass dataset"
 date:   2022-04-11 12:00:00 +0100
 category: ['Machine Learning', 'Computer Vision', 'Python']
-tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'PIL', 'Pandas']
+tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'PIL', 'Pandas', 'Scikit-learn']
 ---
 
 <span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
@@ -320,7 +320,7 @@ Since we saw that using the Imagenet weights gives smoother training curves and 
 We see here in the normalised confusion matrix that perfect results were obtained for the setosa and virginica irises, while for the versicolor, 62% were correctly classified, the rest all being misclassified as virginica.
 {: style="text-align: justify"}
 
-For the final run on our dataset, the normalised confusion matrix looks like the image below. _(Note: the image looks much better on Firefox than Chrome, due to a well-known problem Chrome has with downscaling images. You can open the image in a new tab and zoom it to make it easier to read)_
+For the final run on our dataset, the normalised confusion matrix (created using Scikit-learn) looks like the image below. _(Note: the image looks much better on Firefox than Chrome, due to a well-known problem Chrome has with downscaling images. You can open the image in a new tab and zoom it to make it easier to read)_
 {: style="text-align: justify"}
 
 ![Image_7](/agneev-blog/assets/img/img_8_7.png?raw=true){: width="800", height="400" }
@@ -344,7 +344,7 @@ To better understand the model performance, however, we may want to also have a 
 To get why this is important, have a look at the Harry Clayton class. The normalised confusion matrix was disappointing for this class, as it showed that the model did not make a single accurate prediction on this class. Image 8, however, shows that there were only two images of this class in the validation set! The 0% true positive rate for this class is not, therefore, as shocking as it might first seem. The random manner in which the validation set is selected means that several of the smaller classes may be under-represented even more severely in the validation set than they had been in the original dataset, which is clearly the case here for Harry Clayton. Other runs had given a 100% true positive rate for the same class! This means that for the minor character classes, it is not merely difficult to model them but also hard to quantify the model performance on them.
 {: style="text-align: justify"}
 
-A picture may help demonstrate the effect of class size on the classification performance more vividly. The excellent top-rated answer (not the accepted answer) on [this Stackoverflow question](https://stackoverflow.com/questions/31324218/scikit-learn-how-to-obtain-true-positive-true-negative-false-positive-and-fal) shows how to get the true positives (Archie predicted as Archie), true negatives (non-Archie predicted as non-Archie), false positives (non-Archie predicted as Archie) and false negatives (Archie predicted as non-Archie) from a confusion matrix. Let us just deal with the true positive rate (TPR) for now, i.e., what fraction of, say, Ethel pix were correctly predicted as Ethel. The code below calculates the TPR for each class, makes a Pandas dataframe out of these, and then uses that dataframe to create a Seaborn regression plot.
+A picture may help demonstrate the effect of class size on the classification performance more vividly. The excellent [top-rated answer](https://stackoverflow.com/a/43331484) (not the accepted answer) on a Stackoverflow question shows how to get the true positives (Archie predicted as Archie), true negatives (non-Archie predicted as non-Archie), false positives (non-Archie predicted as Archie) and false negatives (Archie predicted as non-Archie) from a confusion matrix. Let us just deal with the true positive rate (TPR) for now, i.e., what fraction of, say, Ethel pix were correctly predicted as Ethel. The code below calculates the TPR for each class, makes a Pandas dataframe out of these, and then uses that dataframe to create a Seaborn regression plot.
 {: style="text-align: justify"}
 
 {% highlight python %}

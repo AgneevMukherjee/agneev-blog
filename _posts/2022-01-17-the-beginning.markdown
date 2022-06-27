@@ -26,12 +26,12 @@ It all starts here! Over the course of the following months, I will be exploring
 <div class="post-nav">
   <p>
     {% if page.previous.url %}
-    <a href="{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
     {% endif %}
   </p>
   <p style = "text-align:right;">
     {% if page.next.url %}
-    <a href="{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
     {% endif %}
   </p>
 </div>

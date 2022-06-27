@@ -381,3 +381,16 @@ The major classes therefore contribute heavily towards the overall accuracy of 0
 
 If, on the other hand, we want a classifier that will work roughly equally well on every class, then our current approach is clearly not working. What can we do to sort this out? We shall see next time, when we discuss the different approaches for handling unbalanced datasets. For now, ciao!
 {: style="text-align: justify"}
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    {% endif %}
+  </p>
+</div>

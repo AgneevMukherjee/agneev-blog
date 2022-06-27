@@ -277,3 +277,16 @@ The images above can all easily be identified by any Jughead fan, but for a ML m
 
 And finally, as I said at the start, the dataset is also very imbalanced, which introduces its own challenges - and provides the opportunity to test some novel techniques. We shall look at this and other aspects in detail next time, so goodbye for now!
 {: style="text-align: justify"}
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    {% endif %}
+  </p>
+</div>

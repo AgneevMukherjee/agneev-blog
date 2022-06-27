@@ -149,3 +149,16 @@ While permutation importance can be and has been used here for the tree-based me
 
 OK, so this was a text-heavy post where I covered the methodology in plenty of depth. I think, though, that this detailed background was necessary to understand why I made the modelling choices I did. With that out of the way, next time we will see the actual modelling of the water bodies. So long!
 {: style="text-align: justify"}
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    {% endif %}
+  </p>
+</div>

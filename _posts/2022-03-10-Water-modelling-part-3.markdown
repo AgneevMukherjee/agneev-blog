@@ -361,3 +361,16 @@ And that's it! It's been a long trip through the different water bodies and the 
 
 >This notebook presents models for forecasting the target terms for four different types of waterbodies, with the ensembling of random forest, gradient boosting and neural networks providing accurate and reliable predictions for any desired time period. Overall, this competition was a great learning experience, and I would like to thank the organisers for this. One issue is regarding the quality of data, which for some waterbodies, especially water springs Lupa and Madonna di Canneto, were scarce and of poor quality, severely hampering the quality of the model predictions. Ultimately, no amount of sophistication in data imputation and modelling can compensate for a lack of appropriate and sufficient data, and therefore addressing this should be the first step taken towards being able to better forecast water availability. Overall, though, this analytics competition was a great initiative, and I hope that the outcome of the competition will not only help Acea better manage its waterbodies, but will also spur a general interest in applying such techniques to water management.
 {: style="text-align: justify"}
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    {% endif %}
+  </p>
+</div>

@@ -1049,3 +1049,16 @@ I reran all the code for a forecast period of 30 days - everything remaining ide
 
 This has been a very long post, since I had a lot to go over, and so I will leave it here for the moment. The next time, we will take a brief look at some of the interesting points in the modelling of the other water bodies to wind up this series. So long!
 {: style="text-align: justify"}
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    {% endif %}
+  </p>
+</div>

@@ -245,3 +245,16 @@ Some of the images created in this fashion are shown below, and the imperfect co
 
 So that's it, we have seen the various methods I used to create my submissions. Next time we will look at evaluating some of my created datasets using a cut-off Resnet50, as used in the competition, as well as full Resnet versions. So long!
 {: style="text-align: justify"}
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    {% endif %}
+  </p>
+</div>

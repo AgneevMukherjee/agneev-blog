@@ -338,3 +338,16 @@ The above statement may confuse some. How can we overfit on the test set, when t
 
 Let us therefore be satisfied with what we have achieved - an accuracy in the late 80s on a fairly diverse and representative dataset, with a reasonable non-GPU run time of ~26 minutes. On to a new adventure next time!
 {: style="text-align: justify"}
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    {% endif %}
+  </p>
+</div>

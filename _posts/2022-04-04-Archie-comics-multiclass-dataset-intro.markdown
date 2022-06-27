@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "7. Introducing the Archie Comics Multiclass dataset"
-date:   2022-03-28 12:00:00 +0100
+date:   2022-04-04 12:00:00 +0100
 category: ['Machine Learning', 'Computer Vision', 'Python']
 tag: ['Created dataset']
 ---

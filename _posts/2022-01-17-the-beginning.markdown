@@ -21,3 +21,17 @@ categories: General
 <br/>
 
 It all starts here! Over the course of the following months, I will be exploring different aspects related to data science/machine learning, perhaps with the occasional digression. Let's see how this journey goes!
+
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <a href="{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <a href="{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    {% endif %}
+  </p>
+</div>

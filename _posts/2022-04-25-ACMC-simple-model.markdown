@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "8. Diving into the Archie Comics Multiclass dataset"
-date:   2022-04-11 12:00:00 +0100
+date:   2022-04-25 12:00:00 +0100
 category: ['Machine Learning', 'Computer Vision', 'Python']
 tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'PIL', 'Pandas', 'Scikit-learn']
 ---
@@ -238,7 +238,7 @@ Briefly, what the above code does first is generate training and validation Tens
 We can see that the plots show definite overfitting, with a divergence between the training and the validation curves. The other noteworthy feature is the jaggedness of the curves, one reason for which may be the small batch size (8) employed.
 {: style="text-align: justify"}
 
-The maximum validation accuracy obtained in the above run is around 57%. This made me wonder - what if I started with Imagenet weights for the ResNet instead of no weights? I made another notebook on that [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/fork-of-tf-acmc-simple-imagenet.ipynb). The main change is that for using the Imagenet weights, the model head needs to be changed, which I did as per [this](https://pyimagesearch.com/2020/04/27/fine-tuning-resnet-with-keras-tensorflow-and-deep-learning/) - the modeified portion of the code is shown below, while the rest remains unchanged.
+The maximum validation accuracy obtained in the above run is around 57%. This made me wonder - what if I started with Imagenet weights for the ResNet instead of no weights? I made another notebook on that [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/fork-of-tf-acmc-simple-imagenet.ipynb). The main change is that for using the Imagenet weights, the model head needs to be changed, which I did as per [this](https://pyimagesearch.com/2020/04/27/fine-tuning-resnet-with-keras-tensorflow-and-deep-learning/) - the modified portion of the code is shown below, while the rest remains unchanged.
 {: style="text-align: justify"}
 
 {% highlight python %}
@@ -320,7 +320,7 @@ Since we saw that using the Imagenet weights gives smoother training curves and 
 We see here in the normalised confusion matrix that perfect results were obtained for the setosa and virginica irises, while for the versicolor, 62% were correctly classified, the rest all being misclassified as virginica.
 {: style="text-align: justify"}
 
-For the final run on our dataset, the normalised confusion matrix (created using Scikit-learn) looks like the image below. _(Note: the image looks much better on Firefox than Chrome, due to a well-known problem Chrome has with downscaling images. You can open the image in a new tab and zoom it to make it easier to read)_
+For the final run on our dataset, the normalised confusion matrix (created using Scikit-learn) looks like the image below. _(Note: the image looks much better on Firefox than Chrome, due to a well-known problem Chrome has with downscaling images. If needed, you can open the image in a new tab and zoom it to make it easier to read.)_
 {: style="text-align: justify"}
 
 ![Image_7](/agneev-blog/assets/img/img_8_7.png?raw=true){: width="800", height="400" }

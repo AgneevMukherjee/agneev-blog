@@ -3,7 +3,7 @@ layout: post
 title:  "5. Modelling water bodies - 3"
 date:   2022-03-07 12:00:00 +0100
 category: ['Data Science', 'Machine Learning', 'Python', 'Time series', 'Tabular']
-tag: ['Environment', 'Water', 'Pandas', 'Kaggle', 'Competition', 'Random Forest', 'LightGBM', 'LSTM', 'Imputation', 'SHAP', 'Matplotlib', 'Ensemble']
+tag: ['Environment', 'Water', 'Pandas', 'Kaggle', 'Competition', 'Random Forest', 'LightGBM', 'LSTM', 'SHAP', 'Matplotlib', 'Ensemble']
 ---
 
 <div class="post-nav">

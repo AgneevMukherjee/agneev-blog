@@ -6,6 +6,24 @@ category: ['Data Science', 'Machine Learning', 'Python', 'Time series']
 tag: ['Environment', 'Water', 'Kaggle', 'Competition']
 ---
 
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
+    {% endif %}
+  </p>
+</div>
+
+<br>
+
 <span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
 <div class="post-categories">
 <p style="font-size:20px">
@@ -34,7 +52,7 @@ Hello again! The last few weeks, we have seen the creation and evaluation of han
 One thing in common between this post and the previous ones is their origin in competitions I participated in. While the Roman numerals datasets were an output of my participation in the [Data-Centric AI competition](https://https-deeplearning-ai.github.io/data-centric-comp/), the present post is based on my writeup for the [Acea Smart Water Analytics](https://www.kaggle.com/c/acea-water-prediction/overview) competition organised on Kaggle from December 2020 - February 2021. Unlike the vast majority of Kaggle competitions, this particular competition was an 'Analytics Competition', which means that it had no leaderboard and no metric to fit to. Instead, competitors were asked to provide a notebook containing both, the models, and an explanation of the models. These notebooks were judged according to the criteria defined [here](https://www.kaggle.com/c/acea-water-prediction/overview/evaluation) - essentially, the soundness of the methodology, the quality of the presentation, and the applicability of the methods.
 {: style="text-align: justify"}
 
-How did I do in this competition? Well, I at least made it to the list of [finalists](https://www.kaggle.com/c/acea-water-prediction/discussion/229764), which was something...then again, finishing in the top 17 out of 103 isn't _that_ great... In any case, in this post and the next, we will look at how I approached the problem. This post will describe the problem, why it matters, and the methodology I used, while the actual modelling and the results will be covered next time. The notebook containing all the code is available [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb), while the competition dataset is [here](https://www.kaggle.com/c/acea-water-prediction/data). Please note that if you want to download the dataset, you will need to create a Kaggle account and accept the competition rules.
+How did I do in this competition? Well, I at least made it to the list of [finalists](https://www.kaggle.com/c/acea-water-prediction/discussion/229764), which was something...then again, finishing in the top 17 out of 103 isn't _that_ great... In any case, in this series of posts, we will look at how I approached the problem. This post will describe the problem, why it matters, and the methodology I used, while the actual modelling and the results will be covered in future posts. The notebook containing all the code is available [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb), while the competition dataset is [here](https://www.kaggle.com/c/acea-water-prediction/data). Please note that if you want to download the dataset, you will need to create a Kaggle account and accept the competition rules.
 {: style="text-align: justify"}
 
 With that said, let's go!
@@ -153,12 +171,17 @@ OK, so this was a text-heavy post where I covered the methodology in plenty of d
 <div class="post-nav">
   <p>
     {% if page.previous.url %}
-    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
     {% endif %}
   </p>
   <p style = "text-align:right;">
     {% if page.next.url %}
+    <big><b>
     <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
     {% endif %}
   </p>
 </div>
+
+<br>

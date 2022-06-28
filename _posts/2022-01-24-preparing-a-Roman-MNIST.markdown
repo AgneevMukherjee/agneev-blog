@@ -5,6 +5,25 @@ date:   2022-01-24 12:00:00 +0100
 category: ['Machine Learning', 'Computer Vision', 'Python', 'Data-centric']
 tag: ['OpenCV', 'Matplotlib', 'Synthetic Data', 'Competition', 'Created dataset']
 ---
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
+    {% endif %}
+  </p>
+</div>
+
+<br>
+
 <span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
 <div class="post-categories">
 <p style="font-size:20px">
@@ -249,12 +268,15 @@ So that's it, we have seen the various methods I used to create my submissions. 
 <div class="post-nav">
   <p>
     {% if page.previous.url %}
-    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
     {% endif %}
   </p>
   <p style = "text-align:right;">
     {% if page.next.url %}
+    <big><b>
     <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
     {% endif %}
   </p>
 </div>

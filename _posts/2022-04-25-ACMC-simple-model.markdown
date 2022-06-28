@@ -6,6 +6,24 @@ category: ['Machine Learning', 'Computer Vision', 'Python']
 tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'PIL', 'Pandas', 'Scikit-learn']
 ---
 
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
+    {% endif %}
+  </p>
+</div>
+
+<br>
+
 <span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
 <div class="post-categories">
 <p style="font-size:20px">
@@ -382,15 +400,19 @@ The major classes therefore contribute heavily towards the overall accuracy of 0
 If, on the other hand, we want a classifier that will work roughly equally well on every class, then our current approach is clearly not working. What can we do to sort this out? We shall see next time, when we discuss the different approaches for handling unbalanced datasets. For now, ciao!
 {: style="text-align: justify"}
 
+
 <div class="post-nav">
   <p>
     {% if page.previous.url %}
-    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
     {% endif %}
   </p>
   <p style = "text-align:right;">
     {% if page.next.url %}
+    <big><b>
     <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
     {% endif %}
   </p>
 </div>

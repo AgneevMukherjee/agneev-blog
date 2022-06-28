@@ -4,6 +4,25 @@ title:  "0. The Beginning!"
 date:   2022-01-17 12:00:00 +0100
 categories: General
 ---
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
+    {% endif %}
+  </p>
+</div>
+
+<br>
+
 <span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
 <div class="post-categories">
 <p style="font-size:20px">
@@ -26,12 +45,15 @@ It all starts here! Over the course of the following months, I will be exploring
 <div class="post-nav">
   <p>
     {% if page.previous.url %}
-    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
     {% endif %}
   </p>
   <p style = "text-align:right;">
     {% if page.next.url %}
+    <big><b>
     <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
     {% endif %}
   </p>
 </div>

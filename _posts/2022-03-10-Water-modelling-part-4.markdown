@@ -1,10 +1,28 @@
 ---
 layout: post
-title:  "6. Modelling water bodies - 3"
+title:  "6. Modelling water bodies - 4"
 date:   2022-03-10 12:00:00 +0100
 category: ['Data Science', 'Machine Learning', 'Python', 'Time series', 'Tabular']
 tag: ['Environment', 'Water', 'Kaggle', 'Competition', 'Matplotlib']
 ---
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
+    {% endif %}
+  </p>
+</div>
+
+<br>
 
 <span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
 <div class="post-categories">
@@ -28,7 +46,7 @@ tag: ['Environment', 'Water', 'Kaggle', 'Competition', 'Matplotlib']
 </p>
 <br/>
 
-Welcome to the last post in the water body modelling series! The [last time](https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-2/) we saw the modelling of the Aquifer Petrignano using a Random Forest, a LightGBM and an LSTM model, for two different forecast periods. We also saw how to analyse their feature importance via permutation importance and SHAP. It would be redundant (and boring!) to look at all that again for each of the nine water bodies, and so in this post I will just highlight some of the interesting points that arose for the other water bodies. As a reminder, you can find all the code [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb).
+Welcome to the last post in the water body modelling series! The [last time](https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-3/) we saw the modelling of the Aquifer Petrignano using a Random Forest, a LightGBM and an LSTM model, for two different forecast periods. We also saw how to analyse their feature importance via permutation importance and SHAP. It would be redundant (and boring!) to look at all that again for each of the nine water bodies, and so in this post I will just highlight some of the interesting points that arose for the other water bodies. As I say each time, you can find all the code [here](https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb).
 {: style="text-align: justify"}
 
 ## Aquifer Auser  <a id="Auser"></a>
@@ -356,21 +374,25 @@ The above shows the flow rate, which, as I said, is different from what it meant
 <br>
 ## Conclusion  <a id="Conc"></a>
 
-And that's it! It's been a long trip through the different water bodies and the quirks associated with their modelling, but worthwhile, I hope. One of the frustrations of this competition was that the winning submissions were never released, preventing people from learning from these. I quite liked my own submission, except that it was very long (like these posts...), and in hindsight, I would have skipped some of the figures for the latter waterbodies to reduce the length and the monotony. Oh well, I at least hope the organisers got what they wanted. I will leave you with my final words from my competition entry, which I think still sum up my feelings well:
+And that's it! It's been a long trip through the different water bodies and the quirks associated with their modelling, but worthwhile, I hope. One of the frustrations of this competition was that the winning submissions were never released, preventing people from learning from these. I quite liked my own submission, except that it was very long (like these posts...), and in hindsight, I would have skipped some of the figures for the latter waterbodies to reduce the length and the monotony. Oh well, I at least hope the organisers got what they wanted from the competition. I will leave you with my final words from my competition entry, which I think still sum up my feelings well:
 {: style="text-align: justify"}
 
 >This notebook presents models for forecasting the target terms for four different types of waterbodies, with the ensembling of random forest, gradient boosting and neural networks providing accurate and reliable predictions for any desired time period. Overall, this competition was a great learning experience, and I would like to thank the organisers for this. One issue is regarding the quality of data, which for some waterbodies, especially water springs Lupa and Madonna di Canneto, were scarce and of poor quality, severely hampering the quality of the model predictions. Ultimately, no amount of sophistication in data imputation and modelling can compensate for a lack of appropriate and sufficient data, and therefore addressing this should be the first step taken towards being able to better forecast water availability. Overall, though, this analytics competition was a great initiative, and I hope that the outcome of the competition will not only help Acea better manage its waterbodies, but will also spur a general interest in applying such techniques to water management.
 {: style="text-align: justify"}
 
+
 <div class="post-nav">
   <p>
     {% if page.previous.url %}
-    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
     {% endif %}
   </p>
   <p style = "text-align:right;">
     {% if page.next.url %}
+    <big><b>
     <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
     {% endif %}
   </p>
 </div>

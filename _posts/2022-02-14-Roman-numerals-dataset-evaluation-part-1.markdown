@@ -5,6 +5,25 @@ date:   2022-02-14 12:00:00 +0100
 category: ['Machine Learning', 'Computer Vision', 'Python']
 tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Competition']
 ---
+
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
+    {% endif %}
+  </p>
+</div>
+
+<br>
+
 <span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
 <div class="post-categories">
 <p style="font-size:20px">
@@ -667,15 +686,19 @@ We see once again that the training accuracy jumps to almost 100% in about 15 ep
 We have now seen what the cut-off ResNet50 provided by the competition organisers achieved on our three datasets. As we know, the aim of the competition was to keep the model fixed and only change the data. However, we often have the feeling that bigger models do better than smaller ones, so how would a full ResNet50 perform on these datasets? Well, we can find out by simply running a full ResNet50! As this post is running too long, we will look at this next time, also examining how a simple CNN implemented from scratch will perform. Finally, we will pick the best of the three model options and run it on a 'combined' dataset, that will both represent a harder challenge and be more representative of real-life data. So long!
 {: style="text-align: justify"}
 
+
 <div class="post-nav">
   <p>
     {% if page.previous.url %}
-    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
     {% endif %}
   </p>
   <p style = "text-align:right;">
     {% if page.next.url %}
+    <big><b>
     <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
     {% endif %}
   </p>
 </div>

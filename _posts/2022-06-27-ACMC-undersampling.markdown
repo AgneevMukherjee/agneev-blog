@@ -6,6 +6,24 @@ category: ['Machine Learning', 'Computer Vision', 'Python']
 tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'Pandas', 'Scikit-learn']
 ---
 
+<div class="post-nav">
+  <p>
+    {% if page.previous.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
+    {% endif %}
+  </p>
+  <p style = "text-align:right;">
+    {% if page.next.url %}
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
+    {% endif %}
+  </p>
+</div>
+
+<br>
+
 <span style="font-family:Helvetica; font-size:1.5em;">Categories:</span>
 <div class="post-categories">
 <p style="font-size:20px">
@@ -252,15 +270,19 @@ Viewed one way, the problem of the majority classes getting higher true positive
 Undersampling is a straightforward method of dealing with unbalanced data. Unfortunately, it is not a very _effective_ method. Here, we discarded almost 90% of the original images in an attempt to balance the classes, but ended up with both a poor validation accuracy and an enduring disparity in the performance across classes. Fortunately, better options exist, one of which we will look at next time. So long!
 {: style="text-align: justify"}
 
+
 <div class="post-nav">
   <p>
     {% if page.previous.url %}
-    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a>
+    <big><b>
+    <a href="{{ site.baseurl }}{{page.previous.url}}">&#8672;&nbsp;{{page.previous.title}}</a></b></big>
     {% endif %}
   </p>
   <p style = "text-align:right;">
     {% if page.next.url %}
+    <big><b>
     <a href="{{ site.baseurl }}{{page.next.url}}">{{page.next.title}}&nbsp;&#8674;</a>
+    </b></big>
     {% endif %}
   </p>
 </div>

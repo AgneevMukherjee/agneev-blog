@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "8. Diving into the Archie Comics Multiclass dataset"
+title:  "9. Diving into the Archie Comics Multiclass dataset"
 date:   2022-04-25 12:00:00 +0100
 category: ['Machine Learning', 'Computer Vision', 'Python']
 tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'PIL', 'Pandas', 'Scikit-learn']

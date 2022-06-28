@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "9. ACMC - Undersampling"
+title:  "10. ACMC - Undersampling"
 date:   2022-06-26 12:00:00 +0100
 category: ['Machine Learning', 'Computer Vision', 'Python']
 tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'Pandas', 'Scikit-learn']

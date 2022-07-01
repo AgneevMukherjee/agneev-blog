@@ -67,11 +67,6 @@ An alternative is to fix a particular threshold, say 200 samples, and remove the
 
 ![Image_1](/agneev-blog/assets/img/img_10_1.png?raw=true){: width="800", height="600" }
 
-<p style="color:grey;font-size:100%;text-align: center;">
- Image 1: <a href = "https://en.wikipedia.org/wiki/Tall_poppy_syndrome">Cutting down the tall poppies...</a>
-</p>
-<br>
-
 Let's look at both approaches in turn.
 
 ### Minimum samples approach <a id="min_sample"></a>
@@ -239,10 +234,6 @@ We can then run the model, with the [usual callbacks](https://agneevmukherjee.gi
 ![Image_5](/agneev-blog/assets/img/img_10_5.png?raw=true){: width="350", height="200" }
 ![Image_6](/agneev-blog/assets/img/img_10_6.png?raw=true){: width="350", height="200" }
 
-<p style="color:grey;font-size:100%;text-align: center;">
-Image 2: Validation fails completely
-</p>
-<br>
 Hmm...strange. The training accuracy and loss are fine, but the validation accuracy remains virtually at zero, while the validation loss actually rises relentlessly. Clearly something is wrong...
 {: style="text-align: justify"}
 .
@@ -272,10 +263,6 @@ That's better...the different classes are now randomly arranged. We see that the
 
 ![Image_8](/agneev-blog/assets/img/img_10_8.png?raw=true){: width="800", height="600" }
 
-<p style="color:grey;font-size:100%;text-align: center;">
-Image 3: Better results...relatively speaking!
-</p>
-<br>
 We see that the validation accuracy and loss now look more familiar (and appropriate). Let us recap a sentence from the start of this post, however.
 {: style="text-align: justify"}
 
@@ -286,19 +273,10 @@ In the simple model, we got the validation accuracy of 56% after 20 epochs. Here
 
 ![Image_9](/agneev-blog/assets/img/img_10_9.png?raw=true){: width="800", height="600" }
 
-<p style="color:grey;font-size:100%;text-align: center;">
-Image 4: Confusion matrix of undersampled validation set
-</p>
-<br>
 Viewed one way, the problem of the majority classes getting higher true positive rates has been resolved - the results for Archie, Jughead, etc. are pretty average now. On the other hand, several classes still perform much better or worse than average. Why is this? Well, one reason can be divined from looking at the absolute numbers in the confusion matrix:
 {: style="text-align: justify"}
 <br>
 ![Image_10](/agneev-blog/assets/img/img_10_10.png?raw=true){: width="800", height="600" }
-
-<p style="color:grey;font-size:100%;text-align: center;">
-Image 5: Very few samples...
-</p>
-<br>
 
 We see that some classes have as few as 4 samples in the validation set, and in general, the number of samples are too few to make a reasonable judgement about how good the model is for any class, considering both the heterogeneity of the dataset and the [stochastic nature](https://machinelearningmastery.com/stochastic-in-machine-learning/) of ML models. Other factors for why some classes show a higher true positive rate might be some characters being easier to identify, the validation images more closely resembling the training figures for these classes, etc. In any case, our stated goal of achieving an even recognition of all the classes thus remains unaccomplished...
 {: style="text-align: justify"}

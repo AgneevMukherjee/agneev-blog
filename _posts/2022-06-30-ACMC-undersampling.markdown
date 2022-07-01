@@ -331,7 +331,7 @@ So far we have been handling these things qualitatively. If we are to answer the
 {: style="text-align: justify"}
 <br>
 
-<h1>F-score</h1><a id="f-score"></a>
+## F-score <a id="f-score"></a>
 
 [As Wikipedia says](https://en.wikipedia.org/wiki/F-score), the F-score is a measure of accuracy calculated using [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall). What are these terms?
 {: style="text-align: justify"}

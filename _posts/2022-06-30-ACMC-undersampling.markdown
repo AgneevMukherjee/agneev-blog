@@ -329,8 +329,9 @@ Hmm. This certainly appears better than the minimum samples approach. Is it bett
 
 So far we have been handling these things qualitatively. If we are to answer the above questions, however, we need to be more quantitative. We need a metric that can compare models taking into account not only the predictions that the models got correct but also those they got wrong. Enter the...
 {: style="text-align: justify"}
+<br>
 
-## F-score <a id="f-score"></a>
+# F-score <a id="f-score"></a>
 
 [As Wikipedia says](https://en.wikipedia.org/wiki/F-score), the F-score is a measure of accuracy calculated using [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall). What are these terms?
 {: style="text-align: justify"}
@@ -359,7 +360,6 @@ OK, so now that we have the precision and recall values, how do we get the F-sco
 The F<sub>1</sub> score for the Archie class is thus 2 * (0.31 * 0.37) / (0.31 + 0.37) = **0.34**.
 {: style="text-align: justify"}
 <br>
-
 ### F-score averaging <a id="avg"></a>
 
 One thing that I have not mentioned yet is that the F-score is defined for binary classification. The example we looked at above was essentially 'Archie' versus 'non-Archie', a binary classification problem. How do we adapt the F-score to multiclass classification then? Simply by taking the average of the F-scores for all the classes...but how do we take the average?

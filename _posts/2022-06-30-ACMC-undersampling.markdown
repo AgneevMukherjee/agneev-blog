@@ -417,10 +417,10 @@ The two most widely used F-score averages are the micro- and the macro-averages.
 | Others        |               21 |                19 |              505 |                16 |       0.55 |
 | Total         |              276 |               285 |            12057 |               285 |     nan    |
 
-The macroaverage F<sub>1</sub> is simply the mean of the F<sub>1</sub> values for all the classes. In this case, the mean of the F<sub>1</sub> score column comes to 0.47, and this is the macroaverage F<sub>1</sub> score.
+The macroaverage F<sub>1</sub> is simply the mean of the F<sub>1</sub> values for all the classes. In this case, the mean of the F<sub>1</sub> score column comes to **0.47**, and this is the macroaverage F<sub>1</sub> score.
 {: style="text-align: justify"}
 
-The microaverage F<sub>1</sub> score, on the other hand, is calculated using the sum of the TP, FP and FN values. Here, the microaverage F<sub>1</sub> = 276 / (276 + 1/2 * (285 + 285)) = 0.49.
+The microaverage F<sub>1</sub> score, on the other hand, is calculated using the sum of the TP, FP and FN values. Here, the microaverage F<sub>1</sub> = 276 / (276 + 1/2 * (285 + 285)) = **0.49**.
 {: style="text-align: justify"}
 
 We can see that the macroaverage F<sub>1</sub> score gives equal weightage to every class, regardless of the class sample size. The microaverage F<sub>1</sub> score, on the other hand, uses the cumulative TP, FP and FN values, and as the majority classes contribute more to these than the minority classes, the microaverage F<sub>1</sub> score is biased towards performance on the majority classes. For evaluating a model we want to see perform equally well on different classes of an imbalanced dataset, therefore, the macroaverage F<sub>1</sub> score is the more suitable metric.

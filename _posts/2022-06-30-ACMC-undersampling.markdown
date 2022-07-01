@@ -329,8 +329,9 @@ Hmm. This certainly appears better than the minimum samples approach. Is it bett
 
 So far we have been handling these things qualitatively. If we are to answer the above questions, however, we need to be more quantitative. We need a metric that can compare models taking into account not only the predictions that the models got correct but also those they got wrong. Enter the...
 {: style="text-align: justify"}
+<br>
 
-# F-score <a id="f-score"></a>
+<h1>F-score</h1><a id="f-score"></a>
 
 [As Wikipedia says](https://en.wikipedia.org/wiki/F-score), the F-score is a measure of accuracy calculated using [precision and recall](https://en.wikipedia.org/wiki/Precision_and_recall). What are these terms?
 {: style="text-align: justify"}

@@ -327,7 +327,7 @@ Once again we see the overfitting persisting, but once again, that's not our con
 Hmm. This certainly appears better than the minimum samples approach. Is it better than [that of the original dataset](https://agneevmukherjee.github.io/agneev-blog/ACMC-simple-model/#elephant), however? If so, by how much? Better enough to justify the loss in validation accuracy?
 {: style="text-align: justify"}
 
-So far we have been handling these things qualitatively. If we are to answer the above questions, however, we need to be more quantitative. We need a metric that can compare models taking into account not only the predictions that the models got correct but also those they got wrong. Enter the...
+So far we have been handling these things qualitatively. If we are to answer the above questions, however, we need to be more quantitative. Using just accuracy won't work - we need a metric that can compare models taking into account not only the predictions that the models got correct but also those they got wrong. Enter the...
 {: style="text-align: justify"}
 <br>
 

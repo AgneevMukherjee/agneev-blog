@@ -378,7 +378,7 @@ OK, so now that we have the precision and recall values, how do we get the F-sco
 
 ![Image_16](/agneev-blog/assets/img/img_10_16.png?raw=true){: width="600", height="400" }
 
-The F<sub>1</sub> score for the Archie class is thus 2 * (0.31 * 0.37) / (0.31 + 0.37) = 0.34.
+The F<sub>1</sub> score for the Archie class is thus 2 * (0.31 * 0.37) / (0.31 + 0.37) = **0.34**.
 {: style="text-align: justify"}
 <br>
 

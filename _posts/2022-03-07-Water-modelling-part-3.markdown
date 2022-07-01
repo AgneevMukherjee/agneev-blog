@@ -202,7 +202,7 @@ plt.show()
 
 {% endhighlight %}
 
-![Image_10](/agneev-blog/assets/img/img_5_10.png?raw=true){: width="800", height="400" }
+![Image_1](/agneev-blog/assets/img/img_6_1.png?raw=true){: width="800", height="400" }
 
 We can see that the weekly lag terms for the two targets are the most important predictors, which is unsurprising. Among the other inputs, the 30-day rolling mean of the volume term and the 120-day rolling mean of the rainfall term are of relatively major importance. Neither of the temperature terms appears in the list of important features at all, perhaps because they had been dropped when we narrowed down the list of features earlier.
 {: style="text-align: justify"}
@@ -218,13 +218,13 @@ mean_squared_error(rf_preds_1, test_rf_y, multioutput='raw_values', squared=Fals
 
 {% endhighlight %}
 
-![Image_11](/agneev-blog/assets/img/img_5_11.png?raw=true){: width="300", height="200" }
+![Image_2](/agneev-blog/assets/img/img_6_2.png?raw=true){: width="300", height="200" }
 
 <br>
 We have looked at the most important features in terms of permutation importance above. Let us now see what the SHAP values calculated using SHAP's TreeExplainer say. First a look at the summary plot for all the target columns combined:
 {: style="text-align: justify"}
 
-![Image_12](/agneev-blog/assets/img/img_5_12.png?raw=true){: width="600", height="300" }
+![Image_3](/agneev-blog/assets/img/img_6_3.png?raw=true){: width="600", height="300" }
 
 We see that the weekly lag of the two depth to groundwater terms are important predictors for both the target terms, in line with both what the permutation importances showed and our expectations.The 120-day rolling mean of the rainfall is also an important predictor, more for the Depth_to_Groundwater_P24 target than Depth_to_Groundwater_P25 (the blue portion of the bar is longer than the red portion for the Rainfall_Bastia_Umbra_roll_120 term). Three different rolling means of the volume term are of moderate importance, while the weekly lag of the hydrometry term comes much lower down than was the case for the permutation importances. Overall, there is relatively good agreement, but the SHAP plots can provide greater depth of information, as shown below.
 {: style="text-align: justify"}
@@ -247,11 +247,11 @@ for target in targets:
 
 {% endhighlight %}
 
-![Image_13](/agneev-blog/assets/img/img_5_13.png?raw=true){: width="600", height="300" }
+![Image_4](/agneev-blog/assets/img/img_6_4.png?raw=true){: width="600", height="300" }
 
-![Image_14](/agneev-blog/assets/img/img_5_14.png?raw=true){: width="600", height="300" }
+![Image_5](/agneev-blog/assets/img/img_6_5.png?raw=true){: width="600", height="300" }
 
-A detailed explanation of how to interpret SHAP summary plots can be found [here](https://christophm.github.io/interpretable-ml-book/shap.html#shap-summary-plot), but looking at the above, it is clear that they present some interesting insights. Consider the Depth_to_Groundwater_P24 figure. We see that the Depth_to_Groundwater_P24_week_lag term has a positive impact on the model output (except for very low values of the feature), while the Depth_to_Groundwater_P25_week_lag has a negative impact (except for very high values of the feature. Thus, we see that very high values of the Depth_to_Groundwater_P24_week_lag (bright red colour) leads to the model output increasing by around 1.2, while for the Depth_to_Groundwater_P25_week_lag term, very high values affect the model output by -0.2 to +0.1. Very low values of this feature (bright blue) reduce the model output by around 1.5. We also see that the Rainfall_Bastia_Umbra_roll_120 term has a small postive effect, but this effect is a bit inconsistent, as a mixture of blue and red values are seen in the 0.1 to 0.5 region. Finally, all the other terms are centred around 0 with limited spread on either side, indicating that it does not much matter to the model predictions whether these terms have a high or low value - in other words, that they are of low importance in prediction.
+A detailed explanation of how to interpret SHAP summary plots can be found [here](https://christophm.github.io/interpretable-ml-book/shap.html#shap-summary-plot), but looking at the above, it is clear that they present some interesting insights. Consider the Depth_to_Groundwater_P24 figure. We see that the Depth_to_Groundwater_P24_week_lag term has a positive impact on the model output (except for very low values of the feature), while the Depth_to_Groundwater_P25_week_lag has a negative impact (except for very high values of the feature. Thus, we see that very high values of the Depth_to_Groundwater_P24_week_lag (bright red colour) leads to the model output increasing by around 1.2, while for the Depth_to_Groundwater_P25_week_lag term, very high values affect the model output by -0.2 to +0.1. Very low values of this feature (bright blue) reduce the model output by around 1.5. We also see that the Rainfall_Bastia_Umbra_roll_120 term has a small positive effect, but this effect is a bit inconsistent, as a mixture of blue and red values are seen in the 0.1 to 0.5 region. Finally, all the other terms are centred around 0 with limited spread on either side, indicating that it does not much matter to the model predictions whether these terms have a high or low value - in other words, that they are of low importance in prediction.
 {: style="text-align: justify"}
 
 The above thus helps us not only see which features are important, but also how they actually impact the model - whether this impact is positive or negative, and whether high values and low values of the feature affect predictions differently. While the above can be discussed in further depth, in the interests of brevity, let us move on to the LGBM model.
@@ -298,9 +298,9 @@ for target in targets:
 
 {% endhighlight %}
 
-![Image_15](/agneev-blog/assets/img/img_5_15.png?raw=true){: width="600", height="300" }
+![Image_6](/agneev-blog/assets/img/img_6_6.png?raw=true){: width="600", height="300" }
 
-![Image_16](/agneev-blog/assets/img/img_5_16.png?raw=true){: width="600", height="300" }
+![Image_7](/agneev-blog/assets/img/img_6_7.png?raw=true){: width="600", height="300" }
 
 The permutation importances can be calculated for the LGBM similarly to RF, but let us focus on the SHAP summary plots. We see that these are broadly similar to the RF plots, with some differences. In the Depth_to_Groundwater_P24 plot, we see that the impact of the Depth_to_Groundwater_P24 weekly lag term is less pronounced than was the case for RF, with high values increasing model output by less than 1.0. We also see the individual rainfall terms making less of an impact on the model output. These differences are partly a result of the differences in the algorithm, and partly simply due to the greater number of features available to the LGBM regressor, since we did not carry out a feature selection for it. The broad picture, though, remains the same - the weekly lag terms for the depths to groundwater are the most important, the volume and rainfall terms have a part to play, and the hydrometry and temperature terms have a negligible impact on the model output.
 {: style="text-align: justify"}
@@ -316,7 +316,7 @@ mean_squared_error(lgbm_preds_1, test_lgbm_y, multioutput='raw_values', squared=
 
 {% endhighlight %}
 
-![Image_17](/agneev-blog/assets/img/img_5_17.png?raw=true){: width="300", height="200" }
+![Image_8](/agneev-blog/assets/img/img_6_8.png?raw=true){: width="300", height="200" }
 
 <br>
 ## LSTM model  <a id="LSTM"></a>
@@ -379,7 +379,7 @@ n_features = X_train.shape[2]
 
 {% endhighlight %}
 
-![Image_18](/agneev-blog/assets/img/img_5_18.png?raw=true){: width="200", height="100" }
+![Image_9](/agneev-blog/assets/img/img_6_9.png?raw=true){: width="200", height="100" }
 
 After the preprocessing above, we are ready to define and run the LSTM model. I fit the model for 200 epochs, as I found this to give good results while taking a reasonable amount of time. If necessary the ideal number of epochs can be figured out as shown [here](https://machinelearningmastery.com/tune-lstm-hyperparameters-keras-time-series-forecasting/), but let's leave that for now.
 {: style="text-align: justify"}
@@ -426,7 +426,7 @@ mean_squared_error(lstm_preds_1, y_targets, multioutput='raw_values', squared=Fa
 
 {% endhighlight %}
 
-![Image_19](/agneev-blog/assets/img/img_5_19.png?raw=true){: width="300", height="200" }
+![Image_10](/agneev-blog/assets/img/img_6_10.png?raw=true){: width="300", height="200" }
 
 <br>
 The SHAP analysis of the LSTM cannot be done by the TreeExplainer like for the tree-based models, and the DeepExplainer available for NNs gives errors like [this](https://github.com/slundberg/shap/issues/1490) for LSTMs, and so I used the [GradientExplainer](https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html) instead. The difference in the SHAP summary plots for LSTM as compared to the earlier plots is obvious - the Depth_to_Groundwater terms are used directly in the LSTM for predictions, and hence high values of these variables give high values for the model output, and the other way around. This shows that the influence of a feature on the prediction depends not only on the variable but also on the type of model used.
@@ -448,9 +448,9 @@ for target in targets:
 
 {% endhighlight %}
 
-![Image_20](/agneev-blog/assets/img/img_5_20.png?raw=true){: width="600", height="300" }
+![Image_11](/agneev-blog/assets/img/img_6_11.png?raw=true){: width="600", height="300" }
 
-![Image_21](/agneev-blog/assets/img/img_5_21.png?raw=true){: width="600", height="300" }
+![Image_12](/agneev-blog/assets/img/img_6_12.png?raw=true){: width="600", height="300" }
 
 <br>
 ## Ensembling  <a id="Ensemble"></a>
@@ -469,7 +469,7 @@ mean_absolute_error(avg_preds_1, y_targets, multioutput='raw_values')
 
 {% endhighlight %}
 
-![Image_22](/agneev-blog/assets/img/img_5_22.png?raw=true){: width="300", height="100" }
+![Image_13](/agneev-blog/assets/img/img_6_13.png?raw=true){: width="300", height="100" }
 
 We see that the ensemble produces results that are slightly inferior to the best model here, the LSTM. Two comments can be made on this. Firstly, we have used a simple average of the predictions here. Using a [meta model to stack these predictions](https://machinelearningmastery.com/stacking-ensemble-machine-learning-with-python/) will [almost certainly result](https://blogs.sas.com/content/subconsciousmusings/2017/05/18/stacked-ensemble-models-win-data-science-competitions/) in more accurate predictions. The downside is that stacked models are [significantly slower and more computationally expensive](https://towardsdatascience.com/a-practical-guide-to-stacking-using-scikit-learn-91e8d021863d). As I had already developed some very elaborate models that took a fair amount of time to run, I decided that a simple average would suffice here instead of adding further complications. The other point is that the benefit of ensembling will be more clearly brought out when I touch upon some of the other water bodies next time.
 {: style="text-align: justify"}
@@ -480,7 +480,7 @@ We see that the ensemble produces results that are slightly inferior to the best
 I reran all the code for a forecast period of 30 days - everything remaining identical, except putting days_ahead = 30. The model ran smoothly and automatically, producing predictions that are slightly less accurate, understandable given that the prediction period is further away:
 {: style="text-align: justify"}
 
-![Image_23](/agneev-blog/assets/img/img_5_23.png?raw=true){: width="800", height="800" }
+![Image_14](/agneev-blog/assets/img/img_6_14.png?raw=true){: width="800", height="800" }
 
 <br>
 ## Conclusion  <a id="Conc"></a>

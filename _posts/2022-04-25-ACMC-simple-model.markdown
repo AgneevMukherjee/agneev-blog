@@ -80,7 +80,7 @@ ticks = plt.xticks(rotation=45)
 All right, so let us see what the class distribution looks like...
 {: style="text-align: justify"}
 
-![Image_1](/agneev-blog/assets/img/img_8_1.png?raw=true){: width="750", height="400" }
+![Image_1](/agneev-blog/assets/img/img_9_1.png?raw=true){: width="750", height="400" }
 
 <p style="color:grey;font-size:100%;text-align: center;">
  Image 1: Class distribution of ACMC images
@@ -119,7 +119,7 @@ plt.show()
 <br>
 This plot looks like this:
 
-![Image_2](/agneev-blog/assets/img/img_8_2.png?raw=true){: width="700", height="400" }
+![Image_2](/agneev-blog/assets/img/img_9_2.png?raw=true){: width="700", height="400" }
 
 <p style="color:grey;font-size:100%;text-align: center;">
  Image 2: Size distribution of ACMC images
@@ -131,7 +131,7 @@ There are two things noticeable here. Firstly, the images have a wide size distr
 We can wind up this section with a look at some random images. The exact images displayed will differ every time the notebook is run, but will in general look like this:
 {: style="text-align: justify"}
 
-![Image_3](/agneev-blog/assets/img/img_8_3.png?raw=true){: width="750", height="400" }
+![Image_3](/agneev-blog/assets/img/img_9_3.png?raw=true){: width="750", height="400" }
 
 <p style="color:grey;font-size:100%;text-align: center;">
  Image 3: A look at random ACMC images
@@ -247,7 +247,7 @@ plt.show()
 Briefly, what the above code does first is generate training and validation TensorFlow datasets with a 80:20 split. Note that since we do not have a pre-existing training-validation split, i.e. separate folders for training and validation, we use the [image_dataset_from_directory](https://www.tensorflow.org/api_docs/python/tf/keras/utils/image_dataset_from_directory) util instead of the more customary [flow_from_directory ImageDataGenerator](https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator). Next, we define and fit a ResNet50 model, saving the model with the best validation accuracy via a checkpoint callback. We also provide an early stopping callback, with a 'Patience' of 5, i.e., the model will stop running if the validation accuracy doesn't improve over 5 epochs. The remaining parameters are fairly standard. After the run, we plot the model accuracy and loss over the epochs, which look like this:
 {: style="text-align: justify"}
 
-![Image_4](/agneev-blog/assets/img/img_8_4.png?raw=true){: width="400", height="200" }
+![Image_4](/agneev-blog/assets/img/img_9_4.png?raw=true){: width="400", height="200" }
 
 <p style="color:grey;font-size:100%;">
  Image 4: Accuracy and loss of ResNet50 model without pre-trained weights
@@ -282,7 +282,7 @@ for layer in base_model.layers:
 And we obtain a maximum validation accuracy of...56%...in other words, it appears to make no difference whether we use the Imagenet weights or not. This, however, is only true if we look just at the highest validation accuracy. Looking at the training curves gives a slightly different picture.
 {: style="text-align: justify"}
 
-![Image_5](/agneev-blog/assets/img/img_8_5.png?raw=true){: width="400", height="200" }
+![Image_5](/agneev-blog/assets/img/img_9_5.png?raw=true){: width="400", height="200" }
 
 <p style="color:grey;font-size:100%;">
  Image 5: Accuracy and loss of ResNet50 model with Imagenet weights
@@ -329,7 +329,7 @@ All right, we have talked quite a bit about validation accuracies and image size
 Since we saw that using the Imagenet weights gives smoother training curves and using an image size of 512 x 512 increases validation accuracy, I made [yet another notebook](https://github.com/AgneevMukherjee/agneev-blog/blob/main/tf-acmc-simple-imagenet-512.ipynb), this time using these parameters. The maximum validation accuracy obtained? 0.63! Yay! But that's not what we are really interested in here. We are more into the information presented in the ['confusion matrix'](https://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html). A confusion matrix is a great tool to see at a glance how a machine learning algorithm has performed on a class-level, i.e., how many examples of each class it has correctly classified, and into which classes the incorrect results fall. A simple example is given by Scikit-learn for the Iris dataset:
 {: style="text-align: justify"}
 
-![Image_6](/agneev-blog/assets/img/img_8_6.png?raw=true){: width="500", height="250" }
+![Image_6](/agneev-blog/assets/img/img_9_6.png?raw=true){: width="500", height="250" }
 
 <p style="color:grey;font-size:100%;">
  Image 6: Scikit-learn's example of a confusion matrix on the Iris dataset
@@ -341,7 +341,7 @@ We see here in the normalised confusion matrix that perfect results were obtaine
 For the final run on our dataset, the normalised confusion matrix (created using Scikit-learn) looks like the image below. _(Note: the image looks much better on Firefox than Chrome, due to a well-known problem Chrome has with downscaling images. If needed, you can open the image in a new tab and zoom it to make it easier to read.)_
 {: style="text-align: justify"}
 
-![Image_7](/agneev-blog/assets/img/img_8_7.png?raw=true){: width="800", height="400" }
+![Image_7](/agneev-blog/assets/img/img_9_7.png?raw=true){: width="800", height="400" }
 
 <p style="color:grey;font-size:100%;text-align: center;">
  Image 7: Normalised confusion matrix
@@ -353,7 +353,7 @@ Hmmm, we see that the performance is all over the place, and that for some class
 To better understand the model performance, however, we may want to also have a look at the non-normalised confusion matrix. Here it is:
 {: style="text-align: justify"}
 
-![Image_8](/agneev-blog/assets/img/img_8_8.png?raw=true){: width="800", height="400" }
+![Image_8](/agneev-blog/assets/img/img_9_8.png?raw=true){: width="800", height="400" }
 
 <p style="color:grey;font-size:100%;text-align: center;">
  Image 8: Non-normalised confusion matrix
@@ -362,7 +362,7 @@ To better understand the model performance, however, we may want to also have a 
 To get why this is important, have a look at the Harry Clayton class. The normalised confusion matrix was disappointing for this class, as it showed that the model did not make a single accurate prediction on this class. Image 8, however, shows that there were only two images of this class in the validation set! The 0% true positive rate for this class is not, therefore, as shocking as it might first seem. The random manner in which the validation set is selected means that several of the smaller classes may be under-represented even more severely in the validation set than they had been in the original dataset, which is clearly the case here for Harry Clayton. Other runs had given a 100% true positive rate for the same class! This means that for the minor character classes, it is not merely difficult to model them but also hard to quantify the model performance on them.
 {: style="text-align: justify"}
 
-A picture may help demonstrate the effect of class size on the classification performance more vividly. The excellent [top-rated answer](https://stackoverflow.com/a/43331484) (not the accepted answer) on a Stackoverflow question shows how to get the true positives (Archie predicted as Archie), true negatives (non-Archie predicted as non-Archie), false positives (non-Archie predicted as Archie) and false negatives (Archie predicted as non-Archie) from a confusion matrix. Let us just deal with the true positive rate (TPR) for now, i.e., what fraction of, say, Ethel pix were correctly predicted as Ethel. The code below calculates the TPR for each class, makes a Pandas dataframe out of these, and then uses that dataframe to create a Seaborn regression plot.
+A picture may help demonstrate the effect of class size on the classification performance more vividly. The excellent [top-rated answer](https://stackoverflow.com/a/43331484) (not the accepted answer) on a Stackoverflow question shows how to get the true positives (Archie predicted as Archie), true negatives (non-Archie predicted as non-Archie), false positives (non-Archie predicted as Archie) and false negatives (Archie predicted as non-Archie) from a confusion matrix. Let us just deal with the true positive rate (TPR) (also called [sensitivity](https://en.wikipedia.org/wiki/Sensitivity_and_specificity) or [recall](https://en.wikipedia.org/wiki/Precision_and_recall)) for now, i.e., what fraction of, say, Ethel pix were correctly predicted as Ethel. The code below calculates the TPR for each class, makes a Pandas dataframe out of these, and then uses that dataframe to create a Seaborn regression plot.
 {: style="text-align: justify"}
 
 {% highlight python %}
@@ -373,16 +373,16 @@ TP = np.diag(cm)
 TPR = TP/(TP+FN)
 
 df_from_arr = pd.DataFrame(data=[samples_per_class, TPR]).T
-df_from_arr.rename(columns={0: "No. of samples", 1: "True positives"}, inplace = True)
+df_from_arr.rename(columns={0: "No. of samples", 1: "True positive rate"}, inplace = True)
 df_from_arr.index = classes
 df_from_arr["No. of samples"] = df_from_arr["No. of samples"].astype(int)
-df_from_arr["True positives"] = df_from_arr["True positives"].round(2)
+df_from_arr["True positive rate"] = df_from_arr["True positive rate"].round(2)
 
-sns.regplot(data=df_from_arr, x="No. of samples", y="True positives")
+sns.regplot(data=df_from_arr, x="No. of samples", y="True positive rate")
 
 {% endhighlight %}
 
-![Image_9](/agneev-blog/assets/img/img_8_9.png?raw=true){: width="400", height="200" }
+![Image_9](/agneev-blog/assets/img/img_9_9.png?raw=true){: width="400", height="200" }
 
 <p style="color:grey;font-size:100%;">
  Image 9: True positive rate versus number of samples in class

@@ -67,9 +67,9 @@ So let's look at the dataset, which can be found [here](https://www.kaggle.com/d
 
 An example of multi-class image classification is this:
 
- ![Image_1](/agneev-blog/assets/img/img_7_1.png?raw=true){: width="200", height="100" }
+ ![Image_1](/agneev-blog/assets/img/img_8_1.png?raw=true){: width="200", height="100" }
  <p> &emsp;  &emsp;   &emsp; &emsp;  Cat</p>
- ![Image_2](/agneev-blog/assets/img/img_7_2.png?raw=true){: width="200", height="100" }
+ ![Image_2](/agneev-blog/assets/img/img_8_2.png?raw=true){: width="200", height="100" }
 <p> &emsp;  &emsp;   &emsp; &emsp; Dog</p>
  <p style="color:grey;font-size:80%;">
 © 2022 Agneev Mukherjee
@@ -77,14 +77,14 @@ An example of multi-class image classification is this:
 <br>
 Simple, right? On the other hand, the images below, with the labels given below them, may be used for multi-*label* classification:
 
-![Image_3](/agneev-blog/assets/img/img_7_3.jpg?raw=true){: width="400", height="300" }
+![Image_3](/agneev-blog/assets/img/img_8_3.jpg?raw=true){: width="400", height="300" }
 <br>
 [Grass; Sand; Sea; Boats; Sunny]
 <p style="color:grey;font-size:80%;">
 © 2022 Agneev Mukherjee
 </p>
 <br><br>
-![Image_4](/agneev-blog/assets/img/img_7_4.jpg?raw=true){: width="400", height="200"}
+![Image_4](/agneev-blog/assets/img/img_8_4.jpg?raw=true){: width="400", height="200"}
 <br>
 [Cars; Bicycle; Buildings; Trees; Lamp post; Street; Grass; Shrubs; Cloudy]
 <p style="color:grey;font-size:80%;">
@@ -105,32 +105,32 @@ I was originally planning to provide a fairly detailed description of each chara
 
 Archie Andrews (_An archetypal average American teenager_):
 
-![Image_5](/agneev-blog/assets/img/img_7_5.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_6](/agneev-blog/assets/img/img_7_6.png?raw=true){: width="180", height="100" }
+![Image_5](/agneev-blog/assets/img/img_8_5.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_6](/agneev-blog/assets/img/img_8_6.png?raw=true){: width="180", height="100" }
 
 <br>
 Jughead Jones (_Archie's best friend, usually wears a beanie, smart but lazy, girl hater, has an insatiable appetite_):
 
-![Image_7](/agneev-blog/assets/img/img_7_7.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_8](/agneev-blog/assets/img/img_7_8.png?raw=true){: width="170", height="90" }
+![Image_7](/agneev-blog/assets/img/img_8_7.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_8](/agneev-blog/assets/img/img_8_8.png?raw=true){: width="170", height="90" }
 
 <br>
 Betty Cooper (_Sweet girl, good at studies and sports, has crush on Archie_):
 
-![Image_9](/agneev-blog/assets/img/img_7_9.png?raw=true){: width="200", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_10](/agneev-blog/assets/img/img_7_10.png?raw=true){: width="150", height="80" }
+![Image_9](/agneev-blog/assets/img/img_8_9.png?raw=true){: width="200", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_10](/agneev-blog/assets/img/img_8_10.png?raw=true){: width="150", height="80" }
 
 <br>
 Veronica Lodge (_Rich, spoilt girl, Archie's crush_):
 
-![Image_11](/agneev-blog/assets/img/img_7_11.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_12](/agneev-blog/assets/img/img_7_12.png?raw=true){: width="160", height="100" }
+![Image_11](/agneev-blog/assets/img/img_8_11.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_12](/agneev-blog/assets/img/img_8_12.png?raw=true){: width="160", height="100" }
 
 <br>
 Reggie Mantle (_Archie's main rival_):
 
-![Image_13](/agneev-blog/assets/img/img_7_13.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_14](/agneev-blog/assets/img/img_7_14.png?raw=true){: width="170", height="100" }
+![Image_13](/agneev-blog/assets/img/img_8_13.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_14](/agneev-blog/assets/img/img_8_14.png?raw=true){: width="170", height="100" }
 
 <br>
 The above are, in my opinion, the 5 most important characters in the 'Archies Universe' - and, in fact, the members of the band ['The Archies'](https://en.wikipedia.org/wiki/The_Archies)! The 'Riverdale gang', on the other hand, has several other members, among whom the most notable are:
@@ -138,132 +138,132 @@ The above are, in my opinion, the 5 most important characters in the 'Archies Un
 
 Dilton Doiley (_Stereotypical teenage geeky genius_):
 
-![Image_15](/agneev-blog/assets/img/img_7_15.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_16](/agneev-blog/assets/img/img_7_16.png?raw=true){: width="180", height="100" }
+![Image_15](/agneev-blog/assets/img/img_8_15.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_16](/agneev-blog/assets/img/img_8_16.png?raw=true){: width="180", height="100" }
 
 <br>
 Moose Mason (_Stereotypical jock, with near-superhuman strength and a meagre intellect_):
 
-![Image_17](/agneev-blog/assets/img/img_7_17.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_18](/agneev-blog/assets/img/img_7_18.png?raw=true){: width="120", height="60" }
+![Image_17](/agneev-blog/assets/img/img_8_17.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_18](/agneev-blog/assets/img/img_8_18.png?raw=true){: width="120", height="60" }
 
 <br>
 Midge Klump (_Moose's girlfriend_):
 
-![Image_19](/agneev-blog/assets/img/img_7_19.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_20](/agneev-blog/assets/img/img_7_20.png?raw=true){: width="120", height="60" }
+![Image_19](/agneev-blog/assets/img/img_8_19.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_20](/agneev-blog/assets/img/img_8_20.png?raw=true){: width="120", height="60" }
 
 <br>
 Ethel Muggs (_Chases Jughead_):
 
-![Image_21](/agneev-blog/assets/img/img_7_21.png?raw=true){: width="180", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_22](/agneev-blog/assets/img/img_7_22.png?raw=true){: width="100", height="60" }
+![Image_21](/agneev-blog/assets/img/img_8_21.png?raw=true){: width="180", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_22](/agneev-blog/assets/img/img_8_22.png?raw=true){: width="100", height="60" }
 
 <br>
 Chuck Clayton (_Talented athlete and cartoonist_):
 
-![Image_23](/agneev-blog/assets/img/img_7_23.png?raw=true){: width="180", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_24](/agneev-blog/assets/img/img_7_24.png?raw=true){: width="150", height="80" }
+![Image_23](/agneev-blog/assets/img/img_8_23.png?raw=true){: width="180", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_24](/agneev-blog/assets/img/img_8_24.png?raw=true){: width="150", height="80" }
 
 <br>
 Nancy Woods (_Chuck's girlfriend_):
 
-![Image_25](/agneev-blog/assets/img/img_7_25.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_26](/agneev-blog/assets/img/img_7_26.png?raw=true){: width="100", height="50" }
+![Image_25](/agneev-blog/assets/img/img_8_25.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_26](/agneev-blog/assets/img/img_8_26.png?raw=true){: width="100", height="50" }
 
 <br>
 The Riverdale gang studies at Riverdale high, whose most important staff members are:
 
 Waldo Weatherbee (_The school principal_):
 
-![Image_27](/agneev-blog/assets/img/img_7_27.png?raw=true){: width="200", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_28](/agneev-blog/assets/img/img_7_28.png?raw=true){: width="150", height="80" }
+![Image_27](/agneev-blog/assets/img/img_8_27.png?raw=true){: width="200", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_28](/agneev-blog/assets/img/img_8_28.png?raw=true){: width="150", height="80" }
 
 <br>
 Geraldine Grundy (_Usually an English teacher, although often also shown teaching Maths, History and other subjects_):
 
-![Image_29](/agneev-blog/assets/img/img_7_29.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_30](/agneev-blog/assets/img/img_7_30.png?raw=true){: width="150", height="80" }
+![Image_29](/agneev-blog/assets/img/img_8_29.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_30](/agneev-blog/assets/img/img_8_30.png?raw=true){: width="150", height="80" }
 
 <br>
 Mr. Flutesnoot (_Usually a science, especially chemistry, teacher_):
 
-![Image_31](/agneev-blog/assets/img/img_7_31.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_32](/agneev-blog/assets/img/img_7_32.png?raw=true){: width="140", height="70" }
+![Image_31](/agneev-blog/assets/img/img_8_31.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_32](/agneev-blog/assets/img/img_8_32.png?raw=true){: width="140", height="70" }
 
 <br>
 Coach Kleats (_Head physical education teacher_):
 
-![Image_33](/agneev-blog/assets/img/img_7_33.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_34](/agneev-blog/assets/img/img_7_34.png?raw=true){: width="120", height="60" }
+![Image_33](/agneev-blog/assets/img/img_8_33.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_34](/agneev-blog/assets/img/img_8_34.png?raw=true){: width="120", height="60" }
 
 <br>
 Coach Clayton (_Chuck's father, physical education and history teacher_):
 
-![Image_35](/agneev-blog/assets/img/img_7_35.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_36](/agneev-blog/assets/img/img_7_36.png?raw=true){: width="120", height="60" }
+![Image_35](/agneev-blog/assets/img/img_8_35.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_36](/agneev-blog/assets/img/img_8_36.png?raw=true){: width="120", height="60" }
 
 <br>
 Mr. Svenson (_School janitor_):
 
-![Image_37](/agneev-blog/assets/img/img_7_37.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_38](/agneev-blog/assets/img/img_7_38.png?raw=true){: width="150", height="80" }
+![Image_37](/agneev-blog/assets/img/img_8_37.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_38](/agneev-blog/assets/img/img_8_38.png?raw=true){: width="150", height="80" }
 
 <br>
 Ms. Beazley (_School cafeteria cook_):
 
-![Image_39](/agneev-blog/assets/img/img_7_39.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_40](/agneev-blog/assets/img/img_7_40.png?raw=true){: width="150", height="80" }
+![Image_39](/agneev-blog/assets/img/img_8_39.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_40](/agneev-blog/assets/img/img_8_40.png?raw=true){: width="150", height="80" }
 
 <br>
 Of the parents of the Riverdale gang, two characters make appearances far more frequently than others:
 
 Hiram Lodge (_Veronica's father_):
 
-![Image_41](/agneev-blog/assets/img/img_7_41.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_42](/agneev-blog/assets/img/img_7_42.png?raw=true){: width="150", height="80" }
+![Image_41](/agneev-blog/assets/img/img_8_41.png?raw=true){: width="120", height="60" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_42](/agneev-blog/assets/img/img_8_42.png?raw=true){: width="150", height="80" }
 
 <br>
 Fred Andrews (_Archie's father_):
 
-![Image_43](/agneev-blog/assets/img/img_7_43.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_44](/agneev-blog/assets/img/img_7_44.png?raw=true){: width="140", height="70" }
+![Image_43](/agneev-blog/assets/img/img_8_43.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_44](/agneev-blog/assets/img/img_8_44.png?raw=true){: width="140", height="70" }
 
 <br>
 Being as rich as they are, it is no surprise that the Lodges have a butler, Smithers, who makes semi-regular appearances:
 
-![Image_45](/agneev-blog/assets/img/img_7_45.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_46](/agneev-blog/assets/img/img_7_46.png?raw=true){: width="140", height="70" }
+![Image_45](/agneev-blog/assets/img/img_8_45.png?raw=true){: width="150", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_46](/agneev-blog/assets/img/img_8_46.png?raw=true){: width="140", height="70" }
 
 <br>
 And what is the gang's favourite hangout? Pop Tate's Chok'lit Shoppe, of course. Here's Pop:
 
-![Image_47](/agneev-blog/assets/img/img_7_47.png?raw=true){: width="160", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_48](/agneev-blog/assets/img/img_7_48.png?raw=true){: width="130", height="70" }
+![Image_47](/agneev-blog/assets/img/img_8_47.png?raw=true){: width="160", height="80" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_48](/agneev-blog/assets/img/img_8_48.png?raw=true){: width="130", height="70" }
 
 <br>
 So that was a round-up of all the major characters in the ACMC dataset. However, the dataset actually has one more class - 'Others'. This, as you can guess, is a medley of images of random characters, and the aim is for a model to put any images that it cannot classify as a member of any of the other classes into this category. Let's have a look at some of the images under this heading:
 {: style="text-align: justify"}
 
-![Image_49](/agneev-blog/assets/img/img_7_49.png?raw=true){: width="130", height="100" }
-![Image_50](/agneev-blog/assets/img/img_7_50.png?raw=true){: width="130", height="100" }
-![Image_51](/agneev-blog/assets/img/img_7_51.png?raw=true){: width="130", height="100" }
-![Image_52](/agneev-blog/assets/img/img_7_52.png?raw=true){: width="130", height="100" }
-![Image_53](/agneev-blog/assets/img/img_7_53.png?raw=true){: width="120", height="100" }
+![Image_49](/agneev-blog/assets/img/img_8_49.png?raw=true){: width="130", height="100" }
+![Image_50](/agneev-blog/assets/img/img_8_50.png?raw=true){: width="130", height="100" }
+![Image_51](/agneev-blog/assets/img/img_8_51.png?raw=true){: width="130", height="100" }
+![Image_52](/agneev-blog/assets/img/img_8_52.png?raw=true){: width="130", height="100" }
+![Image_53](/agneev-blog/assets/img/img_8_53.png?raw=true){: width="120", height="100" }
 
 <br>
-![Image_54](/agneev-blog/assets/img/img_7_54.png?raw=true){: width="110", height="100" }
-![Image_55](/agneev-blog/assets/img/img_7_55.png?raw=true){: width="140", height="120" }
-![Image_56](/agneev-blog/assets/img/img_7_56.png?raw=true){: width="140", height="120" }
-![Image_57](/agneev-blog/assets/img/img_7_57.png?raw=true){: width="140", height="120" }
-![Image_58](/agneev-blog/assets/img/img_7_58.png?raw=true){: width="140", height="120" }
+![Image_54](/agneev-blog/assets/img/img_8_54.png?raw=true){: width="110", height="100" }
+![Image_55](/agneev-blog/assets/img/img_8_55.png?raw=true){: width="140", height="120" }
+![Image_56](/agneev-blog/assets/img/img_8_56.png?raw=true){: width="140", height="120" }
+![Image_57](/agneev-blog/assets/img/img_8_57.png?raw=true){: width="140", height="120" }
+![Image_58](/agneev-blog/assets/img/img_8_58.png?raw=true){: width="140", height="120" }
 
 <br>
-![Image_59](/agneev-blog/assets/img/img_7_59.png?raw=true){: width="160", height="120" }
-![Image_60](/agneev-blog/assets/img/img_7_60.png?raw=true){: width="90", height="60" }
-![Image_61](/agneev-blog/assets/img/img_7_61.png?raw=true){: width="160", height="120" }
-![Image_62](/agneev-blog/assets/img/img_7_62.png?raw=true){: width="110", height="80" }
-![Image_63](/agneev-blog/assets/img/img_7_63.png?raw=true){: width="140", height="120" }
+![Image_59](/agneev-blog/assets/img/img_8_59.png?raw=true){: width="160", height="120" }
+![Image_60](/agneev-blog/assets/img/img_8_60.png?raw=true){: width="90", height="60" }
+![Image_61](/agneev-blog/assets/img/img_8_61.png?raw=true){: width="160", height="120" }
+![Image_62](/agneev-blog/assets/img/img_8_62.png?raw=true){: width="110", height="80" }
+![Image_63](/agneev-blog/assets/img/img_8_63.png?raw=true){: width="140", height="120" }
 
 <br>
 Archie comics fans will recognise several familiar faces in that gallery: Jughead's father, Gaston, Archie's mother, Cheryl Blossom, Betty's father, Jellybean, and Ms. Haggly. The other images are of non-recurring characters.
@@ -274,20 +274,20 @@ Archie comics fans will recognise several familiar faces in that gallery: Jughea
 Looking at the pictures above serves to highlight some of the challenges of working with this dataset. I used a range of materials to make the dataset, collected over a long period, and hence the images vary widely in size and image quality. How did I decide whether an image belongs in the dataset or not? The primary criterion was that a 'human expert', in this case an Archie comics fan, should be able to look at the image in question and identify it without any further cues. In some cases, this is difficult - without prior knowledge, for example, it is hard to categorise the Midge images above as belonging to the same person. Still, this is better than if I had put Jughead's mother as a category - believe it or not, both the images below are of her. These images actually appear in the 'Others' category, meaning that their belonging to the same character is moot.
 {: style="text-align: justify"}
 
-![Image_64](/agneev-blog/assets/img/img_7_64.png?raw=true){: width="180", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-![Image_65](/agneev-blog/assets/img/img_7_65.png?raw=true){: width="120", height="60" }
+![Image_64](/agneev-blog/assets/img/img_8_64.png?raw=true){: width="180", height="100" }&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Image_65](/agneev-blog/assets/img/img_8_65.png?raw=true){: width="120", height="60" }
 
 <br>
 Another reason for the dataset being challenging - well, a look at some Jughead images below should suffice...
 {: style="text-align: justify"}
 
 <br>
-![Image_66](/agneev-blog/assets/img/img_7_66.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
-![Image_67](/agneev-blog/assets/img/img_7_67.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
-![Image_68](/agneev-blog/assets/img/img_7_68.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
-![Image_69](/agneev-blog/assets/img/img_7_69.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
-![Image_70](/agneev-blog/assets/img/img_7_70.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
-![Image_71](/agneev-blog/assets/img/img_7_71.png?raw=true){: width="100", height="100" }
+![Image_66](/agneev-blog/assets/img/img_8_66.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
+![Image_67](/agneev-blog/assets/img/img_8_67.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
+![Image_68](/agneev-blog/assets/img/img_8_68.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
+![Image_69](/agneev-blog/assets/img/img_8_69.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
+![Image_70](/agneev-blog/assets/img/img_8_70.png?raw=true){: width="100", height="100" }&nbsp;&nbsp;
+![Image_71](/agneev-blog/assets/img/img_8_71.png?raw=true){: width="100", height="100" }
 
 <br>
 The images above can all easily be identified by any Jughead fan, but for a ML model, it might not be as straightforward.

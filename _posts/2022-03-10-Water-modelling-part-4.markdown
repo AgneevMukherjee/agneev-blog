@@ -62,7 +62,7 @@ As per the [competition page](https://www.kaggle.com/c/acea-water-prediction/dat
 So what is interesting about the modelling of this particular water body? Let us examine the hydrometry chart:
 {: style="text-align: justify"}
 
-![Image_1](/agneev-blog/assets/img/img_6_1.png?raw=true){: width="400", height="200" }
+![Image_1](/agneev-blog/assets/img/img_7_1.png?raw=true){: width="400", height="200" }
 
 Here we see one aspect that differs from the Petrignano dataset. It appears that the following a long break, the Piaggione hydrometry level has been moved down, in relation to both its pre-break levels and Monte_S_Quirico (the black series) levels. This most likely indicates an error. It would probably be sensible to move it up by the difference in the minima of the pre-and post-break values. The other option would be to move the first part down, but since all the other hydrometry terms lie in the positive region, I went with the moving up option. In any case, it's the inconsistency in the before and after value that is important; the models will be able to handle the absolute values.
 {: style="text-align: justify"}
@@ -142,23 +142,23 @@ train.iloc[1355:1370,-1]
 
 {% endhighlight %}
 
-![Image_2](/agneev-blog/assets/img/img_6_2.png?raw=true){: width="400", height="400" }
+![Image_2](/agneev-blog/assets/img/img_7_2.png?raw=true){: width="400", height="400" }
 
 We can see that there is indeed a bunch of NaNs here, so let us now move up the 2nd part by the difference between the minima of the 1st and 2nd parts, and then re-plot.
 {: style="text-align: justify"}
 
-![Image_3](/agneev-blog/assets/img/img_6_3.png?raw=true){: width="400", height="200" }
+![Image_3](/agneev-blog/assets/img/img_7_3.png?raw=true){: width="400", height="200" }
 
 This looks much better, and after imputation we get:
 
-![Image_4](/agneev-blog/assets/img/img_6_4.png?raw=true){: width="400", height="200" }
+![Image_4](/agneev-blog/assets/img/img_7_4.png?raw=true){: width="400", height="200" }
 
 This looks just fine.
 
 Another important aspect is the ensembling. Let us look at the results of the three individual models and the ensemble:
 {: style="text-align: justify"}
 
-![Image_5](/agneev-blog/assets/img/img_6_5.png?raw=true){: width="800", height="400" }
+![Image_5](/agneev-blog/assets/img/img_7_5.png?raw=true){: width="800", height="400" }
 
 Here we see the benefit of using a range of models. The LSTM, which had given the best predictions for Petrignano, gives the worst results for Auser, but ensembling enables us to mitigate the inaccuracy, even if the final predictions are still worse than those given by the tree-based methods.
 {: style="text-align: justify"}
@@ -183,7 +183,7 @@ mean_absolute_error(avg_preds_1, y_targets, multioutput='raw_values')
 
 {% endhighlight %}
 
-![Image_6](/agneev-blog/assets/img/img_6_6.png?raw=true){: width="500", height="200" }
+![Image_6](/agneev-blog/assets/img/img_7_6.png?raw=true){: width="500", height="200" }
 
 We see that each model gives the best prediction for 3 targets out of 9, and the ensemble is able to give more accurate predictions on the whole than is the case for any individual model. This can be crosschecked by looking at the uniform average errors below.
 {: style="text-align: justify"}
@@ -200,7 +200,7 @@ mean_absolute_error(avg_preds_1, y_targets, multioutput='uniform_average')
 
 {% endhighlight %}
 
-![Image_7](/agneev-blog/assets/img/img_6_7.png?raw=true){: width="150", height="100" }
+![Image_7](/agneev-blog/assets/img/img_7_7.png?raw=true){: width="150", height="100" }
 
 <br>
 ## Aquifer Luco  <a id="Luco"></a>
@@ -211,11 +211,11 @@ mean_absolute_error(avg_preds_1, y_targets, multioutput='uniform_average')
 The main thing I want to show about aquifer Luco is the poor quality of some of the data. Have a look at the 'Depth to Groundwater' data:
 {: style="text-align: justify"}
 
-![Image_8](/agneev-blog/assets/img/img_6_8.png?raw=true){: width="400", height="300" }
+![Image_8](/agneev-blog/assets/img/img_7_8.png?raw=true){: width="400", height="300" }
 
 Imputing with MissForest gives:
 
-![Image_9](/agneev-blog/assets/img/img_6_9.png?raw=true){: width="400", height="300" }
+![Image_9](/agneev-blog/assets/img/img_7_9.png?raw=true){: width="400", height="300" }
 
 This looks fairly reasonable, but is it? The large chunks of missing data means there is no way to tell. Imputing over such a large span of time is unwise, and should be avoided unless there is no alternative. In either case, the lack of data for these terms made forecasting for this water body difficult, with the best error obtained (0.466 for the ensemble) amounting to well over 5% error.
 {: style="text-align: justify"}
@@ -229,7 +229,7 @@ This looks fairly reasonable, but is it? The large chunks of missing data means 
 Modelling the water springs follows essentially the same format as the aquifers, except that the type of input variables is a little different (flow rate in place of volume and hydrometry). Let us just look at the flow rate term.
 {: style="text-align: justify"}
 
-![Image_10](/agneev-blog/assets/img/img_6_10.png?raw=true){: width="400", height="300" }
+![Image_10](/agneev-blog/assets/img/img_7_10.png?raw=true){: width="400", height="300" }
 
 The flow rates refer to, as expected, the water flow rate of the spring. Looking at the above graphs, two things stand out - the 0s are likely to be errors, and since the data are in the form of a continuous series, rolling means are an appropriate interpolation method. Imputation was therefore simply done by:
 {: style="text-align: justify"}
@@ -256,13 +256,13 @@ There isn't much else that is different here, so let's move on to the next water
 
 A cursory look at this dataset is enough to show that it is different:
 
-![Image_11](/agneev-blog/assets/img/img_6_11.png?raw=true){: width="400", height="300" }
+![Image_11](/agneev-blog/assets/img/img_7_11.png?raw=true){: width="400", height="300" }
 
 <br>
 That's right, a single 'X' or exogenous term - 'Rainfall_Terni', and a single 'Y' or target term - 'Flow_Rate_Lupa'. As if that wasn't enough, look at the rainfall term:
 {: style="text-align: justify"}
 
-![Image_12](/agneev-blog/assets/img/img_6_12.png?raw=true){: width="400", height="300" }
+![Image_12](/agneev-blog/assets/img/img_7_12.png?raw=true){: width="400", height="300" }
 
 The values of Rainfall_Terni are given as monthly averages for the period from 2009 to 2019, but as daily data in 2020. This means that the test data is considerably different from the training data, further compounded by one day in 2020 receiving 76 mm of rainfall, by far the highest value. To be able to model this dataset, I had to replace the 2020 daily rainfall data by the monthly average. First I located the row at which 2020 started:
 {: style="text-align: justify"}
@@ -273,7 +273,7 @@ rain_df.iloc[3965:3970]
 
 {% endhighlight %}
 
-![Image_13](/agneev-blog/assets/img/img_6_13.png?raw=true){: width="200", height="100" }
+![Image_13](/agneev-blog/assets/img/img_7_13.png?raw=true){: width="200", height="100" }
 
 Then I made a new dataframe for the 2020 rainfall:
 
@@ -311,13 +311,13 @@ if len(rains)>0:
         i += 1
 {% endhighlight %}
 
-![Image_14](/agneev-blog/assets/img/img_6_14.png?raw=true){: width="400", height="200" }
+![Image_14](/agneev-blog/assets/img/img_7_14.png?raw=true){: width="400", height="200" }
 
 This now looks quite reasonable...
 
 What about the other term, the one we are supposed to predict for?
 
-![Image_15](/agneev-blog/assets/img/img_6_15.png?raw=true){: width="400", height="200" }
+![Image_15](/agneev-blog/assets/img/img_7_15.png?raw=true){: width="400", height="200" }
 
 I think you can see why this waterbody was the cause of a lot of anguished comments on the competition forums...
 
@@ -330,11 +330,11 @@ I think you can see why this waterbody was the cause of a lot of anguished comme
 Speaking of the data causing anguish, I will just show a couple of graphs for this water spring and leave it at that:
 {: style="text-align: justify"}
 
-![Image_16](/agneev-blog/assets/img/img_6_16.png?raw=true){: width="400", height="200" }
+![Image_16](/agneev-blog/assets/img/img_7_16.png?raw=true){: width="400", height="200" }
 
 That's not too bad, but this...
 
-![Image_17](/agneev-blog/assets/img/img_6_17.png?raw=true){: width="400", height="200" }
+![Image_17](/agneev-blog/assets/img/img_7_17.png?raw=true){: width="400", height="200" }
 
 I am actually quite fond of this graph, as it is something I like to present as an 'Exhibit A' of bad data...
 {: style="text-align: justify"}
@@ -348,7 +348,7 @@ I am actually quite fond of this graph, as it is something I like to present as 
 This is the only river in the competition, and is actually entirely unremarkable, so much so that I did not make a single specific comment on it in my competition submission notebook. Perhaps the most noteworthy thing would be the rainfall graph below, showing the different rainfall terms having different years of missing data...
 {: style="text-align: justify"}
 
-![Image_18](/agneev-blog/assets/img/img_6_18.png?raw=true){: width="400", height="200" }
+![Image_18](/agneev-blog/assets/img/img_7_18.png?raw=true){: width="400", height="200" }
 
 <br>
 ## Lake Bilancino  <a id="Bilancino"></a>
@@ -361,12 +361,12 @@ This is the final water body in the competition dataset, and the only lake. Its 
 
 First, the lake level looks like this:
 
-![Image_19](/agneev-blog/assets/img/img_6_19.png?raw=true){: width="400", height="200" }
+![Image_19](/agneev-blog/assets/img/img_7_19.png?raw=true){: width="400", height="200" }
 
 It exhibits a distinct degree of seasonality, and hence I used seasonal interpolation for data imputation, similarly to temperature.
 {: style="text-align: justify"}
 
-![Image_20](/agneev-blog/assets/img/img_6_20.png?raw=true){: width="400", height="200" }
+![Image_20](/agneev-blog/assets/img/img_7_20.png?raw=true){: width="400", height="200" }
 
 The above shows the flow rate, which, as I said, is different from what it meant in the water springs. Here it refers to the flow rate at the water withdrawal station, and hence is comparable with the volume term in the aquifers. In other words, it can be 0, and therefore imputation can only be done by filling with 0s.
 {: style="text-align: justify"}

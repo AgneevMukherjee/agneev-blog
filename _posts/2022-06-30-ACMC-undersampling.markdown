@@ -2,8 +2,8 @@
 layout: post
 title:  "10. ACMC - Undersampling and F-scores"
 date:   2022-06-30 12:00:00 +0100
-category: ['Machine Learning', 'Computer Vision', 'Python']
-tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'Pandas', 'Scikit-learn']
+category: ['Machine Learning', 'Computer Vision', 'Python', 'Metric']
+tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'Pandas', 'Scikit-learn', 'F-score']
 ---
 
 <div class="post-nav">

@@ -62,10 +62,10 @@ Since some of the classes having more samples than others is our issue, the firs
 The simplest thing to do is to look at the minimum number of samples that are present in every class and just take that many images from each class. In other words, we reduce all the columns in the figure below to the red line showing the level of the minimum samples class (Svenson). This method ensures that every class has the same number of samples, at the cost of discarding a large number of samples from the majority classes.
 {: style="text-align: justify"}
 
+![Image_1](/agneev-blog/assets/img/img_10_1.png?raw=true){: width="800", height="600" }
+
 An alternative is to fix a particular threshold, say 200 samples, and remove the excess samples for the classes that have a higher number of samples. This is denoted by the yellow line in the figure. In this case, a degree of imbalance persists among the classes, but to a much lesser extent than in the original dataset, and we get to train with more samples than using the minimum samples approach.
 {: style="text-align: justify"}
-
-![Image_1](/agneev-blog/assets/img/img_10_1.png?raw=true){: width="800", height="600" }
 
 Let's look at both approaches in turn.
 

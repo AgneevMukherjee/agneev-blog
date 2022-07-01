@@ -367,10 +367,10 @@ We can better understand the above equations with a concrete example. Let us loo
 
 ![Image_15](/agneev-blog/assets/img/img_10_15.png?raw=true){: width="800", height="600" }
 
-Adding up the numbers for 'True Values', we see that there are a total of 30 Archie images in the validation set. Of these, our model has correctly predicted only 11 (True Positives), meaning that 19 images were incorrectly classified as belonging to other classes (False Negatives). The recall, therefore, is 11/(11+19) = 0.37.
+Adding up the numbers for 'True Values', we see that there are a total of 30 Archie images in the validation set. Of these, our model has correctly predicted only 11 (True Positives), meaning that 19 images were incorrectly classified as belonging to other classes (False Negatives). The recall, therefore, is 11/(11+19) = *0.37*.
 {: style="text-align: justify"}
 
-What about the precision? We see that no fewer than 35 images had been identified as Archie (adding up the 'Predicted Value' numbers), of which, again, only 11 are correct predictions (True Positives). The remaining 24 are therefore False Positives. The precision is  11/(11+24) = 0.31.
+What about the precision? We see that no fewer than 35 images had been identified as Archie (adding up the 'Predicted Value' numbers), of which, again, only 11 are correct predictions (True Positives). The remaining 24 are therefore False Positives. The precision is  11/(11+24) = *0.31*.
 {: style="text-align: justify"}
 
 OK, so now that we have the precision and recall values, how do we get the F-score? There are actually various ways of doing this, but the most widely used is the F<sub>1</sub> score. This is defined as the harmonic mean of precision and recall:

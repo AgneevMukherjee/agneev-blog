@@ -3,7 +3,7 @@ layout: post
 title:  "9. Diving into the Archie Comics Multiclass dataset"
 date:   2022-04-25 12:00:00 +0100
 category: ['Machine Learning', 'Computer Vision', 'Python']
-tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'PIL', 'Pandas', 'Scikit-learn']
+tag: ['TensorFlow 2', 'Keras', 'Matplotlib', 'Seaborn', 'PIL', 'Pandas', 'Scikit-learn', 'Confusion Matrix']
 ---
 
 <div class="post-nav">
@@ -394,7 +394,9 @@ We see that there is plenty of scatter towards the left-hand side of the plot, w
 On the whole, though, the trend is clear - there is a clear upward trend, indicating that the characters with more images available are classified more accurately than those with fewer, which is what we would expect. For Archie pix, we have a TPR of 0.84, which is quite impressive, while Jughead and Betty also have a TPR of over 0.7, Veronica and Reggie getting 0.67 and 0.61 respectively.
 {: style="text-align: justify"}
 
-The major classes therefore contribute heavily towards the overall accuracy of 0.63. Is that something we should be happy about? Well, that depends on what we want! If we are trying to build a classifier that will perform well on a randomly selected page from an Archie comics digest, we should be quite happy with what we have done so far. The odds of getting an Archie or a Jughead image, as opposed to a Beazly or Kleats image, in a random Archie comics panel is actually even higher than indicated by this dataset. So it makes sense for us to build a classifier that would work well on the major classes. Think of it this way - if you are building a dog image classifier, you would probably want your model to work well on German Shephard or Golden Retriever images, even if it gets the occasional Azawakh or Lagotto Romagnolo wrong.
+### Does it matter? <a id="matter"></a>
+
+We see that the major classes contribute heavily towards the overall accuracy of 0.63. Is that something we should be happy about? Well, that depends on what we want! If we are trying to build a classifier that will perform well on a randomly selected page from an Archie comics digest, we should be quite happy with what we have done so far. The odds of getting an Archie or a Jughead image, as opposed to a Beazly or Kleats image, in a random Archie comics panel is actually even higher than indicated by this dataset. So it makes sense for us to build a classifier that would work well on the major classes. Think of it this way - if you are building a dog image classifier, you would probably want your model to work well on German Shephard or Golden Retriever images, even if it gets the occasional Azawakh or Lagotto Romagnolo wrong.
 {: style="text-align: justify"}
 
 If, on the other hand, we want a classifier that will work roughly equally well on every class, then our current approach is clearly not working. What can we do to sort this out? We shall see next time, when we discuss the different approaches for handling unbalanced datasets. For now, ciao!

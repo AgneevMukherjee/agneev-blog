@@ -352,12 +352,15 @@ Adding up the numbers for 'True Values', we see that there are a total of 30 Arc
 What about the precision? We see that no fewer than 35 images had been identified as Archie (adding up the 'Predicted Value' numbers), of which, again, only 11 are correct predictions (True Positives). The remaining 24 are therefore False Positives. The precision is  11/(11+24) = **0.31**.
 {: style="text-align: justify"}
 
-OK, so now that we have the precision and recall values, how do we get the F-score? There are actually various ways of doing this, but the most widely used is the F<sub>1</sub> score. This is defined as the harmonic mean of precision and recall:
+OK, so now that we have the precision and recall values, how do we get the F-score? There are actually various ways of doing this, giving different importances to precision and recall, but the most widely used is the F<sub>1</sub> score. This is defined as the harmonic mean of precision and recall:
 {: style="text-align: justify"}
 
 ![Image_16](/agneev-blog/assets/img/img_10_16.png?raw=true){: width="600", height="400" }
 
 The F<sub>1</sub> score for the Archie class is thus 2 * (0.31 * 0.37) / (0.31 + 0.37) = **0.34**.
+{: style="text-align: justify"}
+
+Is this a good performance? No! F-scores range between 0 and 1, with a higher number indicating a better performing model. At least for the Archie class, therefore, our model hasn't been brilliant. What about its overall performance, though?
 {: style="text-align: justify"}
 
 ### F-score averaging <a id="avg"></a>
@@ -404,26 +407,25 @@ The microaverage F<sub>1</sub> score, on the other hand, is calculated using the
 We can see that the macroaverage F<sub>1</sub> score gives equal weightage to every class, regardless of the class sample size. The microaverage F<sub>1</sub> score, on the other hand, uses the cumulative TP, FP and FN values, and as the majority classes contribute more to these than the minority classes, the microaverage F<sub>1</sub> score is biased towards performance on the majority classes. For evaluating a model we want to see perform equally well on different classes of an imbalanced dataset, therefore, the macroaverage F<sub>1</sub> score is the more suitable metric.
 {: style="text-align: justify"}
 
-If we compare the macro- and microaverage F<sub>1</sub> scores for the whole dataset and the two undersampling approaches, we get:
+If we compare the macro- and microaverage F<sub>1</sub> scores for the two undersampling approaches, we get:
 {: style="text-align: justify"}
 
 |         |   Macroaverage F<sub>1</sub> |   Microaverage F<sub>1</sub> |
 |:--------------|-----------------:|------------------:|
-| Whole dataset  |     0.35 |           0.55 |              
 | Undersampling-min   |      0.32 |        0.33 |    
 | Undersampling-200 |         0.47 |       0.49 |
 
-Ah ha! We see that undersampling with 200 samples per class has a much better macroaverage F<sub>1</sub> score than using the whole dataset (0.47 against 0.35). Using the minimum number of samples, on the other hand, actually _decreased_ the macroaverage F<sub>1</sub> score slightly. This is in line with what we had intuitively concluded earlier about the minimum samples approach not really being an improvement in any way.
+We see that undersampling with 200 samples per class has a much better macroaverage F<sub>1</sub> score than undersampling using the minimum number of samples. We will discuss in detail how the two approaches compare with using the whole dataset next time. Teaser!
 {: style="text-align: justify"}
 
-Another thing we can see is that as the dataset gets more balanced, the difference between the macro- and microaverage F<sub>1</sub> scores reduces. This is axiomatically true - for a perfectly balanced dataset, there is no difference between the two averaging methods.
+One thing to notice is that as the dataset gets more balanced, the difference between the macro- and microaverage F<sub>1</sub> scores reduces. This is axiomatically true - for a perfectly balanced dataset, there is no difference between the two averaging methods.
 {: style="text-align: justify"}
 
 ## Conclusion <a id="conc"></a>
 Undersampling is a straightforward method of dealing with unbalanced data, but taken to an extreme for very unbalanced datasets, it is not very useful. Here, in our first attempt, we discarded almost 90% of the original images in an attempt to balance the classes, but ended up with both a poor validation accuracy and an enduring disparity in the performance across classes, as confirmed by the macroaverage F<sub>1</sub> score.
 {: style="text-align: justify"}
 
-However, if we are willing to be a little more flexible and choose a higher threshold for the number of images per class, we can achieve pretty good results, with a macroaverage F<sub>1</sub> score higher than the original dataset and the microaverage F<sub>1</sub> score and validation accuracy not reduced too greatly. On the flip side, the training and testing remain less stable than for the original dataset due to the fewer images used. The main takeaway - undersampling may be a useful tool in redressing class imbalance, but needs to be used carefully!
+However, if we are willing to be a little more flexible and choose a higher threshold for the number of images per class, we can achieve much better results. It must be remembered, though, that the training and testing will remain less stable than for the original dataset due to the fewer images used. The main takeaway so far- undersampling may be a useful tool in redressing class imbalance, but needs to be used carefully!
 {: style="text-align: justify"}
 
 This post has expanded to be much longer than I had anticipated, and so I will stop here. Next time, we will look at another option for handling unbalanced datasets. So long!

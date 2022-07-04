@@ -371,6 +371,8 @@ One thing that I have not mentioned yet is that the F-score is defined for binar
 The two most widely used F-score averages are the micro- and the macro-averages. These can again be better understood by concrete numbers, so let us first tabulate the TP, FP, TN (true negative), FN and F1 values for all the classes.
 {: style="text-align: justify"}
 
+<div class="table-wrapper" markdown="block">
+
 |    Class           |   True positives |   False positives |   True negatives |   False negatives |   F<sub>1</sub> score |
 |:--------------|-----------------:|------------------:|-----------------:|------------------:|-----------:|
 | Kleats        |               16 |                20 |              506 |                19 |       0.45 |
@@ -397,6 +399,8 @@ The two most widely used F-score averages are the micro- and the macro-averages.
 | Hiram Lodge   |               27 |                20 |              499 |                15 |       0.61 |
 | Others        |               21 |                19 |              505 |                16 |       0.55 |
 | Total         |              276 |               285 |            12057 |               285 |     nan    |
+
+</div>
 
 The macroaverage F<sub>1</sub> is simply the mean of the F<sub>1</sub> values for all the classes. In this case, the mean of the F<sub>1</sub> score column comes to **0.47**, and this is the macroaverage F<sub>1</sub> score.
 {: style="text-align: justify"}

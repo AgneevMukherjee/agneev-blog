@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Introducing the Archie Comics Multiclass dataset | Agneev’s DS/ML lab book</title>
+<meta name="generator" content="Jekyll v4.2.1" />
+<meta property="og:title" content="Introducing the Archie Comics Multiclass dataset" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="&#8672;&nbsp;7. Modelling water bodies - 4 9. Diving into the Archie Comics Multiclass dataset&nbsp;&#8674;" />
+<meta property="og:description" content="&#8672;&nbsp;7. Modelling water bodies - 4 9. Diving into the Archie Comics Multiclass dataset&nbsp;&#8674;" />
+<link rel="canonical" href="https://agneevmukherjee.github.io/agneev-blog/Archie-comics-multiclass-dataset-intro/" />
+<meta property="og:url" content="https://agneevmukherjee.github.io/agneev-blog/Archie-comics-multiclass-dataset-intro/" />
+<meta property="og:site_name" content="Agneev’s DS/ML lab book" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-04-04T13:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Introducing the Archie Comics Multiclass dataset" />
+<script type="application/ld+json">
+{"dateModified":"2022-04-04T13:00:00+02:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://agneevmukherjee.github.io/agneev-blog/Archie-comics-multiclass-dataset-intro/"},"datePublished":"2022-04-04T13:00:00+02:00","url":"https://agneevmukherjee.github.io/agneev-blog/Archie-comics-multiclass-dataset-intro/","headline":"Introducing the Archie Comics Multiclass dataset","description":"&#8672;&nbsp;7. Modelling water bodies - 4 9. Diving into the Archie Comics Multiclass dataset&nbsp;&#8674;","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/agneev-blog/assets/main.css">
+  <link rel="shortcut icon" type="image/x-icon" href="/agneev-blog/favicon.ico"><link type="application/atom+xml" rel="alternate" href="https://agneevmukherjee.github.io/agneev-blog/feed.xml" title="Agneev's DS/ML lab book" /></head>
+<body><header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/agneev-blog/">Agneev&#39;s DS/ML lab book</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/agneev-blog/about/">About me</a><a class="page-link" href="/agneev-blog/categories/">Categories</a></div>
+      </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">8. Introducing the Archie Comics Multiclass dataset</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2022-04-04T13:00:00+02:00" itemprop="datePublished">Apr 4, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-4/">&#8672;&nbsp;7. Modelling water bodies - 4</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/ACMC-simple-model/">9. Diving into the Archie Comics Multiclass dataset&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Categories:</span></p>
+<div class="post-categories">
+<p style="font-size:20px">
+  
+  
+  <a href="/agneev-blog/categories/#Machine Learning">Machine Learning</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Computer Vision">Computer Vision</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Python">Python</a>
+  
+  
+  </p>
+</div>
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br /></p>
+<p style="font-size:18px">
+Created dataset
+</p>
+<p><br /></p>
+
+<p style="text-align: justify">Hello again! Today marks the start of an exciting new series, where we look at image classification and other computer vision (CV)-related tasks using the Archie Comics Multi-class (ACMC) dataset that I created.</p>
+
+<p style="text-align: justify">Now, right at the start, let me address one issue that some of you may have - why comics? Why not something with more real world applicability? Well, firstly, because comics are inherently a sketched representation of the real world, almost any CV-related task that can be done on photo datasets can be done on comics datasets - image classification, object detection, image segmentation, image captioning, image reconstruction, you name it. Indeed, we shall look at several of these applications in later posts. The only real difference is that instead of say, training our model on photos of faces, cars, animals, etc., we will train on drawings of these instead. The second reason is that we can often obtain a large number of comics sketches much more easily than we could obtain photographs of a particular subject. In the ACMC dataset, for instance, we shall see that we have hundreds of sketches of certain characters, a number that may not be easy to obtain for any real life subjects. Thirdly, while comics may be representative of reality, they are often an <em>exaggerated</em> version of reality, providing us with poses and expressions that are not common in real life. Depending on your point of view, this may or may not be a plus, but I see it as increasing the diversity of the dataset. Fourth, and probably the main reason I chose to go down this path - it’s fun! Look, doing machine learning (ML) stuff is often hard and frustrating, and so I preferred to choose a subject that is at least interesting to me, rather than some dataset I couldn’t care less about!</p>
+
+<p style="text-align: justify">OK, so then comes the next question - why Archie comics in particular? Once again, we have a list of reasons…starting with the fact that I have been reading them for almost three decades now, and so both have an extensive amount of material, and an intimate knowledge of the characters. The second reason would be that they have been published for over 80 years now. Why does that matter? Well, aside from the abundance of available material, this leads to a point that may be better appreciated by those familiar with the comics than those who are not. You see, dozens of artists have drawn these characters over the decades, bringing their own drawing style to the table. At the same time, dressing styles and other aspects of daily life have also changed tremendously over this period. Despite this, the artists are required to maintain a continuity with past representations of the characters, so that readers can read a 2020 Archie story as easily as they can a 1950 story (and stories from different decades often appear together in the same issue). In other words, the characters have to look similar enough for human readers to be able to readily recognise them. This, then, is a great CV challenge - can the model learn the character feature representations well enough to tell that, though they look <em>somewhat</em> different, this sketch from 1962 and this from 2008 both show Reggie?</p>
+
+<p style="text-align: justify">Thirdly, they have a large cast of characters - over two dozen recurring characters, easily. This makes it especially interesting for classification-type tasks. Fourthly, the frequency of appearance of these characters is wildly different, with those of the lead characters often orders of magnitude higher than some of the niche characters. This makes the dataset very imbalanced…and even more intriguing!</p>
+
+<p style="text-align: justify">So let’s look at the dataset, which can be found <a href="https://www.kaggle.com/datasets/agneev/archie-comics-multi-class">here</a>, in a little more detail. Before that, an obvious disclaimer - all rights to the images belong to Archie Comic Publications Inc., with the dataset only being used by me for educational purposes. I have created the dataset from clippings from various Archie comic books and newspaper strips, with some minor editing occasionally done to remove the lettering in dialogue boxes, etc.</p>
+
+<h2 id="multi-class-versus-multi-label-">Multi-class versus multi-label <a id="mc-ml"></a></h2>
+<p style="text-align: justify">Before anything else, I should mention that I have actually created <em>two</em> datasets - one multi-class, and one multi-label. We will deal with the multi-label dataset later, but since people sometimes get confused about the difference between multi-class and multi-label classification, let me explain this here briefly. Multi-class is when every image has a single label, with the label being one of a number of possible classes. Multi-label is when every image has or can have multiple labels.</p>
+
+<p>An example of multi-class image classification is this:</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_1.png?raw=true" alt="Image_1" width="200&quot;, height=&quot;100" /></p>
+<p> &emsp;  &emsp;   &emsp; &emsp;  Cat</p>
+<p><img src="/agneev-blog/assets/img/img_8_2.png?raw=true" alt="Image_2" width="200&quot;, height=&quot;100" /></p>
+<p> &emsp;  &emsp;   &emsp; &emsp; Dog</p>
+<p style="color:grey;font-size:80%;">
+© 2022 Agneev Mukherjee
+</p>
+<p><br />
+Simple, right? On the other hand, the images below, with the labels given below them, may be used for multi-<em>label</em> classification:</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_3.jpg?raw=true" alt="Image_3" width="400&quot;, height=&quot;300" />
+<br />
+[Grass; Sand; Sea; Boats; Sunny]</p>
+<p style="color:grey;font-size:80%;">
+© 2022 Agneev Mukherjee
+</p>
+<p><br /><br />
+<img src="/agneev-blog/assets/img/img_8_4.jpg?raw=true" alt="Image_4" width="400&quot;, height=&quot;200" />
+<br />
+[Cars; Bicycle; Buildings; Trees; Lamp post; Street; Grass; Shrubs; Cloudy]</p>
+<p style="color:grey;font-size:80%;">
+© 2022 Agneev Mukherjee
+</p>
+<p><br /></p>
+
+<p style="text-align: justify">Of course, the exact labels for the figures will depend on the application, but you get the drift. So the dataset we are dealing with now is multi-class, that is, each picture only has a single label - the name of a particular character - attached to it. Later we will deal with the multi-label dataset, with several characters in each image.</p>
+
+<h2 id="brief-look-at-the-characters-">Brief look at the characters <a id="brief"></a></h2>
+
+<p style="text-align: justify">As I said earlier, Archie comics has a venerable history stretching back over 80 years. While nowhere near as popular (or ubiquitous) as in its heyday, it continues to have legions of fans, with new ‘properties’ like the animated series <a href="https://en.wikipedia.org/wiki/Archie%27s_Weird_Mysteries"><em>Archie’s Weird Mysteries</em></a>, the zombie comics title <a href="https://en.wikipedia.org/wiki/Afterlife_with_Archie"><em>Afterlife with Archie</em></a>, and the TV series <a href="https://en.wikipedia.org/wiki/Riverdale_(2017_TV_series)"><em>Riverdale</em></a> coming out every now and then. There are also different versions of the characters like <a href="https://en.wikipedia.org/wiki/Little_Archie"><em>Little Archie</em></a>, <a href="https://en.wikipedia.org/wiki/The_New_Archies"><em>The New Archies</em></a>, the <a href="https://en.wikipedia.org/wiki/Bad_Boy_Trouble">‘new look’ series</a>, etc.  The ACMC, however, deals with the <em>classic</em> version of the Archie comics characters - as we shall see, there is more than enough varied content in this to satiate us.</p>
+
+<p style="text-align: justify">I was originally planning to provide a fairly detailed description of each character in the dataset, but then realised that this would be superfluous and irrelevant to the task at hand. I therefore redirect you to <a href="https://en.wikipedia.org/wiki/List_of_Archie_Comics_characters">Wikipedia</a> if you would like to know more about them. Here, let’s just see a couple of pix of each character, one ‘old’ and one ‘new’.</p>
+
+<p>Archie Andrews (<em>An archetypal average American teenager</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_5.png?raw=true" alt="Image_5" width="150&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_6.png?raw=true" alt="Image_6" width="180&quot;, height=&quot;100" /></p>
+
+<p><br />
+Jughead Jones (<em>Archie’s best friend, usually wears a beanie, smart but lazy, girl hater, has an insatiable appetite</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_7.png?raw=true" alt="Image_7" width="150&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_8.png?raw=true" alt="Image_8" width="170&quot;, height=&quot;90" /></p>
+
+<p><br />
+Betty Cooper (<em>Sweet girl, good at studies and sports, has crush on Archie</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_9.png?raw=true" alt="Image_9" width="200&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_8_10.png?raw=true" alt="Image_10" width="150&quot;, height=&quot;80" /></p>
+
+<p><br />
+Veronica Lodge (<em>Rich, spoilt girl, Archie’s crush</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_11.png?raw=true" alt="Image_11" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_12.png?raw=true" alt="Image_12" width="160&quot;, height=&quot;100" /></p>
+
+<p><br />
+Reggie Mantle (<em>Archie’s main rival</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_13.png?raw=true" alt="Image_13" width="150&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_14.png?raw=true" alt="Image_14" width="170&quot;, height=&quot;100" /></p>
+
+<p style="text-align: justify"><br />
+The above are, in my opinion, the 5 most important characters in the ‘Archies Universe’ - and, in fact, the members of the band <a href="https://en.wikipedia.org/wiki/The_Archies">‘The Archies’</a>! The ‘Riverdale gang’, on the other hand, has several other members, among whom the most notable are:</p>
+
+<p>Dilton Doiley (<em>Stereotypical teenage geeky genius</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_15.png?raw=true" alt="Image_15" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_16.png?raw=true" alt="Image_16" width="180&quot;, height=&quot;100" /></p>
+
+<p><br />
+Moose Mason (<em>Stereotypical jock, with near-superhuman strength and a meagre intellect</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_17.png?raw=true" alt="Image_17" width="150&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_18.png?raw=true" alt="Image_18" width="120&quot;, height=&quot;60" /></p>
+
+<p><br />
+Midge Klump (<em>Moose’s girlfriend</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_19.png?raw=true" alt="Image_19" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_20.png?raw=true" alt="Image_20" width="120&quot;, height=&quot;60" /></p>
+
+<p><br />
+Ethel Muggs (<em>Chases Jughead</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_21.png?raw=true" alt="Image_21" width="180&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_22.png?raw=true" alt="Image_22" width="100&quot;, height=&quot;60" /></p>
+
+<p><br />
+Chuck Clayton (<em>Talented athlete and cartoonist</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_23.png?raw=true" alt="Image_23" width="180&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_24.png?raw=true" alt="Image_24" width="150&quot;, height=&quot;80" /></p>
+
+<p><br />
+Nancy Woods (<em>Chuck’s girlfriend</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_25.png?raw=true" alt="Image_25" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_26.png?raw=true" alt="Image_26" width="100&quot;, height=&quot;50" /></p>
+
+<p><br />
+The Riverdale gang studies at Riverdale high, whose most important staff members are:</p>
+
+<p>Waldo Weatherbee (<em>The school principal</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_27.png?raw=true" alt="Image_27" width="200&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_8_28.png?raw=true" alt="Image_28" width="150&quot;, height=&quot;80" /></p>
+
+<p><br />
+Geraldine Grundy (<em>Usually an English teacher, although often also shown teaching Maths, History and other subjects</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_29.png?raw=true" alt="Image_29" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_30.png?raw=true" alt="Image_30" width="150&quot;, height=&quot;80" /></p>
+
+<p><br />
+Mr. Flutesnoot (<em>Usually a science, especially chemistry, teacher</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_31.png?raw=true" alt="Image_31" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_32.png?raw=true" alt="Image_32" width="140&quot;, height=&quot;70" /></p>
+
+<p><br />
+Coach Kleats (<em>Head physical education teacher</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_33.png?raw=true" alt="Image_33" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_34.png?raw=true" alt="Image_34" width="120&quot;, height=&quot;60" /></p>
+
+<p><br />
+Coach Clayton (<em>Chuck’s father, physical education and history teacher</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_35.png?raw=true" alt="Image_35" width="150&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_36.png?raw=true" alt="Image_36" width="120&quot;, height=&quot;60" /></p>
+
+<p><br />
+Mr. Svenson (<em>School janitor</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_37.png?raw=true" alt="Image_37" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_38.png?raw=true" alt="Image_38" width="150&quot;, height=&quot;80" /></p>
+
+<p><br />
+Ms. Beazley (<em>School cafeteria cook</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_39.png?raw=true" alt="Image_39" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_40.png?raw=true" alt="Image_40" width="150&quot;, height=&quot;80" /></p>
+
+<p><br />
+Of the parents of the Riverdale gang, two characters make appearances far more frequently than others:</p>
+
+<p>Hiram Lodge (<em>Veronica’s father</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_41.png?raw=true" alt="Image_41" width="120&quot;, height=&quot;60" />        
+<img src="/agneev-blog/assets/img/img_8_42.png?raw=true" alt="Image_42" width="150&quot;, height=&quot;80" /></p>
+
+<p><br />
+Fred Andrews (<em>Archie’s father</em>):</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_43.png?raw=true" alt="Image_43" width="150&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_44.png?raw=true" alt="Image_44" width="140&quot;, height=&quot;70" /></p>
+
+<p><br />
+Being as rich as they are, it is no surprise that the Lodges have a butler, Smithers, who makes semi-regular appearances:</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_45.png?raw=true" alt="Image_45" width="150&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_46.png?raw=true" alt="Image_46" width="140&quot;, height=&quot;70" /></p>
+
+<p><br />
+And what is the gang’s favourite hangout? Pop Tate’s Chok’lit Shoppe, of course. Here’s Pop:</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_47.png?raw=true" alt="Image_47" width="160&quot;, height=&quot;80" />        
+<img src="/agneev-blog/assets/img/img_8_48.png?raw=true" alt="Image_48" width="130&quot;, height=&quot;70" /></p>
+
+<p style="text-align: justify"><br />
+So that was a round-up of all the major characters in the ACMC dataset. However, the dataset actually has one more class - ‘Others’. This, as you can guess, is a medley of images of random characters, and the aim is for a model to put any images that it cannot classify as a member of any of the other classes into this category. Let’s have a look at some of the images under this heading:</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_49.png?raw=true" alt="Image_49" width="130&quot;, height=&quot;100" />
+<img src="/agneev-blog/assets/img/img_8_50.png?raw=true" alt="Image_50" width="130&quot;, height=&quot;100" />
+<img src="/agneev-blog/assets/img/img_8_51.png?raw=true" alt="Image_51" width="130&quot;, height=&quot;100" />
+<img src="/agneev-blog/assets/img/img_8_52.png?raw=true" alt="Image_52" width="130&quot;, height=&quot;100" />
+<img src="/agneev-blog/assets/img/img_8_53.png?raw=true" alt="Image_53" width="120&quot;, height=&quot;100" /></p>
+
+<p><br />
+<img src="/agneev-blog/assets/img/img_8_54.png?raw=true" alt="Image_54" width="110&quot;, height=&quot;100" />
+<img src="/agneev-blog/assets/img/img_8_55.png?raw=true" alt="Image_55" width="140&quot;, height=&quot;120" />
+<img src="/agneev-blog/assets/img/img_8_56.png?raw=true" alt="Image_56" width="140&quot;, height=&quot;120" />
+<img src="/agneev-blog/assets/img/img_8_57.png?raw=true" alt="Image_57" width="140&quot;, height=&quot;120" />
+<img src="/agneev-blog/assets/img/img_8_58.png?raw=true" alt="Image_58" width="140&quot;, height=&quot;120" /></p>
+
+<p><br />
+<img src="/agneev-blog/assets/img/img_8_59.png?raw=true" alt="Image_59" width="160&quot;, height=&quot;120" />
+<img src="/agneev-blog/assets/img/img_8_60.png?raw=true" alt="Image_60" width="90&quot;, height=&quot;60" />
+<img src="/agneev-blog/assets/img/img_8_61.png?raw=true" alt="Image_61" width="160&quot;, height=&quot;120" />
+<img src="/agneev-blog/assets/img/img_8_62.png?raw=true" alt="Image_62" width="110&quot;, height=&quot;80" />
+<img src="/agneev-blog/assets/img/img_8_63.png?raw=true" alt="Image_63" width="140&quot;, height=&quot;120" /></p>
+
+<p style="text-align: justify"><br />
+Archie comics fans will recognise several familiar faces in that gallery: Jughead’s father, Gaston, Archie’s mother, Cheryl Blossom, Betty’s father, Jellybean, and Ms. Haggly. The other images are of non-recurring characters.</p>
+
+<h2 id="conclusion-">Conclusion <a id="conc"></a></h2>
+
+<p style="text-align: justify">Looking at the pictures above serves to highlight some of the challenges of working with this dataset. I used a range of materials to make the dataset, collected over a long period, and hence the images vary widely in size and image quality. How did I decide whether an image belongs in the dataset or not? The primary criterion was that a ‘human expert’, in this case an Archie comics fan, should be able to look at the image in question and identify it without any further cues. In some cases, this is difficult - without prior knowledge, for example, it is hard to categorise the Midge images above as belonging to the same person. Still, this is better than if I had put Jughead’s mother as a category - believe it or not, both the images below are of her. These images actually appear in the ‘Others’ category, meaning that their belonging to the same character is moot.</p>
+
+<p><img src="/agneev-blog/assets/img/img_8_64.png?raw=true" alt="Image_64" width="180&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_8_65.png?raw=true" alt="Image_65" width="120&quot;, height=&quot;60" /></p>
+
+<p style="text-align: justify"><br />
+Another reason for the dataset being challenging - well, a look at some Jughead images below should suffice…</p>
+
+<p><br />
+<img src="/agneev-blog/assets/img/img_8_66.png?raw=true" alt="Image_66" width="100&quot;, height=&quot;100" />  
+<img src="/agneev-blog/assets/img/img_8_67.png?raw=true" alt="Image_67" width="100&quot;, height=&quot;100" />  
+<img src="/agneev-blog/assets/img/img_8_68.png?raw=true" alt="Image_68" width="100&quot;, height=&quot;100" />  
+<img src="/agneev-blog/assets/img/img_8_69.png?raw=true" alt="Image_69" width="100&quot;, height=&quot;100" />  
+<img src="/agneev-blog/assets/img/img_8_70.png?raw=true" alt="Image_70" width="100&quot;, height=&quot;100" />  
+<img src="/agneev-blog/assets/img/img_8_71.png?raw=true" alt="Image_71" width="100&quot;, height=&quot;100" /></p>
+
+<p style="text-align: justify"><br />
+The images above can all easily be identified by any Jughead fan, but for a ML model, it might not be as straightforward.</p>
+
+<p style="text-align: justify">And finally, as I said at the start, the dataset is also very imbalanced, which introduces its own challenges - and provides the opportunity to test some novel techniques. We shall look at this and other aspects in detail next time, so goodbye for now!</p>
+
+<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-4/">&#8672;&nbsp;7. Modelling water bodies - 4</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/ACMC-simple-model/">9. Diving into the Archie Comics Multiclass dataset&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+  </div><a class="u-url" href="/agneev-blog/Archie-comics-multiclass-dataset-intro/" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/agneev-blog/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Agneev&#39;s DS/ML lab book</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Agneev&#39;s DS/ML lab book</li><li><a class="u-email" href="mailto:agneev.m.ai@gmail.com">agneev.m.ai@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/AgneevMukherjee"><svg class="svg-icon"><use xlink:href="/agneev-blog/assets/minima-social-icons.svg#github"></use></svg> <span class="username">AgneevMukherjee</span></a></li><li><a href="https://www.linkedin.com/in/agneevmukherjee"><svg class="svg-icon"><use xlink:href="/agneev-blog/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">agneevmukherjee</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>I mostly write about my experiments in data science/machine learning here,
+ sometimes about other things...</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

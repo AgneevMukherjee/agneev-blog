@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Modelling water bodies - 4 | Agneev’s DS/ML lab book</title>
+<meta name="generator" content="Jekyll v4.2.1" />
+<meta property="og:title" content="Modelling water bodies - 4" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="&#8672;&nbsp;6. Modelling water bodies - 3 8. Introducing the Archie Comics Multiclass dataset&nbsp;&#8674;" />
+<meta property="og:description" content="&#8672;&nbsp;6. Modelling water bodies - 3 8. Introducing the Archie Comics Multiclass dataset&nbsp;&#8674;" />
+<link rel="canonical" href="https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-4/" />
+<meta property="og:url" content="https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-4/" />
+<meta property="og:site_name" content="Agneev’s DS/ML lab book" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-03-10T12:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Modelling water bodies - 4" />
+<script type="application/ld+json">
+{"dateModified":"2022-03-10T12:00:00+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-4/"},"datePublished":"2022-03-10T12:00:00+01:00","url":"https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-4/","headline":"Modelling water bodies - 4","description":"&#8672;&nbsp;6. Modelling water bodies - 3 8. Introducing the Archie Comics Multiclass dataset&nbsp;&#8674;","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/agneev-blog/assets/main.css">
+  <link rel="shortcut icon" type="image/x-icon" href="/agneev-blog/favicon.ico"><link type="application/atom+xml" rel="alternate" href="https://agneevmukherjee.github.io/agneev-blog/feed.xml" title="Agneev's DS/ML lab book" /></head>
+<body><header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/agneev-blog/">Agneev&#39;s DS/ML lab book</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/agneev-blog/about/">About me</a><a class="page-link" href="/agneev-blog/categories/">Categories</a></div>
+      </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">7. Modelling water bodies - 4</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2022-03-10T12:00:00+01:00" itemprop="datePublished">Mar 10, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-3/">&#8672;&nbsp;6. Modelling water bodies - 3</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Archie-comics-multiclass-dataset-intro/">8. Introducing the Archie Comics Multiclass dataset&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Categories:</span></p>
+<div class="post-categories">
+<p style="font-size:20px">
+  
+  
+  <a href="/agneev-blog/categories/#Data Science">Data Science</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Machine Learning">Machine Learning</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Python">Python</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Time series">Time series</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Tabular">Tabular</a>
+  
+  
+  </p>
+</div>
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br /></p>
+<p style="font-size:18px">
+Environment, Water, Kaggle, Competition, Matplotlib
+</p>
+<p><br /></p>
+
+<p style="text-align: justify">Welcome to the last post in the water body modelling series! The <a href="https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-3/">last time</a> we saw the modelling of the Aquifer Petrignano using a Random Forest, a LightGBM and an LSTM model, for two different forecast periods. We also saw how to analyse their feature importance via permutation importance and SHAP. It would be redundant (and boring!) to look at all that again for each of the nine water bodies, and so in this post I will just highlight some of the interesting points that arose for the other water bodies. As I say each time, you can find all the code <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb">here</a>.</p>
+
+<h2 id="aquifer-auser--">Aquifer Auser  <a id="Auser"></a></h2>
+
+<p>As per the <a href="https://www.kaggle.com/c/acea-water-prediction/data">competition page</a>,</p>
+
+<blockquote style="text-align: justify">
+  <p>This waterbody consists of two subsystems, called NORTH and SOUTH, where the former partly influences the behavior of the latter. Indeed, the north subsystem is a water table (or unconfined) aquifer while the south subsystem is an artesian (or confined) groundwater.</p>
+</blockquote>
+<blockquote style="text-align: justify">
+
+  <p>The levels of the NORTH sector are represented by the values of the SAL, PAG, CoS and DIEC wells, while the levels of the SOUTH sector by the LT2 well.</p>
+</blockquote>
+
+<p style="text-align: justify">So what is interesting about the modelling of this particular water body? Let us examine the hydrometry chart:</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_1.png?raw=true" alt="Image_1" width="400&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify">Here we see one aspect that differs from the Petrignano dataset. It appears that the following a long break, the Piaggione hydrometry level has been moved down, in relation to both its pre-break levels and Monte_S_Quirico (the black series) levels. This most likely indicates an error. It would probably be sensible to move it up by the difference in the minima of the pre-and post-break values. The other option would be to move the first part down, but since all the other hydrometry terms lie in the positive region, I went with the moving up option. In any case, it’s the inconsistency in the before and after value that is important; the models will be able to handle the absolute values.</p>
+
+<p style="text-align: justify">The post-break appears to start around early 2011, so first let’s verify this. Let’s get the row number:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">train</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2011-01-01'</span><span class="p">]</span></code></pre></figure>
+
+<font size="2">
+<div style="overflow:auto;">
+<table border="1">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+       <th>Date</th>
+       <th>Rainfall_Gallicano</th>
+       <th>Rainfall_Pontetetto</th>
+       <th>Rainfall_Monte_Serra</th>
+       <th>Rainfall_Orentano</th>
+       <th>Rainfall_Borgo_a_Mozzano</th>
+       <th>Rainfall_Piaggione</th>
+       <th>Rainfall_Calavorno</th>
+       <th>Rainfall_Croce_Arcana</th>
+       <th>Rainfall_Tereglio_Coreglia_Antelminelli</th>
+       <th>Temperature_Monte_Serra</th>
+       <th>Temperature_Ponte_a_Moriano</th>
+       <th>Temperature_Lucca_Orto_Botanico</th>
+       <th>Volume_POL</th>
+       <th>Volume_CC1</th>
+       <th>Volume_CC2</th>
+       <th>Volume_CSA</th>
+       <th>Volume_CSAL</th>
+       <th>Hydrometry_Monte_S_Quirico</th>
+       <th>Hydrometry_Piaggione</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <th>1363</th>
+        <td>2011-01-01</td>
+        <td>0.0</td>
+        <td>0.0</td>
+        <td>0.0</td>
+        <td>0.0</td>
+        <td>0.0</td>
+        <td>0.0</td>
+        <td>0.0</td>
+        <td>0.0</td>
+        <td>0.2</td>
+        <td>3.6</td>
+        <td>6.4</td>
+        <td>4.9</td>
+        <td>-10080.64516</td>
+        <td>-16485.10963</td>
+        <td>-13875.84</td>
+        <td>0.0</td>
+        <td>0.0</td>
+        <td>0.5</td>
+        <td>-0.33</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</font>
+
+<p><br />
+‘Hydrometry_Piaggione’ is the last column in the table, so:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">train</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1355</span><span class="p">:</span><span class="mi">1370</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_7_2.png?raw=true" alt="Image_2" width="400&quot;, height=&quot;400" /></p>
+
+<p style="text-align: justify">We can see that there is indeed a bunch of NaNs here, so let us now move up the 2nd part by the difference between the minima of the 1st and 2nd parts, and then re-plot.</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_3.png?raw=true" alt="Image_3" width="400&quot;, height=&quot;200" /></p>
+
+<p>This looks much better, and after imputation we get:</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_4.png?raw=true" alt="Image_4" width="400&quot;, height=&quot;200" /></p>
+
+<p>This looks just fine.</p>
+
+<p style="text-align: justify">Another important aspect is the ensembling. Let us look at the results of the three individual models and the ensemble:</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_5.png?raw=true" alt="Image_5" width="800&quot;, height=&quot;400" /></p>
+
+<p style="text-align: justify">Here we see the benefit of using a range of models. The LSTM, which had given the best predictions for Petrignano, gives the worst results for Auser, but ensembling enables us to mitigate the inaccuracy, even if the final predictions are still worse than those given by the tree-based methods.</p>
+
+<p><br /></p>
+<h2 id="aquifer-doganella--">Aquifer Doganella  <a id="Doganella"></a></h2>
+
+<blockquote style="text-align: justify">
+  <p>The wells field Doganella is fed by two underground aquifers not fed by rivers or lakes but fed by meteoric infiltration. The upper aquifer is a water table with a thickness of about 30m. The lower aquifer is a semi-confined artesian aquifer with a thickness of 50m and is located inside lavas and tufa products. These aquifers are accessed through wells called Well 1, …, Well 9. Approximately 80% of the drainage volumes come from the artesian aquifer. The aquifer levels are influenced by the following parameters: rainfall, humidity, subsoil, temperatures and drainage volumes.</p>
+</blockquote>
+
+<p>The benefits of ensembling are demonstrated even better in this dataset. First let us see the results for each term, using code like:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">rf_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">)</span>
+
+<span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">lgbm_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">)</span>
+
+<span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">lstm_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">)</span>
+
+<span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">avg_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_7_6.png?raw=true" alt="Image_6" width="500&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify">We see that each model gives the best prediction for 3 targets out of 9, and the ensemble is able to give more accurate predictions on the whole than is the case for any individual model. This can be crosschecked by looking at the uniform average errors below.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">rf_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'uniform_average'</span><span class="p">)</span>
+
+<span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">lgbm_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'uniform_average'</span><span class="p">)</span>
+
+<span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">lstm_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'uniform_average'</span><span class="p">)</span>
+
+<span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">avg_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'uniform_average'</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_7_7.png?raw=true" alt="Image_7" width="150&quot;, height=&quot;100" /></p>
+
+<p><br /></p>
+<h2 id="aquifer-luco--">Aquifer Luco  <a id="Luco"></a></h2>
+
+<blockquote style="text-align: justify">
+  <p>The Luco wells field is fed by an underground aquifer. This aquifer not fed by rivers or lakes but by meteoric infiltration at the extremes of the impermeable sedimentary layers. Such aquifer is accessed through wells called Well 1, Well 3 and Well 4 and is influenced by the following parameters: rainfall, depth to groundwater, temperature and drainage volumes.</p>
+</blockquote>
+
+<p style="text-align: justify">The main thing I want to show about aquifer Luco is the poor quality of some of the data. Have a look at the ‘Depth to Groundwater’ data:</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_8.png?raw=true" alt="Image_8" width="400&quot;, height=&quot;300" /></p>
+
+<p>Imputing with MissForest gives:</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_9.png?raw=true" alt="Image_9" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">This looks fairly reasonable, but is it? The large chunks of missing data means there is no way to tell. Imputing over such a large span of time is unwise, and should be avoided unless there is no alternative. In either case, the lack of data for these terms made forecasting for this water body difficult, with the best error obtained (0.466 for the ensemble) amounting to well over 5% error.</p>
+
+<p><br /></p>
+<h2 id="water-spring-amiata--">Water spring Amiata  <a id="Amiata"></a></h2>
+
+<blockquote style="text-align: justify">
+  <p>The Amiata waterbody is composed of a volcanic aquifer not fed by rivers or lakes but fed by meteoric infiltration. This aquifer is accessed through Ermicciolo, Arbure, Bugnano and Galleria Alta water springs. The levels and volumes of the four sources are influenced by the parameters: rainfall, depth to groundwater, hydrometry, temperatures and drainage volumes.</p>
+</blockquote>
+
+<p style="text-align: justify">Modelling the water springs follows essentially the same format as the aquifers, except that the type of input variables is a little different (flow rate in place of volume and hydrometry). Let us just look at the flow rate term.</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_10.png?raw=true" alt="Image_10" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">The flow rates refer to, as expected, the water flow rate of the spring. Looking at the above graphs, two things stand out - the 0s are likely to be errors, and since the data are in the form of a continuous series, rolling means are an appropriate interpolation method. Imputation was therefore simply done by:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">flows</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">flows</span><span class="p">):</span>
+        <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">flows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">replace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># 0s in flows are errors, so replace them with Nans</span></code></pre></figure>
+
+<p>There isn’t much else that is different here, so let’s move on to the next water body.</p>
+
+<p><br /></p>
+<h2 id="water-spring-lupa--">Water spring Lupa  <a id="Lupa"></a></h2>
+
+<blockquote style="text-align: justify">
+  <p>This water spring is located in the Rosciano Valley, on the left side of the Nera river. The waters emerge at an altitude of about 375 meters above sea level through a long draining tunnel that crosses, in its final section, lithotypes and essentially calcareous rocks. It provides drinking water to the city of Terni and the towns around it.</p>
+</blockquote>
+
+<p>A cursory look at this dataset is enough to show that it is different:</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_11.png?raw=true" alt="Image_11" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify"><br />
+That’s right, a single ‘X’ or exogenous term - ‘Rainfall_Terni’, and a single ‘Y’ or target term - ‘Flow_Rate_Lupa’. As if that wasn’t enough, look at the rainfall term:</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_12.png?raw=true" alt="Image_12" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">The values of Rainfall_Terni are given as monthly averages for the period from 2009 to 2019, but as daily data in 2020. This means that the test data is considerably different from the training data, further compounded by one day in 2020 receiving 76 mm of rainfall, by far the highest value. To be able to model this dataset, I had to replace the 2020 daily rainfall data by the monthly average. First I located the row at which 2020 started:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">rain_df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">3965</span><span class="p">:</span><span class="mi">3970</span><span class="p">]</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_7_13.png?raw=true" alt="Image_13" width="200&quot;, height=&quot;100" /></p>
+
+<p>Then I made a new dataframe for the 2020 rainfall:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">rains_2020</span> <span class="o">=</span> <span class="n">rain_df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">3966</span><span class="p">:]</span></code></pre></figure>
+
+<p>Replace by the monthly average:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">rains_2020</span><span class="p">[</span><span class="s">'Rainfall_Terni'</span><span class="p">]</span> <span class="o">=</span> <span class="n">rains_2020</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">pd</span><span class="p">.</span><span class="n">Grouper</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s">'Date'</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s">'M'</span><span class="p">)).</span><span class="n">transform</span><span class="p">(</span><span class="s">'mean'</span><span class="p">)</span></code></pre></figure>
+
+<p>Insert the newly averaged terms back into the original dataframes and plot the new data:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">rain_df</span><span class="p">.</span><span class="n">Rainfall_Terni</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">3966</span><span class="p">:]</span> <span class="o">=</span> <span class="n">rains_2020</span><span class="p">.</span><span class="n">Rainfall_Terni</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:]</span>
+
+<span class="n">train</span><span class="p">.</span><span class="n">Rainfall_Terni</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">3966</span><span class="p">:]</span> <span class="o">=</span> <span class="n">rain_df</span><span class="p">.</span><span class="n">Rainfall_Terni</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">3966</span><span class="p">:]</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rains</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">rains</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">rain_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">rains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="n">rain_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">rains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">.</span><span class="n">yaxis</span>
+        <span class="n">y_axis</span><span class="p">.</span><span class="n">set_label_text</span><span class="p">(</span><span class="s">'Rainfall (mm)'</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_7_14.png?raw=true" alt="Image_14" width="400&quot;, height=&quot;200" /></p>
+
+<p>This now looks quite reasonable…</p>
+
+<p>What about the other term, the one we are supposed to predict for?</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_15.png?raw=true" alt="Image_15" width="400&quot;, height=&quot;200" /></p>
+
+<p>I think you can see why this waterbody was the cause of a lot of anguished comments on the competition forums…</p>
+
+<p><br /></p>
+<h2 id="water-spring-madonna-di-canneto--">Water spring Madonna di Canneto  <a id="Madonna"></a></h2>
+
+<blockquote style="text-align: justify">
+  <p>The Madonna di Canneto spring is situated at an altitude of 1010m above sea level in the Canneto valley. It does not consist of an aquifer and its source is supplied by the water catchment area of the river Melfa.</p>
+</blockquote>
+
+<p style="text-align: justify">Speaking of the data causing anguish, I will just show a couple of graphs for this water spring and leave it at that:</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_16.png?raw=true" alt="Image_16" width="400&quot;, height=&quot;200" /></p>
+
+<p>That’s not too bad, but this…</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_17.png?raw=true" alt="Image_17" width="400&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify">I am actually quite fond of this graph, as it is something I like to present as an ‘Exhibit A’ of bad data…</p>
+
+<p><br /></p>
+<h2 id="river-arno--">River Arno  <a id="Arno"></a></h2>
+
+<blockquote style="text-align: justify">
+  <p>Arno is the second largest river in peninsular Italy and the main waterway in Tuscany and it has a relatively torrential regime, due to the nature of the surrounding soils (marl and impermeable clays). Arno results to be the main source of water supply of the metropolitan area of Florence-Prato-Pistoia. The availability of water for this waterbody is evaluated by checking the hydrometric level of the river at the section of Nave di Rosano.</p>
+</blockquote>
+
+<p style="text-align: justify">This is the only river in the competition, and is actually entirely unremarkable, so much so that I did not make a single specific comment on it in my competition submission notebook. Perhaps the most noteworthy thing would be the rainfall graph below, showing the different rainfall terms having different years of missing data…</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_18.png?raw=true" alt="Image_18" width="400&quot;, height=&quot;200" /></p>
+
+<p><br /></p>
+<h2 id="lake-bilancino--">Lake Bilancino  <a id="Bilancino"></a></h2>
+
+<blockquote style="text-align: justify">
+  <p>Bilancino lake is an artificial lake located in the municipality of Barberino di Mugello (about 50 km from Florence). It is used to refill the Arno river during the summer months. Indeed, during the winter months, the lake is filled up and then, during the summer months, the water of the lake is poured into the Arno river.</p>
+</blockquote>
+
+<p style="text-align: justify">This is the final water body in the competition dataset, and the only lake. Its modelling is largely similar to the rest, except that it has a ‘Lake_Level’ term, which is one of the targets, and the ‘Flow_Rate’, the other target, differs in meaning from the water spring flow rates.</p>
+
+<p>First, the lake level looks like this:</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_19.png?raw=true" alt="Image_19" width="400&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify">It exhibits a distinct degree of seasonality, and hence I used seasonal interpolation for data imputation, similarly to temperature.</p>
+
+<p><img src="/agneev-blog/assets/img/img_7_20.png?raw=true" alt="Image_20" width="400&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify">The above shows the flow rate, which, as I said, is different from what it meant in the water springs. Here it refers to the flow rate at the water withdrawal station, and hence is comparable with the volume term in the aquifers. In other words, it can be 0, and therefore imputation can only be done by filling with 0s.</p>
+
+<p><br /></p>
+<h2 id="conclusion--">Conclusion  <a id="Conc"></a></h2>
+
+<p style="text-align: justify">And that’s it! It’s been a long trip through the different water bodies and the quirks associated with their modelling, but worthwhile, I hope. One of the frustrations of this competition was that the winning submissions were never released, preventing people from learning from these. I quite liked my own submission, except that it was very long (like these posts…), and in hindsight, I would have skipped some of the figures for the latter waterbodies to reduce the length and the monotony. Oh well, I at least hope the organisers got what they wanted from the competition. I will leave you with my final words from my competition entry, which I think still sum up my feelings well:</p>
+
+<blockquote style="text-align: justify">
+  <p>This notebook presents models for forecasting the target terms for four different types of waterbodies, with the ensembling of random forest, gradient boosting and neural networks providing accurate and reliable predictions for any desired time period. Overall, this competition was a great learning experience, and I would like to thank the organisers for this. One issue is regarding the quality of data, which for some waterbodies, especially water springs Lupa and Madonna di Canneto, were scarce and of poor quality, severely hampering the quality of the model predictions. Ultimately, no amount of sophistication in data imputation and modelling can compensate for a lack of appropriate and sufficient data, and therefore addressing this should be the first step taken towards being able to better forecast water availability. Overall, though, this analytics competition was a great initiative, and I hope that the outcome of the competition will not only help Acea better manage its waterbodies, but will also spur a general interest in applying such techniques to water management.</p>
+</blockquote>
+
+<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-3/">&#8672;&nbsp;6. Modelling water bodies - 3</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Archie-comics-multiclass-dataset-intro/">8. Introducing the Archie Comics Multiclass dataset&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+  </div><a class="u-url" href="/agneev-blog/Water-modelling-part-4/" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/agneev-blog/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Agneev&#39;s DS/ML lab book</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Agneev&#39;s DS/ML lab book</li><li><a class="u-email" href="mailto:agneev.m.ai@gmail.com">agneev.m.ai@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/AgneevMukherjee"><svg class="svg-icon"><use xlink:href="/agneev-blog/assets/minima-social-icons.svg#github"></use></svg> <span class="username">AgneevMukherjee</span></a></li><li><a href="https://www.linkedin.com/in/agneevmukherjee"><svg class="svg-icon"><use xlink:href="/agneev-blog/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">agneevmukherjee</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>I mostly write about my experiments in data science/machine learning here,
+ sometimes about other things...</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

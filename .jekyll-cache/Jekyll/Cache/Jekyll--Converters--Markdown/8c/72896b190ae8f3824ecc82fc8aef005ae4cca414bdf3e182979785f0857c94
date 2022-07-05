@@ -1,0 +1,408 @@
+I"�:<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-2/">&#8672;&nbsp;5. Modelling water bodies - 2</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-4/">7. Modelling water bodies - 4&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Categories:</span></p>
+<div class="post-categories">
+<p style="font-size:20px">
+  
+  
+  <a href="/agneev-blog/categories/#Data Science">Data Science</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Machine Learning">Machine Learning</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Python">Python</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Time series">Time series</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Tabular">Tabular</a>
+  
+  
+  </p>
+</div>
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br /></p>
+<p style="font-size:18px">
+Environment, Water, Pandas, Kaggle, Competition, Random Forest, LightGBM, LSTM, SHAP, Matplotlib, Ensemble
+</p>
+<p><br /></p>
+
+<p><em>[Edit: This and the previous post were originally published as one, but I have now split them to improve readability.]</em></p>
+
+<p style="text-align: justify">Hello! The <a href="https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-2/">last time</a> we looked at the data wrangling aspects on data for Aquifer Petrignano in the <a href="https://www.kaggle.com/c/acea-water-prediction/overview">Acea Smart Water Analytics</a> competition. Now, let’s tackle the modelling. As a reminder, the complete code is <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb">available on Github</a>, but we will only look at the main bits here. First, let’s look at a Random Forest (RF) model.</p>
+
+<h2 id="random-forest-model--">Random forest model  <a id="RF"></a></h2>
+
+<p style="text-align: justify">Before anything else, we should make a copy of the train dataframe that we have carried out all the data wrangling on, since that dataframe will also be used for the LGBM and LSTM models. The next thing is to carry out the feature engineering needed for a tree-based model to make predictions. This involves calculating the rolling mean for the variables where the cumulative sum is meaningful for modelling (i.e. rainfall and volume - the sum of the daily rainfall over a week can be an important input to the model) and the lag terms where this sum is meaningless (i.e. temperatures, hydrometry and depth of gorundwater - the ‘sum’ of the daily temperature over a week has no utility as such). Based on preliminary tests, separate rolling mean terms for every 30 days till 180 days and four lag terms till 90 days work sufficiently well without being either an excessive or an insufficient number of terms, and hence these are calculated in the cell below.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">train_rf</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rains</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rains</span><span class="p">:</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="s">'_roll_030'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">30</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="s">'_roll_060'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">60</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="s">'_roll_090'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">90</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="s">'_roll_120'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">120</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="s">'_roll_150'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">150</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span> <span class="o">+</span> <span class="s">'_roll_180'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">180</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vols</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vols</span><span class="p">:</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span> <span class="o">+</span> <span class="s">'_roll_030'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">30</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span> <span class="o">+</span> <span class="s">'_roll_060'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">60</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span> <span class="o">+</span> <span class="s">'_roll_090'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">90</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span> <span class="o">+</span> <span class="s">'_roll_120'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">120</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span> <span class="o">+</span> <span class="s">'_roll_150'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">150</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span> <span class="o">+</span> <span class="s">'_roll_180'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rolling</span><span class="p">(</span><span class="mi">180</span><span class="p">).</span><span class="n">mean</span><span class="p">().</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">temps</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">temps</span><span class="p">:</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="s">'_week_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">7</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="s">'_month_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">30</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="s">'_bimonth_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">60</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="s">'_quarter_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">90</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hydros</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hydros</span><span class="p">:</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">h</span> <span class="o">+</span> <span class="s">'_week_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">h</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">7</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">h</span> <span class="o">+</span> <span class="s">'_month_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">h</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">30</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">h</span> <span class="o">+</span> <span class="s">'_bimonth_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">h</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">60</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">h</span> <span class="o">+</span> <span class="s">'_quarter_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">h</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">90</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">depths</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">depths</span><span class="p">:</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="s">'_week_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">d</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">7</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="s">'_month_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">d</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">30</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="s">'_bimonth_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">d</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">60</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+        <span class="n">train_rf</span><span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="s">'_quarter_lag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">d</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="mi">90</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span></code></pre></figure>
+
+<p style="text-align: justify">If the non-shifted target terms are kept in the dataframe, then the RF focusses on using those to predict the shifted target terms, which is contrary to our aim of getting it to predict based on the input variables. These are therefore dropped in the next cell. Alongside, the lag terms introduce NaNs at the start of the dataframe which will also be removed in the following cell in the same way we saw last time. The dropna removes all rows containing NaN, and the index[0] gives the first row of the resulting dataframe.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+    <span class="n">train_rf</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">+=</span><span class="mi">1</span>
+<span class="c1"># If the target columns are not removed, the RF just focuses on them.
+</span><span class="n">train_rf</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_rf</span><span class="p">.</span><span class="n">dropna</span><span class="p">().</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span></code></pre></figure>
+
+<p style="text-align: justify">Now we are ready to split the dataframe into the train and test sets. Since we are trying to see how good our model is at predicting the future, the final year of data, i.e. from 1/7/2019 to 30/6/2020 will be used as the test set, with all the earlier data being used for training. We will further split the data into X (input) and y (output) terms. All this is done in the following cell.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">rf_X</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">train_rf</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">difference</span><span class="p">(</span><span class="n">target_cols</span><span class="p">)]</span>
+<span class="n">rf_y</span> <span class="o">=</span> <span class="n">train_rf</span><span class="p">[</span><span class="n">target_cols</span><span class="p">]</span>
+<span class="n">train_rf_X</span> <span class="o">=</span> <span class="n">rf_X</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">rf_X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">()].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">test_rf_X</span> <span class="o">=</span> <span class="n">rf_X</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">():].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">train_rf_y</span> <span class="o">=</span> <span class="n">rf_y</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">rf_y</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">()].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">test_rf_y</span> <span class="o">=</span> <span class="n">rf_y</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rf_y</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">():].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="c1"># Note that rf_y does not have a Date column, but as it's the same length as rf_X,
+# the Date column from that df can be used for the train-test split
+</span><span class="n">col_list2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">train_rf</span><span class="p">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">train_rf_X</span> <span class="o">=</span> <span class="n">train_rf_X</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Date'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_rf_X</span> <span class="o">=</span> <span class="n">test_rf_X</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Date'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># The Date column needs to be removed for the RF regressor to work</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+Now, I want to clarify one thing to prevent any misgivings on the issue. The rolling and lag terms for the first few items of the test set will be based on data from the end of the training set. Is this data leakage? No.</p>
+
+<p style="text-align: justify">Data leakage refers to <a href="https://insidebigdata.com/2014/11/26/ask-data-scientist-data-leakage/">‘when the data you are using to train a machine learning algorithm happens to have the information you are trying to predict’</a>. This is not the case here, as we are not trying to predict any of the rolling or lag terms. Further, we can see in the above link that leakage occurs due to ‘leaking data from the test set into the training set’, ‘leaking the correct prediction or ground truth into the test data’, ‘leaking of information from the future into the past’ and ‘information from data samples outside of scope of the algorithm’s intended use’. None of these is the case here.</p>
+
+<p style="text-align: justify">In short, leakage only occurs if information that will not be available at prediction time is used in model training. All the lag and rolling means terms are in the past and thus will be available at prediction time, and hence this is not a data leak.</p>
+
+<p style="text-align: justify"><br />
+Having clarified the above point, we can now run the RF regressor. I maintained the default number of estimators (100), but this can be increased or decreased depending on whether accuracy and robustness or processing time is of greater importance. The max_depth item I kept at 30 to prevent overfitting, while I passed a random_state int value of 2 to <a href="https://stackoverflow.com/questions/39158003/confused-about-random-state-in-decision-tree-of-scikit-learn">ensure consistency across calls</a>. All the other (hyper)parameters were kept at their default. Hyperparameter tuning may lead to somewhat improved accuracy at the cost of increased complexity, run time and perhaps overfitting, and if desired, can be investigated further as per online guides, such as <a href="https://www.analyticsvidhya.com/blog/2020/03/beginners-guide-random-forest-hyperparameter-tuning/">this</a> or <a href="https://medium.com/all-things-ai/in-depth-parameter-tuning-for-random-forest-d67bb7e920d">this</a>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">regr_rf</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">regr_rf</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_rf_X</span><span class="p">,</span> <span class="n">train_rf_y</span><span class="p">)</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+After the initial fit carried out above, it is better to take the training features deemed most important as per permutation importance and refit the RF only on these. This will enable the RF to focus on these important features, rather than spreading its attention, so to speak, among a lot of different features of marginal importance. This is done below. The code is mostly self-explanatory, but <a href="https://github.com/fastai/fastbook/blob/master/09_tabular.ipynb">this reference</a> may be used for better understanding certain portions if needed.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Calculating permutation importance based on the previous RF
+</span><span class="n">train_val_rf</span> <span class="o">=</span> <span class="n">permutation_importance</span><span class="p">(</span><span class="n">regr_rf</span><span class="p">,</span> <span class="n">train_rf_X</span><span class="p">,</span> <span class="n">train_rf_y</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sorted_idx_val</span> <span class="o">=</span> <span class="n">train_val_rf</span><span class="p">.</span><span class="n">importances_mean</span><span class="p">.</span><span class="n">argsort</span><span class="p">()</span>
+
+<span class="c1"># Taking the important features from the random forest above
+</span><span class="n">var_names</span> <span class="o">=</span> <span class="n">train_rf_X</span><span class="p">.</span><span class="n">columns</span><span class="p">[</span><span class="n">sorted_idx_val</span><span class="p">].</span><span class="n">to_frame</span><span class="p">()</span>
+<span class="n">imps</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">train_val_rf</span><span class="p">.</span><span class="n">importances_mean</span><span class="p">)</span>
+<span class="n">var_names</span> <span class="o">=</span> <span class="n">var_names</span><span class="p">.</span><span class="n">assign</span><span class="p">(</span><span class="n">imps</span> <span class="o">=</span> <span class="n">imps</span><span class="p">)</span>
+<span class="n">var_names</span> <span class="o">=</span> <span class="n">var_names</span><span class="p">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s">"vars"</span><span class="p">})</span>
+
+<span class="c1"># Making a list containing the most important variables. The feature importance value of 0.001
+# is arbitrary and can be changed if needed
+</span><span class="n">to_keep</span> <span class="o">=</span> <span class="n">var_names</span><span class="p">[</span><span class="n">var_names</span><span class="p">.</span><span class="n">imps</span><span class="o">&gt;</span><span class="mf">0.001</span><span class="p">].</span><span class="nb">vars</span><span class="p">.</span><span class="n">to_list</span><span class="p">()</span>
+
+<span class="c1"># Making new train and test dataframes for the X terms judged important enough to keep
+</span><span class="n">train_rf_X</span> <span class="o">=</span> <span class="n">train_rf_X</span><span class="p">[[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">train_rf_X</span><span class="p">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">to_keep</span><span class="p">]]</span>
+<span class="n">test_rf_X</span> <span class="o">=</span> <span class="n">test_rf_X</span><span class="p">[[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">test_rf_X</span><span class="p">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">to_keep</span><span class="p">]]</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+We can now rerun the RF on the new dataframe containing the most important features and obtain the predictions. We can then have a look at the features now deemed most important as per permutation importance, this time using the test data instead of the training data as above.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">regr_rf</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_rf_X</span><span class="p">,</span> <span class="n">train_rf_y</span><span class="p">)</span>
+<span class="n">rf_preds_1</span> <span class="o">=</span> <span class="n">regr_rf</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_rf_X</span><span class="p">)</span>
+
+<span class="n">result_val2</span> <span class="o">=</span> <span class="n">permutation_importance</span><span class="p">(</span><span class="n">regr_rf</span><span class="p">,</span> <span class="n">test_rf_X</span><span class="p">,</span> <span class="n">test_rf_y</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sorted_idx_val2</span> <span class="o">=</span> <span class="n">result_val2</span><span class="p">.</span><span class="n">importances_mean</span><span class="p">.</span><span class="n">argsort</span><span class="p">()</span>
+
+<span class="n">fig1</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">result_val2</span><span class="p">.</span><span class="n">importances</span><span class="p">[</span><span class="n">sorted_idx_val2</span><span class="p">].</span><span class="n">T</span><span class="p">,</span>
+           <span class="n">vert</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">test_rf_X</span><span class="p">.</span><span class="n">columns</span><span class="p">[</span><span class="n">sorted_idx_val2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">"Permutation Importances (test set)"</span><span class="p">)</span>
+<span class="n">fig1</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_6_1.png?raw=true" alt="Image_1" width="800&quot;, height=&quot;400" /></p>
+
+<p style="text-align: justify">We can see that the weekly lag terms for the two targets are the most important predictors, which is unsurprising. Among the other inputs, the 30-day rolling mean of the volume term and the 120-day rolling mean of the rainfall term are of relatively major importance. Neither of the temperature terms appears in the list of important features at all, perhaps because they had been dropped when we narrowed down the list of features earlier.</p>
+
+<p style="text-align: justify">Finally, we can calculate the MAE of the predictions. The predictions appear to be reasonably accurate - given that the depth to groundwater terms are in the range of 19 and 35 m, an average absolute error of around 0.3 m is a little over 1%. The RMSE values are also provided below for reference, and are slightly higher than the MAE numbers.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">rf_preds_1</span><span class="p">,</span> <span class="n">test_rf_y</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">)</span>
+
+<span class="n">mean_squared_error</span><span class="p">(</span><span class="n">rf_preds_1</span><span class="p">,</span> <span class="n">test_rf_y</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_6_2.png?raw=true" alt="Image_2" width="300&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify"><br />
+We have looked at the most important features in terms of permutation importance above. Let us now see what the SHAP values calculated using SHAP’s TreeExplainer say. First a look at the summary plot for all the target columns combined:</p>
+
+<p><img src="/agneev-blog/assets/img/img_6_3.png?raw=true" alt="Image_3" width="600&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">We see that the weekly lag of the two depth to groundwater terms are important predictors for both the target terms, in line with both what the permutation importances showed and our expectations.The 120-day rolling mean of the rainfall is also an important predictor, more for the Depth_to_Groundwater_P24 target than Depth_to_Groundwater_P25 (the blue portion of the bar is longer than the red portion for the Rainfall_Bastia_Umbra_roll_120 term). Three different rolling means of the volume term are of moderate importance, while the weekly lag of the hydrometry term comes much lower down than was the case for the permutation importances. Overall, there is relatively good agreement, but the SHAP plots can provide greater depth of information, as shown below.</p>
+
+<p><br />
+Now let us see what the individual SHAP summary plots show.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+    <span class="c1"># To ensure the code works if only target variable is present
+</span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">shap</span><span class="p">.</span><span class="n">summary_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">test_rf_X</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">shap</span><span class="p">.</span><span class="n">summary_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">test_rf_X</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">+=</span><span class="mi">1</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_6_4.png?raw=true" alt="Image_4" width="600&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_6_5.png?raw=true" alt="Image_5" width="600&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">A detailed explanation of how to interpret SHAP summary plots can be found <a href="https://christophm.github.io/interpretable-ml-book/shap.html#shap-summary-plot">here</a>, but looking at the above, it is clear that they present some interesting insights. Consider the Depth_to_Groundwater_P24 figure. We see that the Depth_to_Groundwater_P24_week_lag term has a positive impact on the model output (except for very low values of the feature), while the Depth_to_Groundwater_P25_week_lag has a negative impact (except for very high values of the feature. Thus, we see that very high values of the Depth_to_Groundwater_P24_week_lag (bright red colour) leads to the model output increasing by around 1.2, while for the Depth_to_Groundwater_P25_week_lag term, very high values affect the model output by -0.2 to +0.1. Very low values of this feature (bright blue) reduce the model output by around 1.5. We also see that the Rainfall_Bastia_Umbra_roll_120 term has a small positive effect, but this effect is a bit inconsistent, as a mixture of blue and red values are seen in the 0.1 to 0.5 region. Finally, all the other terms are centred around 0 with limited spread on either side, indicating that it does not much matter to the model predictions whether these terms have a high or low value - in other words, that they are of low importance in prediction.</p>
+
+<p style="text-align: justify">The above thus helps us not only see which features are important, but also how they actually impact the model - whether this impact is positive or negative, and whether high values and low values of the feature affect predictions differently. While the above can be discussed in further depth, in the interests of brevity, let us move on to the LGBM model.</p>
+
+<p><br /></p>
+<h2 id="lightgbm-model--">LightGBM model  <a id="LGBM"></a></h2>
+
+<p style="text-align: justify">First things first - the LightGBM algorithm <a href="https://github.com/microsoft/LightGBM/issues/524">does not support multi-output regression</a>, and <a href="https://github.com/dmlc/xgboost/issues/2087">neither does the competing library XGBoost</a>, for that matter. This hurdle can be tackled in two ways. One is to use sklearns’ <a href="https://scikit-learn.org/stable/modules/generated/sklearn.multioutput.MultiOutputRegressor.html">MultiOutputRegressor</a> as a wrapper. This works very well indeed, but in our case presents one hitch - SHAP does not support MultiOutputRegressor. This brings us to the second alternative - run LGBM for each target term. This would normally be an inferior alternative, as the interactions between the target terms would not be captured. In this case, for instance, if we run the LGBM for the Depth_to_Groundwater_P24 term, dropping the Depth_to_Groundwater_P25 term, and then the other way round, the effect of the Depth_to_Groundwater_P24 term on the Depth_to_Groundwater_P25 term and vice versa would not be accounted for in the model. Here, though, we are using the lag terms of the targets, which are present during the modelling step, and hence the target variables’ interactions <em>are</em> captured in the model. We will therefore use the LGBMRegressor in a for-loop for each of the target variables. We will stick to the default LightGBM parameters in the interest of time, simplicity, and robustness, but more information about parameter tuning can be found <a href="https://lightgbm.readthedocs.io/en/latest/Parameters-Tuning.html">here</a> and <a href="https://neptune.ai/blog/lightgbm-parameters-guide">here</a>.</p>
+
+<p style="text-align: justify">The train and test sets are prepared in the same way as for RF, reusing the lag and rolling mean terms we had calculated for using in the RF. As a Gradient Boosting method works sequentially, <a href="https://www.displayr.com/gradient-boosting-the-coolest-kid-on-the-machine-learning-block/">progressively improving the model to minimise prediction error</a>, a feature selection step as was carried out for the RF is less important - less important features will anyway be dropped as the algorithm finetunes the predictions. In theory, a lower number of features should allow for lower run time, but the feature selection itself is time consuming, and so I did not carry this out for the LGBM model. Therefore, all we now need to do before running the regressor is to drop the Date columns, and create an empty numpy array to hold the model predictions.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">regr_lgbm</span> <span class="o">=</span> <span class="n">LGBMRegressor</span><span class="p">()</span>
+
+<span class="n">train_lgbm_X</span> <span class="o">=</span> <span class="n">rf_X</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">rf_X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">()].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">test_lgbm_X</span> <span class="o">=</span> <span class="n">rf_X</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">():].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">train_lgbm_y</span> <span class="o">=</span> <span class="n">rf_y</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">rf_y</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">()].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">test_lgbm_y</span> <span class="o">=</span> <span class="n">rf_y</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rf_y</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rf_X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">():].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="c1"># Note that rf_y does not have a Date column, but as it's the same length as rf_X,
+# the Date column from that df can be used for the train-test split
+</span><span class="n">train_lgbm_X</span> <span class="o">=</span> <span class="n">train_lgbm_X</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Date'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_lgbm_X</span> <span class="o">=</span> <span class="n">test_lgbm_X</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Date'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">lgbm_preds_1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">test_lgbm_y</span><span class="p">)</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+    <span class="n">m1</span> <span class="o">=</span> <span class="n">regr_lgbm</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_lgbm_X</span><span class="p">,</span> <span class="n">train_lgbm_y</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">lgbm_preds_1</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">m1</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_lgbm_X</span><span class="p">)</span>
+    <span class="n">explainer2</span> <span class="o">=</span> <span class="n">shap</span><span class="p">.</span><span class="n">TreeExplainer</span><span class="p">(</span><span class="n">regr_lgbm</span><span class="p">)</span>
+    <span class="n">shap_values</span> <span class="o">=</span> <span class="n">explainer2</span><span class="p">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">test_lgbm_X</span><span class="p">)</span>
+    <span class="n">shap</span><span class="p">.</span><span class="n">summary_plot</span><span class="p">(</span><span class="n">shap_values</span><span class="p">,</span> <span class="n">test_lgbm_X</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">+=</span><span class="mi">1</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_6_6.png?raw=true" alt="Image_6" width="600&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_6_7.png?raw=true" alt="Image_7" width="600&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">The permutation importances can be calculated for the LGBM similarly to RF, but let us focus on the SHAP summary plots. We see that these are broadly similar to the RF plots, with some differences. In the Depth_to_Groundwater_P24 plot, we see that the impact of the Depth_to_Groundwater_P24 weekly lag term is less pronounced than was the case for RF, with high values increasing model output by less than 1.0. We also see the individual rainfall terms making less of an impact on the model output. These differences are partly a result of the differences in the algorithm, and partly simply due to the greater number of features available to the LGBM regressor, since we did not carry out a feature selection for it. The broad picture, though, remains the same - the weekly lag terms for the depths to groundwater are the most important, the volume and rainfall terms have a part to play, and the hydrometry and temperature terms have a negligible impact on the model output.</p>
+
+<p style="text-align: justify">Looking at the accuracy of the predictions, we see numbers fairly similar to those obtained for RF.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">lgbm_preds_1</span><span class="p">,</span> <span class="n">test_lgbm_y</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">)</span>
+
+<span class="n">mean_squared_error</span><span class="p">(</span><span class="n">lgbm_preds_1</span><span class="p">,</span> <span class="n">test_lgbm_y</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_6_8.png?raw=true" alt="Image_8" width="300&quot;, height=&quot;200" /></p>
+
+<p><br /></p>
+<h2 id="lstm-model--">LSTM model  <a id="LSTM"></a></h2>
+
+<p style="text-align: justify">Finally, we come to the LSTM model. The train-test split I did similarly to the RF and LGBM, but the split into the X and y arrays I did as per the code given <a href="https://machinelearningmastery.com/how-to-develop-lstm-models-for-multi-step-time-series-forecasting-of-household-power-consumption/">here</a>. In fact, the LSTM model I used is itself adapted from the ‘LSTM Model With Univariate Input and Vector Output’ section of that page, and hence the explanations given there are applicable here. The only item that needs separate explanation is the scaling step. Scaling is <a href="https://stackoverflow.com/questions/46686924/why-scaling-data-is-very-important-in-neural-networklstm/46688787">very useful</a> in helping NNs like LSTM make quicker and more accurate predictions, but needs to be carried out <a href="https://stackoverflow.com/questions/49444262/normalize-data-before-or-after-split-of-training-and-testing-data">post the train-test split</a> to avoid data leakage, which is what has been done below. Sklearn’s <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html">MinMaxScaler</a> has been used for scaling.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Make a copy of the train dataframe
+</span><span class="n">train_lstm</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">train_lstm</span> <span class="o">=</span> <span class="n">train_lstm</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_lstm</span><span class="p">.</span><span class="n">dropna</span><span class="p">().</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="c1"># Create train-test split, then drop Date columns
+</span><span class="n">train_train_lstm</span> <span class="o">=</span> <span class="n">train_lstm</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">train_lstm</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_lstm</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">()]</span>
+<span class="n">train_test_lstm</span> <span class="o">=</span> <span class="n">train_lstm</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_lstm</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_lstm</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'2019-07-01'</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="n">item</span><span class="p">():]</span>
+<span class="n">train_train_lstm</span> <span class="o">=</span> <span class="n">train_train_lstm</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Date'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">train_test_lstm</span> <span class="o">=</span> <span class="n">train_test_lstm</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Date'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Create a copy of the train test dataframes and perform scaling on thiese dataframes
+# Separate scalers used for the train and test sets to prevent the possibility of data leakage
+</span><span class="n">train_train_lstm2</span> <span class="o">=</span> <span class="n">train_train_lstm</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">train_test_lstm2</span> <span class="o">=</span> <span class="n">train_test_lstm</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">scaler1</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+<span class="n">scaler2</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
+<span class="n">train_train_lstm2</span> <span class="o">=</span> <span class="n">scaler1</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train_train_lstm2</span><span class="p">)</span>
+<span class="n">train_test_lstm2</span> <span class="o">=</span> <span class="n">scaler2</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train_test_lstm2</span><span class="p">)</span></code></pre></figure>
+
+<p style="text-align: justify">The function below splits the train and test sets into separate arrays containing the X and y terms, and it is run to obtain the inputs and outputs in the shape required for the LSTM. As mentioned above, the portion below is based on the code <a href="https://machinelearningmastery.com/how-to-develop-lstm-models-for-multi-step-time-series-forecasting-of-household-power-consumption/">here</a>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Split a multivariate sequence into samples
+</span><span class="k">def</span> <span class="nf">split_sequences</span><span class="p">(</span><span class="n">sequences</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">):</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(),</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sequences</span><span class="p">)):</span>
+        <span class="c1"># find the end of this pattern
+</span>        <span class="n">end_ix</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n_steps</span>
+        <span class="c1"># check if we are beyond the dataset
+</span>        <span class="k">if</span> <span class="n">end_ix</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequences</span><span class="p">):</span>
+            <span class="k">break</span>
+        <span class="c1"># gather input and output parts of the pattern
+</span>        <span class="n">seq_x</span><span class="p">,</span> <span class="n">seq_y</span> <span class="o">=</span> <span class="n">sequences</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">end_ix</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">target_cols</span><span class="p">)],</span> <span class="n">sequences</span><span class="p">[</span><span class="n">end_ix</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">target_cols</span><span class="p">):]</span>
+        <span class="n">X</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq_x</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq_y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Choose number of time steps used for training. Arbitrary, 7 chosen here.
+</span><span class="n">n_steps</span> <span class="o">=</span> <span class="mi">7</span>
+
+<span class="c1"># Convert into input/output
+</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">split_sequences</span><span class="p">(</span><span class="n">train_train_lstm2</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">X_train</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_train</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">split_sequences</span><span class="p">(</span><span class="n">train_test_lstm2</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">X_test</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_test</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># The number of features
+</span><span class="n">n_features</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_6_9.png?raw=true" alt="Image_9" width="200&quot;, height=&quot;100" /></p>
+
+<p style="text-align: justify">After the preprocessing above, we are ready to define and run the LSTM model. I fit the model for 200 epochs, as I found this to give good results while taking a reasonable amount of time. If necessary the ideal number of epochs can be figured out as shown <a href="https://machinelearningmastery.com/tune-lstm-hyperparameters-keras-time-series-forecasting/">here</a>, but let’s leave that for now.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Define model
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">return_sequences</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">n_features</span><span class="p">)))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">LSTM</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">target_cols</span><span class="p">)))</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s">'adam'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s">'mse'</span><span class="p">)</span>
+
+<span class="c1"># Fit model
+</span><span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Demonstrate prediction
+</span><span class="n">yhat</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Change X test array dimensions and concatenate with y test and y prediction arrays
+</span><span class="n">X_test_new</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:]</span>
+<span class="n">test_new</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X_test_new</span><span class="p">,</span> <span class="n">y_test</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_new2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X_test_new</span><span class="p">,</span> <span class="n">yhat</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Scale back the test arrays
+</span><span class="n">test_new</span> <span class="o">=</span> <span class="n">scaler2</span><span class="p">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">test_new</span><span class="p">)</span>
+<span class="n">test_new2</span> <span class="o">=</span> <span class="n">scaler2</span><span class="p">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">test_new2</span><span class="p">)</span>
+
+<span class="c1"># Create target and prediction arrays containing only the target terms, to compare the predictions
+</span><span class="n">y_targets</span> <span class="o">=</span> <span class="n">test_new</span><span class="p">[:,</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">target_cols</span><span class="p">):]</span>
+<span class="n">lstm_preds_1</span> <span class="o">=</span> <span class="n">test_new2</span><span class="p">[:,</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">target_cols</span><span class="p">):]</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+Looking at the MAE values, we see that the LSTM model is more accurate for this waterbody than the RF and LGBM models.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">lstm_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">)</span>
+
+<span class="n">mean_squared_error</span><span class="p">(</span><span class="n">lstm_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_6_10.png?raw=true" alt="Image_10" width="300&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify"><br />
+The SHAP analysis of the LSTM cannot be done by the TreeExplainer like for the tree-based models, and the DeepExplainer available for NNs gives errors like <a href="https://github.com/slundberg/shap/issues/1490">this</a> for LSTMs, and so I used the <a href="https://shap-lrjball.readthedocs.io/en/latest/generated/shap.GradientExplainer.html">GradientExplainer</a> instead. The difference in the SHAP summary plots for LSTM as compared to the earlier plots is obvious - the Depth_to_Groundwater terms are used directly in the LSTM for predictions, and hence high values of these variables give high values for the model output, and the other way around. This shows that the influence of a feature on the prediction depends not only on the variable but also on the type of model used.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">explainer</span> <span class="o">=</span> <span class="n">shap</span><span class="p">.</span><span class="n">GradientExplainer</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_train</span><span class="p">)</span>
+<span class="n">shap_values1</span> <span class="o">=</span> <span class="n">explainer</span><span class="p">.</span><span class="n">shap_values</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">Xtests</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">hsplit</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+    <span class="n">shaps</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">hsplit</span><span class="p">(</span><span class="n">shap_values1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">n_steps</span><span class="p">)</span>
+    <span class="n">shap</span><span class="p">.</span><span class="n">summary_plot</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">shaps</span><span class="p">[</span><span class="n">n_steps</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">Xtests</span><span class="p">[</span><span class="n">n_steps</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                      <span class="p">,</span><span class="n">feature_names</span> <span class="o">=</span> <span class="n">train_test_lstm</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">show</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">+=</span><span class="mi">1</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_6_11.png?raw=true" alt="Image_11" width="600&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_6_12.png?raw=true" alt="Image_12" width="600&quot;, height=&quot;300" /></p>
+
+<p><br /></p>
+<h2 id="ensembling--">Ensembling  <a id="Ensemble"></a></h2>
+
+<p style="text-align: justify">We have seen that all the models gave quite good results on the Petrignano dataset. Let us now see how an ensemble of these models fares. First we need to reshape the different model prediction arrays to make these all the same shape. Then we take an average of the predicted values, and find the MAE.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">rf_preds_1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="n">rf_preds_1</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">s_</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">n_steps</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">lgbm_preds_1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="n">lgbm_preds_1</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">s_</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">n_steps</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">lstm_preds_1</span> <span class="o">=</span> <span class="n">lstm_preds_1</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rf_preds_1</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">avg_preds_1</span> <span class="o">=</span> <span class="p">(</span><span class="n">rf_preds_1</span> <span class="o">+</span> <span class="n">lgbm_preds_1</span> <span class="o">+</span> <span class="n">lstm_preds_1</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span>
+
+<span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">avg_preds_1</span><span class="p">,</span> <span class="n">y_targets</span><span class="p">,</span> <span class="n">multioutput</span><span class="o">=</span><span class="s">'raw_values'</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_6_13.png?raw=true" alt="Image_13" width="300&quot;, height=&quot;100" /></p>
+
+<p style="text-align: justify">We see that the ensemble produces results that are slightly inferior to the best model here, the LSTM. Two comments can be made on this. Firstly, we have used a simple average of the predictions here. Using a <a href="https://machinelearningmastery.com/stacking-ensemble-machine-learning-with-python/">meta model to stack these predictions</a> will <a href="https://blogs.sas.com/content/subconsciousmusings/2017/05/18/stacked-ensemble-models-win-data-science-competitions/">almost certainly result</a> in more accurate predictions. The downside is that stacked models are <a href="https://towardsdatascience.com/a-practical-guide-to-stacking-using-scikit-learn-91e8d021863d">significantly slower and more computationally expensive</a>. As I had already developed some very elaborate models that took a fair amount of time to run, I decided that a simple average would suffice here instead of adding further complications. The other point is that the benefit of ensembling will be more clearly brought out when I touch upon some of the other water bodies next time.</p>
+
+<p><br /></p>
+<h2 id="forecast-period-of-30-days--">Forecast period of 30 days  <a id="Thirty"></a></h2>
+
+<p style="text-align: justify">I reran all the code for a forecast period of 30 days - everything remaining identical, except putting days_ahead = 30. The model ran smoothly and automatically, producing predictions that are slightly less accurate, understandable given that the prediction period is further away:</p>
+
+<p><img src="/agneev-blog/assets/img/img_6_14.png?raw=true" alt="Image_14" width="800&quot;, height=&quot;800" /></p>
+
+<p><br /></p>
+<h2 id="conclusion--">Conclusion  <a id="Conc"></a></h2>
+
+<p style="text-align: justify">That pretty much covers everything I had to say about Aquifer Petrignano. The next time, we will take a brief look at some of the interesting points in the modelling of the other water bodies to wind up this series. So long!</p>
+
+<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-2/">&#8672;&nbsp;5. Modelling water bodies - 2</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-4/">7. Modelling water bodies - 4&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+:ET

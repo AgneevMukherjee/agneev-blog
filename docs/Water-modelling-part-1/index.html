@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Modelling water bodies - 1 | Agneev’s DS/ML lab book</title>
+<meta name="generator" content="Jekyll v4.2.1" />
+<meta property="og:title" content="Modelling water bodies - 1" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="&#8672;&nbsp;3. Evaluating handwritten Roman numerals datasets - 2 5. Modelling water bodies - 2&nbsp;&#8674;" />
+<meta property="og:description" content="&#8672;&nbsp;3. Evaluating handwritten Roman numerals datasets - 2 5. Modelling water bodies - 2&nbsp;&#8674;" />
+<link rel="canonical" href="https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-1/" />
+<meta property="og:url" content="https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-1/" />
+<meta property="og:site_name" content="Agneev’s DS/ML lab book" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-02-28T12:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Modelling water bodies - 1" />
+<script type="application/ld+json">
+{"dateModified":"2022-02-28T12:00:00+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-1/"},"datePublished":"2022-02-28T12:00:00+01:00","url":"https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-1/","headline":"Modelling water bodies - 1","description":"&#8672;&nbsp;3. Evaluating handwritten Roman numerals datasets - 2 5. Modelling water bodies - 2&nbsp;&#8674;","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/agneev-blog/assets/main.css">
+  <link rel="shortcut icon" type="image/x-icon" href="/agneev-blog/favicon.ico"><link type="application/atom+xml" rel="alternate" href="https://agneevmukherjee.github.io/agneev-blog/feed.xml" title="Agneev's DS/ML lab book" /></head>
+<body><header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/agneev-blog/">Agneev&#39;s DS/ML lab book</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/agneev-blog/about/">About me</a><a class="page-link" href="/agneev-blog/categories/">Categories</a></div>
+      </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">4. Modelling water bodies - 1</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2022-02-28T12:00:00+01:00" itemprop="datePublished">Feb 28, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Roman-numerals-dataset-evaluation-part-2/">&#8672;&nbsp;3. Evaluating handwritten Roman numerals datasets - 2</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-2/">5. Modelling water bodies - 2&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Categories:</span></p>
+<div class="post-categories">
+<p style="font-size:20px">
+  
+  
+  <a href="/agneev-blog/categories/#Data Science">Data Science</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Machine Learning">Machine Learning</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Python">Python</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Time series">Time series</a>
+  
+  
+  </p>
+</div>
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br /></p>
+<p style="font-size:18px">
+Environment, Water, Kaggle, Competition
+</p>
+<p><br /></p>
+
+<p style="text-align: justify">Hello again! The last few weeks, we have seen the creation and evaluation of handwritten Roman numerals datasets. This time, let us turn our attention to something different - the modelling of water levels in different water bodies.</p>
+
+<p style="text-align: justify">One thing in common between this post and the previous ones is their origin in competitions I participated in. While the Roman numerals datasets were an output of my participation in the <a href="https://https-deeplearning-ai.github.io/data-centric-comp/">Data-Centric AI competition</a>, the present post is based on my writeup for the <a href="https://www.kaggle.com/c/acea-water-prediction/overview">Acea Smart Water Analytics</a> competition organised on Kaggle from December 2020 - February 2021. Unlike the vast majority of Kaggle competitions, this particular competition was an ‘Analytics Competition’, which means that it had no leaderboard and no metric to fit to. Instead, competitors were asked to provide a notebook containing both, the models, and an explanation of the models. These notebooks were judged according to the criteria defined <a href="https://www.kaggle.com/c/acea-water-prediction/overview/evaluation">here</a> - essentially, the soundness of the methodology, the quality of the presentation, and the applicability of the methods.</p>
+
+<p style="text-align: justify">How did I do in this competition? Well, I at least made it to the list of <a href="https://www.kaggle.com/c/acea-water-prediction/discussion/229764">finalists</a>, which was something…then again, finishing in the top 17 out of 103 isn’t <em>that</em> great… In any case, in this series of posts, we will look at how I approached the problem. This post will describe the problem, why it matters, and the methodology I used, while the actual modelling and the results will be covered in future posts. The notebook containing all the code is available <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb">here</a>, while the competition dataset is <a href="https://www.kaggle.com/c/acea-water-prediction/data">here</a>. Please note that if you want to download the dataset, you will need to create a Kaggle account and accept the competition rules.</p>
+
+<p style="text-align: justify">With that said, let’s go!</p>
+<p><br /></p>
+<h2 id="the-problem--">The problem  <a id="prob"></a></h2>
+
+<p style="text-align: justify">The competition was hosted by the Italian multiutility <a href="https://en.wikipedia.org/wiki/Acea_(company)">Acea SpA</a>, which is involved in the water, energy and environmental sectors. As a water utility, one of the challenges they face is forecasting water body levels, which is important both in terms of ensuring water body health and adequately meeting water demand. This is made harder by the fact that they are in charge of different types of water bodies, with each type having unique characteristics, and so making generalisable models for predicting water levels is very difficult.</p>
+
+<p style="text-align: justify">What the organisers wanted from the competitors therefore were four models that could be applied to one of the four categories of water bodies presented. A total of nine water bodies were present in the data - four aquifers, three water springs, one river and one lake. The aim was to determine how the particular features of a water body category influence the water availability. The organisers helpfully provided the following figure to explain what they were looking for:</p>
+
+<p><br />
+<img src="/agneev-blog/assets/img/img_4_1.png?raw=true" alt="Image_1" width="600&quot;, height=&quot;400" /></p>
+
+<p style="text-align: justify"><br />
+In reality, the modelling procedure follows a similar pattern for all the water bodies. We will look at that procedure next time - this post, as I said, will focus instead on the methodology used for the modelling.</p>
+<p><br /></p>
+<h2 id="why-it-matters--">Why it matters  <a id="matter"></a></h2>
+
+<p style="text-align: justify">Before heading into the methodological details, however, I think it might be worth explaining why I decided to enter this competition. Firstly, an analytics competition was appealing since it avoids my pet peeve about Kaggle competitions - a horde of competitors doing whatever it takes to get a 0.01% improvement on the target metric. I might rant on that some other time, but suffice to say that this competition allowed the rather unusual prospect of models being judged on their elegance and real-world applicability. The flip side, of course, was the inherent subjectivity of the evaluation, but then again, this is certainly the case in real life as well.</p>
+
+<p style="text-align: justify">The second reason was that I felt the competition tackled a very important and somewhat underappreciated problem - water scarcity. We have all heard the phrase ‘water is life’, to the point that it has become something of a cliché. And yet, that statement hardly overstates the critical role played by water in our existence. Indeed, it is because water is so ubiquitous, something we all need and use on a daily basis, be it for drinking, bathing, cooking, cleaning, or watering our plants, that we take it for granted, neglecting to think of how we would fare in its absence.</p>
+
+<p style="text-align: justify">Actually, the previous sentence is probably only applicable to a relatively privileged portion of the global population. While precise numbers are hard to calculate, as per some estimates, as many as <a href="https://www.science.org/doi/10.1126/sciadv.1500323">four billion people</a> may be said to be living under conditions of severe water scarcity, a situation that is likely to grow worse if <a href="https://apo.org.au/node/276976">present trends continue</a>. Growing population, combined with an ever-increasing water footprint, means that water demand is likely to continue to rise till at least the middle of the century, which prompts the question - how will this demand be met?</p>
+
+<p style="text-align: justify">Globally, the answer to this question thus far has usually been to simply overexploit water resources. The results of this approach are now plain to see in many parts of the world - <a href="https://www.smithsonianmag.com/science-nature/world-vanishing-lakes-180949645/">disappearing lakes</a>, <a href="https://www.nationalgeographic.com/environment/photos/rivers-run-dry/">drying rivers</a>, <a href="https://www.wearewater.org/en/the-inside-of-india-is-drying-out_288691">depleted aquifers</a>, <a href="https://nationalpost.com/news/world/the-water-table-is-dropping-all-over-the-world-new-nasa-study-reveals-global-drought">dropping water tables</a>… Climate change is unsurprisingly expected to <a href="https://www.nationalgeographic.com/magazine/article/water-crisis-looms-for-270-million-people-south-asia-perpetual-planet-feature/">make matters worse</a> still. An aspect that is less appreciated, though, is how water scarcity itself begets further overexploitation of water. An example may be seen in California, USA, where a prolonged drought <a href="https://alumni.berkeley.edu/california-magazine/just-in/2018-04-02/deep-water-deep-trouble-can-we-save-californias-drying">caused by over-damming of rivers</a> caused a huge <a href="https://www.nationalgeographic.com/news/2014/8/140819-groundwater-california-drought-aquifers-hidden-crisis/">increase in groundwater pumping</a>. Of course, groundwater depletion in turn causes a <a href="https://theprint.in/environment/man-made-disaster-under-your-feet-river-flows-dry-up/300451/">drop in river flows</a>, creating a vicious cycle. This is in addition to the <a href="https://link.springer.com/article/10.1007/s00254-004-1164-3">other adverse impacts</a> of groundwater depletion, such as reduction in vegetation, land subsidence and saltwater intrusion.</p>
+
+<p style="text-align: justify">I think the above paragraph, though depressing, has made its point - sustainable use of our water resources is no trifling matter, but ranks among the biggest challenges facing us today. While water conservation measures will no doubt have a huge role to play, proper management on the supply side is no less important. Another less obvious point from the above is that management of water resources is a complex subject not just because of the associated socio-economic considerations, but also because the dynamics of water extraction, replenishment, and the interplay between the various water resources is very complex. Consider an aquifer. The aquifer may be replenished by rainfall, but depending on the geology, there may be a time lag before its water levels rise due to the rain. The aquifer may feed or be fed by surface water sources like rivers or lakes - perhaps both. It may be connected to other underground aquifers, with the flows through this system determined by the levels of the components. The aquifer system may also change with time, due to environmental changes or other factors. This means that proper water resource management requires both an understanding of the factors affecting the resources and a model that can employ these factors to tell us how to optimally utilise the resources. In other words, it’s a problem that calls for interpretable machine learning.</p>
+<p><br /></p>
+<h2 id="methodology--">Methodology  <a id="method"></a></h2>
+
+<p style="text-align: justify">Based on the above, I decided to develop four interpretable machine learning models to forecast water levels for the nine different water bodies in the competition dataset. The guiding principles behind the model creation were simplicity, generalisability and robustness, while also attempting to predict as accurately as possible within these constraints.</p>
+
+<p style="text-align: justify">The first thing to do when tackling any machine learning problem is to define the type of the problem. This problem was clearly an example of time series modelling - we were provided with features as a function of time, and asked to predict water volumes over a time interval (often multiple volumes, as we shall see next time). This brings us to the next question - what is the best approach to solve this problem?</p>
+
+<h3 id="classical-methods--">Classical methods  <a id="classical"></a></h3>
+
+<p style="text-align: justify">The traditional solution for time series forecasting has been a group of <a href="https://machinelearningmastery.com/time-series-forecasting-methods-in-python-cheat-sheet/">‘classical’ methods</a>. These range from simple methods like autoregression and moving average to progressively more complicated methods like Seasonal Autoregressive Integrated Moving-Average with Exogenous Regressors (SARIMAX) and Vector Autoregression Moving-Average with Exogenous Regressors (VARMAX). These methods are time-tested, and despite recent hype about machine learning (ML), <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0194889"> often still outperform </a> ML methods on a range of data. Naturally then, I started out by trying to apply these methods to the competition dataset. After about a week, though, I decided that I needed to change tack, as the classical methods were simply not working well enough, or at all in some cases.</p>
+
+<p style="text-align: justify">The first problem was trying to figure out which method to use. This choice needed to be made based on the number and types of the inputs and outputs. Consider the aquifers. The temperature and hydrometry data showed strong seasonal trends, implying that a SARIMA/SARIMAX type model should be considered. However, these models are univariate, meaning that they tackle a single input variable, and hence the interaction between the different variables is lost. A VAR/VARMAX type model solves this issue by considering multivariate inputs, but is most suitable for time series without trends or seasonal components. To an extent, this can be addressed by repeatedly differencing each time series till it is judged as stationary by a test like the <a href="https://www.machinelearningplus.com/time-series/augmented-dickey-fuller-test/"> Augmented Dickey Fuller Test (ADF Test)</a> or <a href="https://www.machinelearningplus.com/time-series/kpss-test-for-stationarity/">KPSS test</a>. Another concern is the way VAR-type models make their predictions. A VAR-type model works as follows: you feed in the data for all the series from, say, 2006-2021, and the model then issues a forecast based on this for all the series for 2022. What is desirable, though, is a model to which the values for the non-target items for 2022 can be supplied, with the model predicting the target items. That is to say, we provide the rainfall, humidity, temperature, etc. for 2022, and get the expected water flow as output. This needs the use of a different class of methods, which I will discuss later.</p>
+
+<p style="text-align: justify">Leaving the above shortcomings aside, I found that the classical methods were less suitable for this task simply because their inherent shortcomings, nicely summed up <a href="https://machinelearningmastery.com/promise-recurrent-neural-networks-time-series-forecasting/">here</a>: to perform well, they require complete and ‘clean’ data, which was not the case here; they generally assume a linear relationship between the variables; they focus on a fixed temporal dependence, and on one-step forecasts. Rather than trying to patch over each of these shortcomings, I decided to see if there are alternative methods that are easier to use and more accurate, while also being sufficiently robust. This search brought me to two different ways of tackling the problem.</p>
+
+<h3 id="neural-networks--">Neural networks  <a id="NN"></a></h3>
+
+<p style="text-align: justify">The term ‘neural networks’ has become so popular in recent years as to become almost synonymous with ‘artificial intelligence’. Quite simply, a neural network (NN) is a model that attempts to replicate the structure of the brain via a system of mathematical functions called ‘neurons’. These ‘neurons’ can be trained to learn the relationship between input information and the desired outputs, and a properly trained NN can then be deployed on unseen data. If fed sufficient training data, then large NNs, with dozens of layers and thousands of neurons, can significantly outperform traditional ML algorithms or statistical methods.</p>
+
+<p><br />
+<img src="/agneev-blog/assets/img/img_4_2.jpg?raw=true" alt="Image_2" width="500&quot;, height=&quot;100" /></p>
+
+<p>Advantage of neural networks (based on Andrew Ng’s talk available <a href="https://www.youtube.com/watch?v=F1ka6a13S9I&amp;feature=youtu.be">here</a>)</p>
+
+<p style="text-align: justify">The downside of NNs is that they require a large amount of data to outperform, and are computationally expensive. Anyway, among the different types of NNs, Recurrent Neural Networks (RNNs) are better suited to time series analysis, as their neurons <a href="https://www.guru99.com/rnn-tutorial.html">contain a ‘memory state’ </a>that helps them ‘remember’ the previous inputs and thus model sequential data. A traditional RNN, however, cannot model long-term dependencies in the data owing to the <a href="https://en.wikipedia.org/wiki/Vanishing_gradient_problem">‘vanishing gradient problem’</a> - simply put, it has a relatively short-term memory. <a href="https://databricks.com/blog/2019/09/10/doing-multivariate-time-series-forecasting-with-recurrent-neural-networks.html">Long-Short Term Memory networks (LSTMs)</a> are specialised RNNs developed to tackle this issue, and these are therefore well-suited to time series modelling where long-term trends form an important part of the modelling inputs, as was the case here. A detailed explanation of these systems is beyond the scope of this post (later maybe…), and I refer you instead to the many excellent explanations found online (such as <a href="https://machinelearningmastery.com/gentle-introduction-long-short-term-memory-networks-experts/">here</a>, <a href="https://heartbeat.fritz.ai/a-beginners-guide-to-implementing-long-short-term-memory-networks-lstm-eb7a2ff09a27">here</a> or <a href="https://adventuresinmachinelearning.com/keras-lstm-tutorial/">here</a>). All that I will say here is that their robustness to noisy input data, ability to learn non-linear relationships in the data, and inherent support for multivariate, multi-step forecasts certainly make LSTMs worthy of further consideration for this competition dataset. At the same time, LSTMs need a large quantity of data to perform properly, which is not the case for several of the data series here. They also ideally require a large number of layers and training epochs, which is computationally unattractive. It is therefore pertinent to also look at another class of deep learning models.</p>
+
+<h3 id="decision-tree-based-methods--">Decision tree-based methods  <a id="DT"></a></h3>
+
+<p style="text-align: justify">A <a href="https://towardsai.net/p/programming/decision-trees-explained-with-a-practical-example-fe47872d3b53">decision tree</a> is an ML algorithm that takes decisions based on the responses to a series of yes or no questions about the data. A simple decision tree for predicting the possibility of the survival of passengers on the Titanic is shown below as an example.</p>
+
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Decision_Tree.jpg" width="400" height="400" /></p>
+
+<p>Example of decision tree based on Titanic passengers data, <a href="https://commons.wikimedia.org/wiki/File:Decision_Tree.jpg">taken from Wikimedia</a></p>
+
+<p style="text-align: justify">While simple, a decision tree is not very useful by itself as a machine learning model, as it will <a href="https://towardsdatascience.com/decision-trees-understanding-the-basis-of-ensemble-methods-e075d5bfa704">overfit to the training data</a>, and therefore be virtually useless for any new data. However, if numerous decision trees are trained on subsets of the data, the average of these predictions is much more accurate and robust than those of any single tree trained on the entire data. Two methods used for this are <a href="https://towardsdatascience.com/decision-tree-ensembles-bagging-and-boosting-266a8ba60fd9">bagging and boosting</a>. Random forest (RF) is a bagging method that is <a href="https://builtin.com/data-science/random-forest-algorithm">simple, easy to use, and resistant to overfitting</a>, due to which it is one of the most widely used ML algorithms. On the flipside, making an accurate RF model requires lots of trees, and training these can be a slow process in the presence of large quantities of data. Boosting methods, if tuned properly, <a href="https://www.datasciencecentral.com/profiles/blogs/decision-tree-vs-random-forest-vs-boosted-trees-explained">give better results than RFs.</a> However, they are more sensitive to noisy data and require more careful tuning, as they are prone to overfitting.</p>
+
+<p style="text-align: justify">With respect to the competition dataset, decision tree-based methods have some pros and cons. On the negative side, these methods have no awareness of time, as they assume that observations are independent and identically distributed. This limitation can be solved by feature engineering, particularly <a href="https://www.statworx.com/en/content-hub/blog/time-series-forecasting-with-random-forest/">‘time delay embedding’</a>, in other words providing the model with time lags of the modelled data. Another concern is that these methods cannot extrapolate, i.e., predict values outside the range of the trained data. This can also be dealt with using feature engineering, such as differencing and statistical transforms, but for this competition, the predicted values are in any case unlikely to be outside the training data band, meaning that this disadvantage is not a major handicap.</p>
+
+<p style="text-align: justify">While the above explains why decision tree-based methods <em>can</em> be used for time series modelling, it does not explain why they are a <em>good</em> option. The first reason they are a good option is that, unlike classical methods or LSTM, one can simply provide these models with the non-target item values and obtain the target predictions. This is useful since, at the end of the day, the aim of the exercise is to see how variables like rainfall and temperature influence the output variables like depth of groundwater. Secondly, it has been noted that interpretability is very important in making an effective model, and in this regard, decision tree-based methods are far superior to NN methods. As noted <a href="https://github.com/fastai/fastbook/blob/master/09_tabular.ipynb">here</a>, these methods help easily answer questions such as which inputs are the most important for the predictions, how they are related to the dependent variable and interact with each other, which particular features are most important for some particular observation, etc. Finally, the very fact that they work in a manner very different from NNs makes them useful in an ‘ensemble’.</p>
+
+<h3 id="ensembling--">Ensembling  <a id="Ensemble"></a></h3>
+
+<p style="text-align: justify">I mentioned earlier that the reason a combination of the predictions of decision trees trained on subsets of the data outperforms that of a decision tree trained on the entire data is because their uncorrelated errors tend to cancel each other out. This is the basis of the ensembling principle, wherein several models making uncorrelated errors on different parts of the data can be combined to give a model with a much lower error rate and higher generalisability. Decion tree-based ensembles are an ensemble of ‘weak learners’, as the decision trees are not individually very good at making predictions. The ensembling principle can however be extended to ‘strong learners’, such as a combination of RFs and NNs. By offsetting each other’s weaknesses, they give more robust and accurate predictions, explaining why they are a staple of <a href="https://blogs.sas.com/content/subconsciousmusings/2017/05/18/stacked-ensemble-models-win-data-science-competitions/#:~:text=Why%20do%20stacked%20ensemble%20models%20win%20data%20science%20competitions%3F,-0&amp;text=Ensemble%20methods%20are%20commonly%20used,of%20multiple%20machine%20learning%20models.&amp;text=In%20an%20unweighted%20average%2C%20each,an%20ensemble%20model%20is%20built.">winning ML competition submissions.</a> The added complexity is an undoubted disadvantage, and so it needs to be checked that the ensemble predictions are indeed better enough than those of the individual models to justify this extra complexity.</p>
+
+<h3 id="models-used--">Models used  <a id="models"></a></h3>
+
+<p style="text-align: justify">I performed some preliminary runs on the competition datasets, which showed that random forests, LightGBM (<a href="https://lightgbm.readthedocs.io/en/latest/">Light Gradient Boosting Machine</a>, a decision tree boosting method) and long short-term memory neural networks were the best options, with each giving the best results for a certain portion of the data. I therefore decided to use these three methods, hereafter be referred to as RF, LGBM and LSTM. In addition, I also evaluated the results of an ensemble of these methods.</p>
+
+<h3 id="metrics-used--">Metrics used  <a id="metrics"></a></h3>
+
+<p style="text-align: justify">Before we can judge whether a model is ‘good’ or not, the metrics for determining the quality of the predictions need to first be fixed. Here, the competition organisers asked us to provide ‘a way of assessing the performance and accuracy of the solution’, in other words to provide a metric with justification. A range of error metrics are available, with <a href="https://en.wikipedia.org/wiki/Mean_absolute_error">Mean Absolute Error (MAE)</a>, <a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation">Root Mean Square Error (RMSE)</a>, <a href="https://en.wikipedia.org/wiki/Mean_percentage_error">Mean Percentage Error (MPE)</a>, <a href="https://en.wikipedia.org/wiki/Mean_absolute_percentage_error">Mean Absolute Percentage Error (MAPE)</a>, <a href="https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error">Symmetric mean absolute percentage error (SMAPE)</a>, and <a href="https://en.wikipedia.org/wiki/WMAPE">Weighted Mean Absolute Percentage Error (WMAPE)</a> among the proposed options for regression problems. Since all of these have shortcomings, and trying them all out was impractical, the first two options, which are the most widely used of the lot, were the only two I seriously considered. Unless there is a specific reason to penalise larger errors much more than smaller errors (i.e. an error of 10 is more than twice as bad as an error of 5), MAE is a better metric due to its <a href="https://medium.com/human-in-a-machine-world/mae-and-rmse-which-metric-is-better-e60ac3bde13d">better interpretability</a> as compared to RMSE, which is actually a function of <a href="https://www.jstor.org/stable/24869236">three different characteristics of errors</a>, rather than of just the average error, making its interpretation ambiguous. However, regression algorithms such as sklearn’s RandomForestRegressor tend to be <a href="https://stackoverflow.com/questions/57243267/why-is-training-a-random-forest-regressor-with-mae-criterion-so-slow-compared-to"> far slower</a> if MAE is used as a splitting criterion rather than RMSE. This was not a handicap, though - I was interested in using MAE as a <a href="https://datascience.stackexchange.com/questions/43542/mean-absolute-error-in-random-forest-regression"><em>model evaluation criterion</em></a>, so the split criterion used in the algorithm is irrelevant. In other words, the RMSE was used earlier in the modelling process to train the model, and then the performance of the model was later determined using MAE. I anyway provided the RMSE of all the models as well, but only as a reference, not for deciding model performance.</p>
+
+<h3 id="model-interpretation--">Model interpretation  <a id="interpret"></a></h3>
+
+<p style="text-align: justify">I have already stated that model interpretability is very important in ML, and that decision tree ensembles are superior in this regard to NNs. For RFs, for example, the decision on how to split a tree is based on an ‘impurity’ measure like Gini impurity, and the <a href="https://blog.datadive.net/selecting-good-features-part-iii-random-forests/">Mean Decrease Impurity (MDI)</a> can be itself be used as a gauge of feature importance. MDI, however, <a href="https://explained.ai/rf-importance/#7">tends to inflate the importance</a> of continuous or high cardinality variables compared to lower cardinality categorical variables, meaning that a variable than has a 1000 levels is likely to be ranked higher than one with 3 levels regardless of the actual contribution to the target prediction. Besides, as the MDI is calculated on the training set, it <a href="https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance.html"> can give high importances to variables that are not actually predictive of the target</a> but which could potentially be used to overfit. The solution is to use permutation importance - further details can be found <a href="https://explained.ai/rf-importance/#7">here</a> and <a href="https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance.html">here</a>.</p>
+
+<p style="text-align: justify">While permutation importance can be and has been used here for the tree-based methods, the LSTM is a <a href="https://www.kdnuggets.com/2017/04/ai-machine-learning-black-boxes-transparency-accountability.html">‘black box model’</a>, and therefore requires a different interpretation mechanism. Several interpretation methods have been proposed in recent years, of which SHAP (SHapely Additive exPlanations) and LIME (Local Interpretable Model-agnostic Explanations) are perhaps the two most prominent (see <a href="https://www.kdnuggets.com/2020/01/explaining-black-box-models-ensemble-deep-learning-lime-shap.html">here</a> and <a href="https://www.kdnuggets.com/2019/12/interpretability-part-3-lime-shap.html">here</a> for detailed explanations). While neither is perfect, the main advantage of LIME <a href="https://medium.com/analytics-vidhya/explain-your-model-with-lime-5a1a5867b423">appears to be speed</a>, while SHAP appears to be a better overall <a href="https://towardsdatascience.com/whats-wrong-with-lime-86b335f34612">choice for model interpretation</a>, especially if one is trying to <a href="https://python-bloggers.com/2020/12/lime-vs-shap-which-is-better-for-explaining-machine-learning-models/">explain the entire model rather than a single prediction</a>. While I initially tried using both simultaneously, this became unwieldy and hard to work with when applied to all the models, and hence decided to stick with SHAP, which I applied to all the models, including the tree-based ones. The details of the SHAP mechanisms can be better understood when we look at the actual runs, and will therefore be provided there.</p>
+<p><br /></p>
+<h2 id="conclusion--">Conclusion  <a id="conc"></a></h2>
+
+<p style="text-align: justify">OK, so this was a text-heavy post where I covered the methodology in plenty of depth. I think, though, that this detailed background was necessary to understand why I made the modelling choices I did. With that out of the way, next time we will see the actual modelling of the water bodies. So long!</p>
+
+<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Roman-numerals-dataset-evaluation-part-2/">&#8672;&nbsp;3. Evaluating handwritten Roman numerals datasets - 2</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-2/">5. Modelling water bodies - 2&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+<p><br /></p>
+
+  </div><a class="u-url" href="/agneev-blog/Water-modelling-part-1/" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/agneev-blog/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Agneev&#39;s DS/ML lab book</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Agneev&#39;s DS/ML lab book</li><li><a class="u-email" href="mailto:agneev.m.ai@gmail.com">agneev.m.ai@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/AgneevMukherjee"><svg class="svg-icon"><use xlink:href="/agneev-blog/assets/minima-social-icons.svg#github"></use></svg> <span class="username">AgneevMukherjee</span></a></li><li><a href="https://www.linkedin.com/in/agneevmukherjee"><svg class="svg-icon"><use xlink:href="/agneev-blog/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">agneevmukherjee</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>I mostly write about my experiments in data science/machine learning here,
+ sometimes about other things...</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

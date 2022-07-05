@@ -1,0 +1,334 @@
+I"l�<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Roman-numerals-dataset-evaluation-part-1/">&#8672;&nbsp;2. Evaluating handwritten Roman numerals datasets - 1</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-1/">4. Modelling water bodies - 1&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Categories:</span></p>
+<div class="post-categories">
+<p style="font-size:20px">
+  
+  
+  <a href="/agneev-blog/categories/#Machine Learning">Machine Learning</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Computer Vision">Computer Vision</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Python">Python</a>
+  
+  
+  </p>
+</div>
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br /></p>
+<p style="font-size:18px">
+TensorFlow 2, Keras, Matplotlib, Competition
+</p>
+<p><br /></p>
+
+<p style="text-align: justify">Welcome to part 2 of evaluating the Roman numerals datasets - you can read the background about the reason behind creating this dataset <a href="https://agneevmukherjee.github.io/agneev-blog/preparing-a-Roman-MNIST/">here</a>. In the <a href="https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-part-1/">previous part</a>, we saw that a cut-off ResNet50 overfit on the three datasets we created and tested it on. In this post, let’s see how a full ResNet and a simple CNN perform on these datasets, before the winner is tested on a dataset combining samples from the three datasets. As a reminder, we will only look at running the models on CPU here - GPU and TPU runs will be looked at in future posts. As in the previous post, we will be dealing with <a href="https://www.tensorflow.org/tutorials/quickstart/beginner">TensorFlow 2</a> and <a href="https://keras.io/">Keras</a>-based models here.</p>
+
+<h2 id="early-stopping--">Early stopping  <a id="stop"></a></h2>
+
+<p style="text-align: justify">The second part of each notebook I linked to in the previous post (<a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/roman-datasets-evaluation-1.ipynb">this</a>, <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/roman-datasets-evaluation-2.ipynb">this</a> and <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/roman-datasets-evaluation-3.ipynb">this</a>) have the full ResNet50 operating. Before we get to looking at that, however, we might recollect one point from all the graphs seen in the previous post- the accuracy values reach a particular level pretty quickly, and then plateau. In the competition organisers’ code that I used, however, the model continues running until the 100 epochs asked for have finished. It would be nice if we could stop the training once no further progress is being made - this would surely be a timesaver! We can accomplish this using an <a href="https://keras.io/api/callbacks/early_stopping/">early stopping callback</a>, which is implemented in the code below. Alongside, we have another callback saving the best model as a checkpoint – this had been implemented in the organisers’ code as well.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">stopping</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">callbacks</span><span class="p">.</span><span class="n">EarlyStopping</span><span class="p">(</span>
+        <span class="n">monitor</span><span class="o">=</span><span class="s">"val_accuracy"</span><span class="p">,</span>
+        <span class="n">min_delta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">patience</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s">"auto"</span><span class="p">,</span>
+        <span class="n">baseline</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">restore_best_weights</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">callbacks</span><span class="p">.</span><span class="n">ModelCheckpoint</span><span class="p">(</span>
+        <span class="s">"best_model"</span><span class="p">,</span>
+        <span class="n">monitor</span><span class="o">=</span><span class="s">"val_accuracy"</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s">"max"</span><span class="p">,</span>
+        <span class="n">save_best_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">save_weights_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+The two important parameters to note in the early stopping callback are ‘min_delta’ and ‘patience’. Min_delta refers to the minimum change in the monitored quantity required for it to qualify as an improvement. For example, if we are monitoring validation accuracy, we can specify ‘min_delta = 0.01’, which would mean that the validation accuracy would have to improve by at least 0.01 for it to count. Here I have just kept it at the default value of 0 for simplicity. ‘Patience’ is the number of epochs of no improvement after which training will be stopped. The default for this is also 0, which means that the instant no improvement is observed, training will stop. In practice, this is usually sub-optimal, as the accuracy fluctuates, and hence one bad round does not imply that no further improvement is possible. We should therefore be ‘patient’ for a few epochs to see if the results improve before terminating the model. Here I have set the ‘patience’ parameter at 10, which is a very conservative value - I think it is safe to say that if no further improvement is obtained even after 10 epochs, then it is very unlikely that any further rounds will be helpful.</p>
+
+<h2 id="full-resnet50--">Full ResNet50  <a id="full"></a></h2>
+
+<p>OK, so then let’s run the full ResNet50, as per the code below:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">start_2</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+
+<span class="n">base_model_2</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">applications</span><span class="p">.</span><span class="n">ResNet50</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">classes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">inputs_2</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">x_2</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">applications</span><span class="p">.</span><span class="n">resnet</span><span class="p">.</span><span class="n">preprocess_input</span><span class="p">(</span><span class="n">inputs_2</span><span class="p">)</span>
+<span class="n">x_2</span> <span class="o">=</span> <span class="n">base_model_2</span><span class="p">(</span><span class="n">x_2</span><span class="p">)</span>
+<span class="n">model_2</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs_2</span><span class="p">,</span> <span class="n">x_2</span><span class="p">)</span>
+
+<span class="n">model_2</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span>
+        <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">optimizers</span><span class="p">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">),</span>
+        <span class="n">loss</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">losses</span><span class="p">.</span><span class="n">CategoricalCrossentropy</span><span class="p">(),</span><span class="c1">#from_logits=True),
+</span>        <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">"accuracy"</span><span class="p">]</span>
+    <span class="p">)</span>
+
+<span class="n">loss_0</span><span class="p">,</span> <span class="n">acc_0</span> <span class="o">=</span> <span class="n">model_2</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"loss </span><span class="si">{</span><span class="n">loss_0</span><span class="si">}</span><span class="s">, acc </span><span class="si">{</span><span class="n">acc_0</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+
+<span class="n">history_2</span> <span class="o">=</span> <span class="n">model_2</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span>
+        <span class="n">train</span><span class="p">,</span>
+        <span class="n">validation_data</span><span class="o">=</span><span class="n">valid</span><span class="p">,</span>
+        <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">stopping</span><span class="p">,</span> <span class="n">checkpoint</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">model_2</span><span class="p">.</span><span class="n">load_weights</span><span class="p">(</span><span class="s">"best_model"</span><span class="p">)</span>
+
+<span class="n">loss</span><span class="p">,</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">model_2</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"final loss </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s">, final acc </span><span class="si">{</span><span class="n">acc</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+<span class="n">test_loss</span><span class="p">,</span> <span class="n">test_acc</span> <span class="o">=</span> <span class="n">model_2</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"test loss </span><span class="si">{</span><span class="n">test_loss</span><span class="si">}</span><span class="s">, test acc </span><span class="si">{</span><span class="n">test_acc</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+<span class="n">end_2</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Time taken = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_2</span> <span class="o">-</span> <span class="n">start_2</span><span class="p">)</span> <span class="o">+</span> <span class="s">' s'</span><span class="p">)</span></code></pre></figure>
+
+<p><br />
+Without further ado, let use see the results. First, for the raw images dataset:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_1.png?raw=true" alt="Image_1" width="800&quot;, height=&quot;600" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_2.png?raw=true" alt="Image_2" width="400&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_3.png?raw=true" alt="Image_3" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify"><br />
+For the raw images dataset, our high ‘Patience’ value means that all the 100 epochs have been run, and yet the test accuracy obtained is considerably lower than <a href="https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-part-1/#raw">had been accomplished</a> by the cut-off ResNet50 (~81% instead of ~87%). The validation loss is much jumpier, and worst of all, though not unexpected, the run took almost 8 times longer. In short, there was no advantage to using the full ResNet at all on this dataset.</p>
+
+<p><br />
+For the EMNIST-based dataset, we have:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_4.png?raw=true" alt="Image_4" width="800&quot;, height=&quot;600" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_5.png?raw=true" alt="Image_5" width="400&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_6.png?raw=true" alt="Image_6" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">Here we at least see a reduction in the total number of epochs, although the time taken is again several times higher than even the 100 epochs that the cut-off ResNet had taken. This was the easiest dataset to fit <a href="https://agneevmukherjee.github.io/agneev-blog/Roman-numerals-dataset-evaluation-part-1/#syn">the last time</a>, and it’s no surprise that we again obtained almost a perfect accuracy.</p>
+<p><br />
+Finally we come to the Chars74K-based dataset:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_7.png?raw=true" alt="Image_7" width="800&quot;, height=&quot;600" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_8.png?raw=true" alt="Image_8" width="400&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_9.png?raw=true" alt="Image_9" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">Arguably the worst results are obtained for this dataset, with test accuracy being half that obtained by the cut-off ResNet. The problem of overfitting seen last time has obviously been magnified by applying a bigger model.</p>
+
+<p style="text-align: justify">We see that the results are different for the three datasets, but are rather discouraging overall. Now, we can undoubtedly improve the performance of the full ResNet - we have not applied any regularisation, BatchNormalization, Dropout, transfer learning weights, etc., etc. As a first pass, though, we can conclude that using the full ResNet50 on what are at the end of the day are fairly simple images is unlikely to lead to accuracy improvements that will be worth the added complexity and run times.</p>
+
+<h2 id="simple-cnn--">Simple CNN  <a id="simple"></a></h2>
+
+<p>What about a simpler network? Let us build a simple, no-frills CNN from scratch and see how it performs.</p>
+
+<p>First the CNN itself is built as per the following code:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">model_3</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">models</span><span class="p">.</span><span class="n">Sequential</span><span class="p">([</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">)),</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">),</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">),</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Flatten</span><span class="p">(),</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">),</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'softmax'</span><span class="p">)</span>
+<span class="p">])</span></code></pre></figure>
+
+<p><br />
+Now for the results. For the raw images dataset we have:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_10.png?raw=true" alt="Image_10" width="800&quot;, height=&quot;600" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_11.png?raw=true" alt="Image_11" width="400&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_12.png?raw=true" alt="Image_12" width="400&quot;, height=&quot;300" /></p>
+
+<p>Well, the good news is that it was quick - only 342 s! The bad news is that the test accuracy is only 66%…</p>
+
+<p>Let us see what the EMIST-dataset results are like:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_13.png?raw=true" alt="Image_13" width="800&quot;, height=&quot;600" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_14.png?raw=true" alt="Image_14" width="400&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_15.png?raw=true" alt="Image_15" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">If you have followed the previous runs on this dataset, you might have already guessed the results obtained - very quick run, and 98% test accuracy. Moving on to the Chars74K-dataset, we have:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_16.png?raw=true" alt="Image_16" width="800&quot;, height=&quot;600" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_17.png?raw=true" alt="Image_17" width="400&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_18.png?raw=true" alt="Image_18" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">In one sense, the results obtained are better than that which had been obtained for the cut-off ResNet - the validation loss curve is much smoother than what we saw last time. Although a good thing in itself, as too much fluctuation in the loss values is a sign of instability in training, ultimately it does not in this case lead to a higher, or even comparable, test accuracy, which is what really counts.</p>
+
+<p>So we can conclude that the cut-off ResNet50 used by the competition organisers is in fact the best choice for this problem.</p>
+
+<p style="text-align: justify">But wait, I hear some of you say - what about run time? Isn’t the simple CNN much faster than the cut-off ResNet? Well yes, but remember that we did <em>not</em> use early stopping for the cut-off ResNet. We can <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/chars74k-cutoff-resnet50-early-stopping.ipynb">see what happens</a> if we apply early stopping and run the cut-off ResNet on the Chars74K-based dataset - we get both lower run time (154 s against 198 s) and higher test accuracy (~53% against ~47%) for the cut-off ResNet. So the organisers certainly knew what they were doing when they selected this particular network!</p>
+
+<h2 id="combined-dataset--">Combined dataset  <a id="combo"></a></h2>
+
+<p style="text-align: justify">All right, so we are now ready for the final part of this particular journey. I mentioned earlier that we will be testing the best performing network on a combined dataset. Now that we have selected the winning network, let us see how it does on the final dataset.</p>
+
+<p style="text-align: justify">The combined dataset I used contains all the files in the raw images and Chars-74k based datasets, along with 100 capital and 100 small letters for each number from the EMNIST-based dataset. The reason for using a limited number of EMNIST-based images is simple - using all the images (~10,000) would have led to this dataset providing the overwhelming majority of images in the combined dataset. As it now stands, the combined dataset is relatively well balanced, with almost 6,500 images split in a 70:20:10 training:validation:test set ratio. You can find this dataset <a href="https://www.kaggle.com/agneev/combined-handwritten-roman-numerals-dataset">here</a>, while the evaluation code is <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/combined-ds-cutoff-resnet50-early-stopping.ipynb">here</a>.</p>
+
+<p>As per the usual procedure, let us see the accuracy values and the training curves:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_19.png?raw=true" alt="Image_19" width="800&quot;, height=&quot;600" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_20.png?raw=true" alt="Image_20" width="400&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_21.png?raw=true" alt="Image_21" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">Not bad! We got a test accuracy of ~85%, while the training curves are also reasonably smooth, although some evidence of overfitting is present.</p>
+
+<h2 id="data-augmentation--">Data augmentation  <a id="aug"></a></h2>
+
+<p style="text-align: justify">Now, as the final touch, let us see if we can improve the results a little further by using <a href="https://machinelearningmastery.com/how-to-configure-image-data-augmentation-when-training-deep-learning-neural-networks/">image augmentation</a>. Image augmentation is an easy way to generate subtly modified images on the fly, enhancing the number of images available for training. It also makes the model more robust against overfitting by teaching the model to recognise images despite changes such as distortions or orientation shifts. We will look at image augmentation in greater depth in the future, but for now let us just <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/augment-combined-ds-cutoff-resnet50-early-stopping.ipynb">dip our toes</a>.</p>
+
+<p>The code used for the data augmentation is:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="n">train_datagen</span> <span class="o">=</span> <span class="n">ImageDataGenerator</span><span class="p">(</span>
+        <span class="n">rotation_range</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">width_shift_range</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">height_shift_range</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">shear_range</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">zoom_range</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">fill_mode</span><span class="o">=</span><span class="s">'nearest'</span><span class="p">)</span>
+
+<span class="n">val_datagen</span> <span class="o">=</span> <span class="n">ImageDataGenerator</span><span class="p">()</span>
+
+<span class="n">test_datagen</span> <span class="o">=</span> <span class="n">ImageDataGenerator</span><span class="p">()</span>
+
+<span class="n">train</span> <span class="o">=</span> <span class="n">train_datagen</span><span class="p">.</span><span class="n">flow_from_directory</span><span class="p">(</span>
+        <span class="n">user_data</span><span class="p">,</span>
+        <span class="n">target_size</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+
+<span class="n">valid</span> <span class="o">=</span> <span class="n">val_datagen</span><span class="p">.</span><span class="n">flow_from_directory</span><span class="p">(</span>
+        <span class="n">valid_data</span><span class="p">,</span>
+        <span class="n">target_size</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+
+<span class="n">test</span> <span class="o">=</span> <span class="n">test_datagen</span><span class="p">.</span><span class="n">flow_from_directory</span><span class="p">(</span>
+        <span class="n">test_data</span><span class="p">,</span>
+        <span class="n">target_size</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span></code></pre></figure>
+
+<p style="text-align: justify">You can read about the various parameters used in Keras’ ImageDataGenerator <a href="https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator">here</a>. Although there are a large number of arguments that can be provided, I am only using rotation_range (the degrees by which the images can be rotated randomly), width_shift_range and height_shift_range (the fraction of the width and height by which to randomly move the images horizontally or vertically), shear_range (for random shear transformations) and zoom_range (for randomly zooming inside the images). Flipping, horizontally and/or vertically, is a commonly applied transformation, but a little thought will convince us that it is inappropriate here - a flipped ‘vii’ is no longer a 7…</p>
+
+<p style="text-align: justify">It is important to remember that data augmentation, as a method to combat overfitting on the training set, is only applied to the training data, not the validation or test data. We therefore create two additional data generators for the validation and test sets without passing any arguments to these.</p>
+
+<p style="text-align: justify">A brief point here - rescaling the images is generally recommended as an argument for all the data generators. By supplying ‘rescale = 1./255’, we ensure that the original 0-255 RGB pixel coefficients are reduced to a 0-1 range, which is more manageable for our models. In this case, however, rescaling led to noticeably worse results. This might be because the images are simple enough for the model to handle as-is, while rescaling led to information loss that impaired training. This is purely speculative, of course, and perhaps merits a more detailed look. For now, though, let us move forward without rescaling.</p>
+
+<p style="text-align: justify">Once we have created the data generators, we need to feed them the appropriate data. As we are getting our data directly from the relevant directory, we can use Keras’ <a href="https://vijayabhaskar96.medium.com/tutorial-image-classification-with-keras-flow-from-directory-and-generators-95f75ebe5720">flow_from_directory</a> for this purpose. As can be seen from the code above, all this means here is providing the folder name, the target image size, and the batch size.</p>
+
+<p>Once the above code is run, we get the output:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_22.png?raw=true" alt="Image_22" width="300&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify">Perfect. We see that the training, validation and test images have been passed in, and the number of classes correctly detected from the number of folders (i-x) in each set.</p>
+
+<p style="text-align: justify">Before running the model, let us have a look at the images. The code (rescaling is done here only to enable Matplotlib to plot the images, it has no effect on the modelling):</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">batch</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+<span class="k">print</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">])</span>
+<span class="c1"># batch[0] are the images, batch[1] are the labels
+# batch[0][0] is the first image,  batch[0][1] the next image
+</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+    <span class="n">img</span><span class="o">=</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span>   
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">fig</span><span class="p">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s">'auto'</span><span class="p">)</span></code></pre></figure>
+
+<p>And the output (random, so will differ from run-to-run):</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_23.png?raw=true" alt="Image_23" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_24.png?raw=true" alt="Image_24" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_25.png?raw=true" alt="Image_25" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_26.png?raw=true" alt="Image_26" width="100&quot;, height=&quot;100" />        </p>
+
+<p><img src="/agneev-blog/assets/img/img_3_27.png?raw=true" alt="Image_27" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_28.png?raw=true" alt="Image_28" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_29.png?raw=true" alt="Image_29" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_30.png?raw=true" alt="Image_30" width="100&quot;, height=&quot;100" /></p>
+
+<p><br />
+For comparison, the validation images are:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_31.png?raw=true" alt="Image_31" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_32.png?raw=true" alt="Image_32" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_33.png?raw=true" alt="Image_33" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_34.png?raw=true" alt="Image_34" width="100&quot;, height=&quot;100" />        </p>
+
+<p><img src="/agneev-blog/assets/img/img_3_35.png?raw=true" alt="Image_35" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_36.png?raw=true" alt="Image_36" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_37.png?raw=true" alt="Image_37" width="100&quot;, height=&quot;100" />        
+<img src="/agneev-blog/assets/img/img_3_38.png?raw=true" alt="Image_38" width="100&quot;, height=&quot;100" /></p>
+
+<p style="text-align: justify"><br />
+We can see that the augmented training images are slightly harder to read, and have been rotated or moved up or down a little in some cases. We can certainly make the images more distorted, but ultimately, our aim is to make training a little harder for the neural network, not change the images so much that they bear little resemblance to the validation or test images.</p>
+
+<p>All right, so let us train our model the same way, and see the results:</p>
+
+<p><img src="/agneev-blog/assets/img/img_3_39.png?raw=true" alt="Image_39" width="800&quot;, height=&quot;600" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_40.png?raw=true" alt="Image_40" width="400&quot;, height=&quot;300" /></p>
+
+<p><img src="/agneev-blog/assets/img/img_3_41.png?raw=true" alt="Image_41" width="400&quot;, height=&quot;300" /></p>
+
+<p style="text-align: justify">We see that the validation curve fluctuates more than earlier, but the overfitting appears to have been more or less eliminated. The test accuracy is now around 87.5% - not bad!</p>
+
+<p style="text-align: justify">Is it possible to improve the accuracy further? Probably - for starters, we could look at <a href="https://en.wikipedia.org/wiki/Hyperparameter_optimization">hyperparameter optimisation</a> to search for the ImageDataGenerator argument values that work best. We must be careful though - too much fine-tuning is a recipe for overfitting on the test set!</p>
+
+<p style="text-align: justify">The above statement may confuse some. How can we overfit on the test set, when the model never sees it? Ah, the <em>model</em> doesn’t see it, but we do! We tinker with the parameters, run the model, and then look at the test accuracy. We then change the parameters some more, rerun the model, and see how the test accuracy was affected. At the end of it all, we feel that we have obtained the highest accuracy possible on the test set, which may be true, but we have ended up defeating the purpose of the test set, which is to provide a means to objectively assess the effectiveness of our model on unseen data. In other words, the test set is now simply a glorified extension to the training set. If tuned in this way, our model is unlikely to perform optimally on <em>real</em> unseen data.</p>
+
+<p style="text-align: justify">Let us therefore be satisfied with what we have achieved - an accuracy in the late 80s on a fairly diverse and representative dataset, with a reasonable non-GPU run time of ~26 minutes. On to a new adventure next time!</p>
+
+<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Roman-numerals-dataset-evaluation-part-1/">&#8672;&nbsp;2. Evaluating handwritten Roman numerals datasets - 1</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-1/">4. Modelling water bodies - 1&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+:ET

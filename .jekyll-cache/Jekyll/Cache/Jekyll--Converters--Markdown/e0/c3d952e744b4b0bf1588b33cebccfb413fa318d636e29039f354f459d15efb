@@ -1,0 +1,558 @@
+I"�5<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-1/">&#8672;&nbsp;4. Modelling water bodies - 1</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-3/">6. Modelling water bodies - 3&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Categories:</span></p>
+<div class="post-categories">
+<p style="font-size:20px">
+  
+  
+  <a href="/agneev-blog/categories/#Data Science">Data Science</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Machine Learning">Machine Learning</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Python">Python</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Time series">Time series</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Tabular">Tabular</a>
+  
+  
+  </p>
+</div>
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br /></p>
+<p style="font-size:18px">
+Environment, Water, Pandas, Kaggle, Competition, Imputation, Matplotlib
+</p>
+<p><br /></p>
+
+<p><em>[Edit: This and the next post were originally published as one, but I have now split them to improve readability.]</em></p>
+
+<p style="text-align: justify">Welcome back. The <a href="https://agneevmukherjee.github.io/agneev-blog/Water-modelling-part-1/">last time</a> we saw the details of the methodology that I used to tackle the <a href="https://www.kaggle.com/c/acea-water-prediction/overview">Acea Smart Water Analytics</a> competition. Now, let’s see the actual modelling of the water bodies. While the notebook containing all the code (available <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/acea-submission-code.ipynb">here</a>) deals with all the waterbodies, the procedure is repetitive, and so we will look in detail in this post at only one representative water body. As you will see, there’s plenty to unpack for that one!</p>
+
+<p style="text-align: justify">Before we start, the competition’s <a href="https://www.kaggle.com/c/acea-water-prediction/data">data page</a> helpfully points out one of the challenges involved in the modelling:</p>
+
+<blockquote style="text-align: justify">
+  <p>It is of the utmost importance to notice that some features like rainfall and temperature, which are present in each dataset, don’t go alongside the date. Indeed, both rainfall and temperature affect features like level, flow, depth to groundwater and hydrometry some time after it fell down. This means, for instance, that rain fell on 1st January doesn’t affect the mentioned features right the same day but some time later. As we don’t know how many days/weeks/months later rainfall affects these features, this is another aspect to keep into consideration when analyzing the dataset.</p>
+</blockquote>
+
+<p style="text-align: justify">OK, keeping that in mind, let us get to the modelling. This post will deal with the <a href="https://en.wikipedia.org/wiki/Data_wrangling">data wrangling/munging</a> aspects, with the actual modelling handled next time.</p>
+
+<h2 id="aquifer-petrignano--">Aquifer Petrignano  <a id="Petrignano"></a></h2>
+
+<p style="text-align: justify">The water body I have selected to demonstrate the modelling here is Aquifer Petrignano, one of the four aquifers present in the dataset. As per the stated goal of the competition, this ‘aquifer’ model I built is applicable to each aquifer. Only the initial <a href="https://expressanalytics.com/blog/what-is-data-wrangling-what-are-the-steps-in-data-wrangling/">data wrangling</a> portion requires some manual intervention, while the rest of the process is automated and identical for each aquifer.</p>
+
+<p style="text-align: justify">The competition <a href="https://www.kaggle.com/c/acea-water-prediction/data">data page</a> describes the Petrignano aquifer as follows:</p>
+
+<blockquote style="text-align: justify">
+  <p>The wells field of the alluvial plain between Ospedalicchio di Bastia Umbra and Petrignano is fed by three underground aquifers separated by low permeability septa. The aquifer can be considered a water table groundwater and is also fed by the Chiascio river. The groundwater levels are influenced by the following parameters: rainfall, depth to groundwater, temperatures and drainage volumes, level of the Chiascio river.</p>
+</blockquote>
+
+<p style="text-align: justify"><br />
+The reason I chose this aquifer to demonstrate is since it has all the column types associated with aquifers (rainfall, depth to groundwater, temperature, volume and hydrometry), and only two target variables, unlike some of the other water bodies. The methods for loading and visualising the data, filling in the missing values, and the various modelling steps are largely similar for all the water bodies, and so I will take the time to explain these in detail.</p>
+
+<p><br /></p>
+<h2 id="data-loading-and-visualisation--">Data loading and visualisation  <a id="visual"></a></h2>
+<p style="text-align: justify">The first thing to do is to load the dataset. For every water body I loaded the csv file in an identical fashion, to keep things general. As is customary for dealing with tabular data in Python, the <a href="https://pandas.pydata.org/">pandas</a> library has been used for all the data loading.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># Load the dataset
+</span><span class="n">train</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'../input/acea-water-prediction/Aquifer_Petrignano.csv'</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s">'Date'</span><span class="p">],</span> <span class="n">dayfirst</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># Create a copy of the original data, since the 'train' dataframe will be modified
+</span><span class="n">train_orig</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span></code></pre></figure>
+
+<p><br />
+Let us now look at the start and end of the data, as well as the columns in the dataframe.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">train</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">train</span><span class="p">.</span><span class="n">tail</span><span class="p">()</span>
+<span class="n">train</span><span class="p">.</span><span class="n">info</span><span class="p">()</span></code></pre></figure>
+
+<font size="2">
+<div style="overflow:auto;">
+<table border="1">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+       <th>Date</th>
+       <th>Rainfall_Bastia_Umbra</th>
+       <th>Depth_to_Groundwater_P24</th>
+       <th>Depth_to_Groundwater_P25</th>
+       <th>Temperature_Bastia_Umbra</th>
+       <th>Temperature_Petrignano</th>
+       <th>Volume_C10_Petrignano</th>
+       <th>Hydrometry_Fiume_Chiascio_Petrignano</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <th>0</th>
+        <td>2006-03-14</td>
+        <td>NaN</td>
+        <td>-22.48</td>
+        <td>-22.18</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>1</th>
+        <td>2006-03-15</td>
+        <td>NaN</td>
+        <td>-22.38</td>
+        <td>-22.14</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>2</th>
+        <td>2006-03-16</td>
+        <td>NaN</td>
+        <td>-22.25</td>
+        <td>-22.04</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>3</th>
+        <td>2006-03-17</td>
+        <td>NaN</td>
+        <td>-22.38</td>
+        <td>-22.04</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+      <tr>
+        <th>4</th>
+        <td>2006-03-18</td>
+        <td>NaN</td>
+        <td>-22.60</td>
+        <td>-22.04</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+        <td>NaN</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</font>
+
+<p><br /></p>
+
+<font size="2">
+<div style="overflow:auto;">
+<table border="1">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+       <th>Date</th>
+       <th>Rainfall_Bastia_Umbra</th>
+       <th>Depth_to_Groundwater_P24</th>
+       <th>Depth_to_Groundwater_P25</th>
+       <th>Temperature_Bastia_Umbra</th>
+       <th>Temperature_Petrignano</th>
+       <th>Volume_C10_Petrignano</th>
+       <th>Hydrometry_Fiume_Chiascio_Petrignano</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <th>5218</th>
+        <td>2020-06-26</td>
+        <td>0.0</td>
+        <td>-25.68</td>
+        <td>-25.07</td>
+        <td>25.7</td>
+        <td>24.5</td>
+        <td>-29930.688</td>
+        <td>2.5</td>
+      </tr>
+      <tr>
+        <th>5219</th>
+        <td>2020-06-27</td>
+        <td>0.0</td>
+        <td>-25.80</td>
+        <td>-25.11</td>
+        <td>26.2</td>
+        <td>25.0</td>
+        <td>-31332.960</td>
+        <td>2.4</td>
+      </tr>
+      <tr>
+        <th>5220</th>
+        <td>2020-06-28</td>
+        <td>0.0</td>
+        <td>-25.80</td>
+        <td>-25.19</td>
+        <td>26.9</td>
+        <td>25.7</td>
+        <td>-32120.928</td>
+        <td>2.4</td>
+      </tr>
+      <tr>
+        <th>5221</th>
+        <td>2020-06-29</td>
+        <td>0.0</td>
+        <td>-25.78</td>
+        <td>-25.18</td>
+        <td>26.9</td>
+        <td>26.0</td>
+        <td>-30602.880</td>
+        <td>2.4</td>
+      </tr>
+      <tr>
+        <th>5222</th>
+        <td>2020-06-30</td>
+        <td>0.0</td>
+        <td>-25.91</td>
+        <td>-25.25</td>
+        <td>27.3</td>
+        <td>26.5</td>
+        <td>-31878.144</td>
+        <td>2.4</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</font>
+
+<p><br />
+<img src="/agneev-blog/assets/img/img_5_1.png?raw=true" alt="Image_1" width="500&quot;, height=&quot;100" /></p>
+
+<p style="text-align: justify">We see that the data starts in March 2006 and ends in June 2020, and that there are 7 columns in all: 1 Date, 1 Rainfall, 2 Depth to Groundwater, 2 Temperature, 1 Volume and 1 Hydrometry. We also see that there are lots of missing values, especially at the start of the data - the Date column, which has an entry for each row, has 5223 non-null values, while some of the columns have only 4199. It is clear that missing value imputation will play a key part - we will discuss that in detail later. Before that though, let us make a list of the target columns - a step that obviously must be done manually.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Depth_to_Groundwater_P24'</span><span class="p">,</span> <span class="s">'Depth_to_Groundwater_P25'</span><span class="p">]</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+Next, I decided to remove all the February 29 rows from the data, since otherwise there are issues later on in the modelling process, all years other than leap years having 365 days. Since a leap day only occurs once every 1461 days, there is minimal loss of data. The following cell removes the leap days via masking.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">is_leap_and_29Feb</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">Date</span><span class="p">.</span><span class="n">dt</span><span class="p">.</span><span class="n">year</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> \
+           <span class="p">((</span><span class="n">s</span><span class="p">.</span><span class="n">Date</span><span class="p">.</span><span class="n">dt</span><span class="p">.</span><span class="n">year</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">Date</span><span class="p">.</span><span class="n">dt</span><span class="p">.</span><span class="n">year</span> <span class="o">%</span> <span class="mi">400</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&amp;</span> \
+           <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">Date</span><span class="p">.</span><span class="n">dt</span><span class="p">.</span><span class="n">month</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">Date</span><span class="p">.</span><span class="n">dt</span><span class="p">.</span><span class="n">day</span> <span class="o">==</span> <span class="mi">29</span><span class="p">)</span>
+
+<span class="n">mask</span> <span class="o">=</span> <span class="n">is_leap_and_29Feb</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+
+<span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+OK, the next step is removing those rows at the start of the dataframe that do not have values for one or more of the target variables. Why is this needed? While it is not the case for Aquifer Petrignano, there are some datasets where target values are not available for several years at the beginning. Imputing values and using these rows for model training is incorrect, as the model will learn to predict the imputed data instead of fulfilling the aim of matching the actual data. I therefore wrote the cell below to find out the maximum length of NaNs before a valid value for any of the target columns, and remove all the dataframe rows before this value. Any missing values in the targets that occur later in the dataframe will be imputed. Doesn’t this contradict what I just said about imputation being inappropriate? Well, the gaps in data in the middle are a lot less numerous than the large gaps in the beginning, and so imputing these is an acceptable trade-off here.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">nan_len</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">):</span>
+    <span class="n">nan_len</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">notna</span><span class="p">().</span><span class="n">idxmax</span><span class="p">())</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">nan_len</span><span class="p">):].</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span></code></pre></figure>
+
+<p style="text-align: justify">Let us now see how the data looks visually, which will help determine if any data wrangling other than missing value imputation is needed. I should note here that I used a light touch to data wrangling, only making any changes to the data where I felt it was both necessary and justified.</p>
+
+<p style="text-align: justify">The cell below creates separate dataframes for each type of variable (e.g. rainfall, volume, etc.), both for ease of plotting and because they come in handy later in the modelling process. A list of the columns corresponding to that variable type is also created for later use.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">rain_df</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="p">(</span><span class="s">"Rainfall.*"</span><span class="p">))</span>
+<span class="n">rains</span> <span class="o">=</span> <span class="n">rain_df</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">rain_df</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s">'Date'</span><span class="p">])</span>
+
+<span class="n">vol_df</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="p">(</span><span class="s">"Volume.*"</span><span class="p">))</span>
+<span class="n">vols</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">vol_df</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s">'Date'</span><span class="p">])</span>
+
+<span class="n">temp_df</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="p">(</span><span class="s">"Temperature.*"</span><span class="p">))</span>
+<span class="n">temps</span> <span class="o">=</span> <span class="n">temp_df</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">temp_df</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s">'Date'</span><span class="p">])</span>
+
+<span class="n">depth_df</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="p">(</span><span class="s">"Depth_to_Groundwater.*"</span><span class="p">))</span>
+<span class="n">depths</span> <span class="o">=</span> <span class="n">depth_df</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">depth_df</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s">'Date'</span><span class="p">])</span>
+
+<span class="n">hydro_df</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="p">(</span><span class="s">"Hydrometry.*"</span><span class="p">))</span>
+<span class="n">hydros</span> <span class="o">=</span> <span class="n">hydro_df</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">hydro_df</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s">'Date'</span><span class="p">])</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+Now let us plot the different variables (using <a href="https://matplotlib.org/">Matplotlib</a>, as ever). You will notice that all the plot codes are contained inside a if statement that checks if the particular type of variable exists. If, for instance, there is no hydrometry term, the length of the hydrometry list created earlier will be 0, and the code will not run. This takes care of different datasets not having all the different variable types (a recurrent problem), ensuring that the model runs smoothly and automatically for every dataset.</p>
+
+<p>First, the rainfall:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rains</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">rains</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">rain_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">rains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="n">rain_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">rains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">.</span><span class="n">yaxis</span>
+        <span class="n">y_axis</span><span class="p">.</span><span class="n">set_label_text</span><span class="p">(</span><span class="s">'Rainfall (mm)'</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_5_2.png?raw=true" alt="Image_2" width="400&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify">We can see that for the rainfall, the graph is as expected. Most of the days receive no rainfall, the average rainy day sees perhaps 10-20 mm of rain, while there are a few exceptional days that have values greater than 50 mm. Note the X-axis; the rainfall data is only available from 2009.</p>
+
+<p>Next, the ‘volume’:
+<br /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vols</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">vols</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">vols</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="n">vol_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">vols</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">.</span><span class="n">yaxis</span>
+        <span class="n">y_axis</span><span class="p">.</span><span class="n">set_label_text</span><span class="p">(</span><span class="s">'Volume (m$^3$)'</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p style="text-align: justify"><img src="/agneev-blog/assets/img/img_5_3.png?raw=true" alt="Image_3" width="400&quot;, height=&quot;200" />
+<br />
+The volume term refers to the amount of water taken from the drinking water treatment plant, a critical parameter in determining its health. Here, we see that most of the days had water extraction of roughly 30000 m<sup>3</sup>, with no clear trends visible.</p>
+
+<p><br /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">temps</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">temps</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">temp_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="n">temp_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">.</span><span class="n">yaxis</span>
+        <span class="n">y_axis</span><span class="p">.</span><span class="n">set_label_text</span><span class="p">(</span><span class="s">'Temperature ($^o$C)'</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_5_4.png?raw=true" alt="Image_4" width="400&quot;, height=&quot;200" />
+<br /></p>
+
+<p style="text-align: justify">The two temperature terms show a seasonal trend, with maximum temperatures of around 30 <sup>o</sup>C towards the middle of the year, and a minimum value of around 0 <sup>o</sup>C around the turn of the year. This is as expected; after all seasons are virtually defined by the rise and fall in temperatures. This seasonality will be used for imputing missing temperature data.</p>
+
+<p><br /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">depths</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">depths</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">depth_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="n">depth_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">.</span><span class="n">yaxis</span>
+        <span class="n">y_axis</span><span class="p">.</span><span class="n">set_label_text</span><span class="p">(</span><span class="s">'Depth to groundwater (m)'</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p style="text-align: justify"><img src="/agneev-blog/assets/img/img_5_5.png?raw=true" alt="Image_5" width="400&quot;, height=&quot;200" />
+<br />
+‘Depth to groundwater’ refers to the groundwater level measured in terms of distance from the ground floor as detected by a piezometer. As the target variables for aquifers are the depth to groundwater terms, this is obviously a very important variable category. The two depth to groundwater terms in this dataset follow each other very closely, and both show a highly haphazard pattern, with the values dropping and rising by large amounts at seemingly random intervals.</p>
+
+<p><br /></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hydros</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">hydros</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">hydro_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">hydros</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="n">hydro_df</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">hydros</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">.</span><span class="n">yaxis</span>
+        <span class="n">y_axis</span><span class="p">.</span><span class="n">set_label_text</span><span class="p">(</span><span class="s">'Hydrometry (m)'</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p style="text-align: justify"><img src="/agneev-blog/assets/img/img_5_6.png?raw=true" alt="Image_6" width="400&quot;, height=&quot;200" />
+<br />
+Finally, we come to the hydrometry term, which is also a measure of the groundwater level, but as determined by a hydrometric station rather than using a piezometer. We see from the figure that this variable is more stable than the depth to groundwater terms, and it exhibits a mild seasonal pattern, far less pronounced than for temperatures.</p>
+
+<p><br /></p>
+<h2 id="data-imputation--">Data imputation  <a id="impute"></a></h2>
+
+<p style="text-align: justify">As I said earlier, data imputation plays a major part in tackling this competition dataset. Different imputation methods are suitable for the different variable types, as will be seen below. An additional point is that the imputation should occur not just for missing values, but also to replace erroneous data, if these can be definitively identified.</p>
+
+<p style="text-align: justify">Let us start with rainfall. For rainfalls, since 0 is a legitimate value, and is in fact the <a href="https://en.wikipedia.org/wiki/Mode_(statistics)">mode</a> of the data, and since there is no theoretical upper limit to the amount of rain received, the only way any data can be identified as wrong is in the case of negative values or values perhaps a hundred times greater than the rest. This is not the case for any of the datasets, and hence we can focus simply on imputing the missing data. Using the monthly average of the rainfall may be one possible method, but as we saw in the rainfall graph above, there is no seasonality in the data, and hence using monthly averages to impute long stretches of time will probably bias the data. As per the <a href="https://en.wikipedia.org/wiki/KISS_principle">KISS principle</a>, complexity should be avoided unless necessary. In the case of rainfall, inserting the mode value of 0 (i.e. no rainfall on that day) in place of the missing data is the simplest solution, and in the absence of any better alternatives, I decided to use this.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rains</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">rains</span><span class="p">):</span>
+        <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">rains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">rains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p style="text-align: justify">Next, the volume. As mentioned above, the volume term refers to the amount of water taken from the drinking water treatment plant. It can therefore have a value of 0 if no water is taken on that day. The same points as made for rainfall also hold for volume, and therefore I did the imputation the same way too.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vols</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">vols</span><span class="p">):</span>
+        <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">vols</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">vols</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p style="text-align: justify">We have seen that the temperature terms show a seasonal trend as expected, and I used this for imputation. The invalid data is a little hard to identify here, given that the data correctly has positive, negative and zero values. Again, values far outside the range of the rest of the data may be erroneous, and a statistical measure like the <a href="https://en.wikipedia.org/wiki/Standard_score">z-score</a> may be used to identify these outliers. An inspection of the minimum and maximum values of the temperature data for all the datasets did not turn up anything untoward, and hence I decided to skip further statistical inspection. Another source of erroneous data, however, does appear to exist - long stretches of time with values of 0, likely indicating corrupt data. Somewhat arbitrarily, I decided that 7 or more consecutive values of 0 were errors, and decided to mask and replace these with NaNs for imputation.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">temps</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">temps</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">cumsum</span><span class="p">()</span><span class="o">-</span><span class="n">a</span><span class="p">.</span><span class="n">cumsum</span><span class="p">().</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">a</span><span class="p">).</span><span class="n">ffill</span><span class="p">().</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">7</span>
+        <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">temp_df</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_df</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># Replacing 7 or more 0 temperature values with Nans
+# Taken from
+#https://stackoverflow.com/questions/42946226/replacing-more-than-n-consecutive-values-in-pandas-dataframe-column   </span></code></pre></figure>
+
+<p><br />
+That done, we can now turn to the actual data imputation, which is done in the cell below.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">temps</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">temps</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">temp_df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">np</span><span class="p">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">X</span><span class="p">[</span><span class="s">'dayofyear'</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">].</span><span class="n">dt</span><span class="p">.</span><span class="n">dayofyear</span>
+        <span class="n">X2</span> <span class="o">=</span> <span class="n">X</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">'dayofyear'</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">X2</span><span class="p">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">isnull</span><span class="p">()</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="s">'same_day'</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">X</span><span class="p">[</span><span class="s">'dayofyear'</span><span class="p">].</span><span class="nb">map</span><span class="p">(</span><span class="n">X2</span><span class="p">.</span><span class="n">set_index</span><span class="p">(</span><span class="s">'dayofyear'</span><span class="p">)[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="n">X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">isnull</span><span class="p">()</span> <span class="o">==</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'same_day'</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">]</span>
+        <span class="n">X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">isnull</span><span class="p">()</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span> <span class="o">+</span> <span class="s">'_new'</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="s">'same_day'</span><span class="p">]</span>
+        <span class="n">X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">isnull</span><span class="p">()</span> <span class="o">==</span> <span class="bp">False</span><span class="p">,</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span> <span class="o">+</span> <span class="s">'_new'</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">]</span>
+
+        <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">update</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span> <span class="o">+</span> <span class="s">'_new'</span><span class="p">])</span>
+
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">temps</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">temps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">.</span><span class="n">yaxis</span>
+        <span class="n">y_axis</span><span class="p">.</span><span class="n">set_label_text</span><span class="p">(</span><span class="s">'Temperature ($^o$C)'</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p style="text-align: justify">Briefly, the average temperature for each day of the year is calculated, and this average is used to fill in missing data for that date. For example, if the temperature value for June 29, 2018 is missing, then the average temperature of June 29 calculated using the rest of the data will be filled in. As we can see from the figures showing the original (left) and the imputed data (right) below, this method works very well. In the original temperature data, you see that the ‘red’ graph has a big stretch of zeroes around 2015, and the updated graph looks much more reasonable in this timespan.</p>
+
+<p><img src="/agneev-blog/assets/img/img_5_4.png?raw=true" alt="Image_4" width="350&quot;, height=&quot;200" />
+<img src="/agneev-blog/assets/img/img_5_7.png?raw=true" alt="Image_7" width="350&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify"><br />
+Next, let us turn to the hydrometry term, which also has a weak seasonal pattern, and hence can be imputed similarly to temperature. Unlike all the previous items, however, the 0 values here <em>can</em> be considered as errors - the values cannot suddenly depart from their usual 2-4 m range and become 0. Therefore, I replaced all the 0 values by NaNs. I made a fresh dataframe for the hydro terms from the imputed data, for reasons that I will explain when I touch upon Aquifer Auser. The rest of the procedure is the same as for temperature. The figure below shows that this imputation method gives adequate results for hydrometry, though less realistic than was the case for temperature.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hydros</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">hydros</span><span class="p">):</span>
+        <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">hydros</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">replace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c1"># 0s in hydros are errors, so replace them with Nans
+</span>    <span class="n">hydro_df2</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="p">(</span><span class="s">"Hydrometry.*"</span><span class="p">))</span>
+    <span class="n">hydros</span> <span class="o">=</span> <span class="n">hydro_df2</span><span class="p">.</span><span class="n">columns</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">hydro_df2</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s">'Date'</span><span class="p">])</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_5_6.png?raw=true" alt="Image_6" width="350&quot;, height=&quot;200" />
+<img src="/agneev-blog/assets/img/img_5_8.png?raw=true" alt="Image_8" width="350&quot;, height=&quot;200" /></p>
+
+<p style="text-align: justify">That leaves only one more term to deal with. I have kept the depth of groundwater term for the last, since this is easily the most difficult to impute. Going over all the different datasets, no one method, e.g. mean, rolling mean, fill forward, K-nearest neighbours, seasonal interpolation, etc. worked well for every depth of groundwater series. This left me with two alternatives - either use a bespoke imputation method for each depth of groundwater after manual inspection and analysis, or use a <a href="https://www.bmj.com/content/338/bmj.b2393">multiple imputation method</a>. Multiple imputation methods compensate for the uncertainty in the missing data by creating and combining predictions from several plausible imputed datasets. Their use permits automatic processing, which was one of my aims, and hence I decided to use these for imputing the depth of groundwater data. The question, though, was: which of the several different multiple imputation methods should I use?</p>
+
+<p style="text-align: justify">Again, there is no perfect solution, but some <a href="https://bmjopen.bmj.com/content/3/8/e002847">studies</a>/<a href="https://www.analyticsvidhya.com/blog/2016/03/tutorial-powerful-packages-imputing-missing-values/">opinions</a> show that the RF-based MissForest algorithm (details can be found <a href="https://towardsdatascience.com/missforest-the-best-missing-data-imputation-algorithm-4d01182aed3">here</a> or <a href="https://www.kaggle.com/lmorgan95/missforest-the-best-imputation-algorithm">here</a>) can outperform alternatives like MICE and Hmisc. We will therefore use this method. The original MissForest algorithm was implemented in R, and sklearns’ IterativeImputer, which <a href="https://scikit-learn.org/stable/auto_examples/impute/plot_iterative_imputer_variants_comparison.html">has an ExtraTreesRegressor estimator</a> similar to MissForest is <a href="https://scikit-learn.org/stable/modules/impute.html#iterative-imputer">currently experimental</a> and not stable. I therefore used the <a href="https://pypi.org/project/missingpy/">missingpy module</a>. I carried out the imputation on a copy of the original dataset to avoid the fitting being influenced by the imputations of the other variables carried out above. Like with the hydrometry term, I treated 0 values as missing data. As the algorithm cannot handle ‘Date’ terms, and they are not necessary for the imputation anyway, I dropped the Date column prior to the run, and then added it back to the imputed dataframe.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">imputer</span> <span class="o">=</span> <span class="n">MissForest</span><span class="p">()</span>
+<span class="n">train_copy</span> <span class="o">=</span> <span class="n">train_orig</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">depths</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">depths</span><span class="p">):</span>
+        <span class="n">train_copy</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">replace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c1"># 0s in depths are errors, so replace them with Nans
+</span>    <span class="n">train_copy</span> <span class="o">=</span> <span class="n">train_copy</span><span class="p">.</span><span class="n">drop</span><span class="p">([</span><span class="s">'Date'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">col_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">train_copy</span><span class="p">)</span>
+    <span class="n">imputs</span> <span class="o">=</span> <span class="n">imputer</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">train_copy</span><span class="p">)</span>
+    <span class="n">imputs</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">imputs</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">col_list</span><span class="p">)</span>
+    <span class="n">imputs</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span><span class="o">=</span> <span class="n">train_orig</span><span class="p">[</span><span class="s">'Date'</span><span class="p">]</span></code></pre></figure>
+
+<p>The imputed values are used to replace the missing values in the cell below:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">depths</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">depths</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">depth_df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">np</span><span class="p">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">isnull</span><span class="p">()</span> <span class="o">==</span> <span class="bp">True</span><span class="p">,</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span> <span class="o">+</span> <span class="s">'_new'</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">X</span><span class="p">[</span><span class="s">'Date'</span><span class="p">].</span><span class="nb">map</span><span class="p">(</span><span class="n">imputs</span><span class="p">.</span><span class="n">set_index</span><span class="p">(</span><span class="s">'Date'</span><span class="p">)[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">to_dict</span><span class="p">())</span>
+        <span class="n">X</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">].</span><span class="n">isnull</span><span class="p">()</span> <span class="o">==</span> <span class="bp">False</span><span class="p">,</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span> <span class="o">+</span> <span class="s">'_new'</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">]</span>
+        <span class="n">train</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span> <span class="o">+</span> <span class="s">'_new'</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">depths</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">plot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">'Date'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">depths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">)</span>
+        <span class="n">y_axis</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">.</span><span class="n">yaxis</span>
+        <span class="n">y_axis</span><span class="p">.</span><span class="n">set_label_text</span><span class="p">(</span><span class="s">'Depth to groundwater (m)'</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+It must be said that the plot showing the imputed data (below, right) is not the best advertisement for MissForest, as there are some fitted points above and below the actual values. Overall, though, I found MissForest to be the most reliable and generalisable of all the imputation methods I tried on all the different depth of groundwater series, and hence decided to stick with it.</p>
+
+<p><img src="/agneev-blog/assets/img/img_5_5.png?raw=true" alt="Image_5" width="350&quot;, height=&quot;200" />
+<img src="/agneev-blog/assets/img/img_5_9.png?raw=true" alt="Image_9" width="350&quot;, height=&quot;200" /></p>
+
+<p><br /></p>
+<h2 id="forecast-period--">Forecast period  <a id="Period"></a></h2>
+
+<p style="text-align: justify">After concluding the data inspection and imputation, we are finally ready to look at the actual models. The first thing I had to decide is the time frame for which we want the predictions, i.e. how many days ahead do we want to predict. There was plenty of discussion on this topic in the competition forums, and it was stated by the organisers that the prediction period is difficult to predetermine, but needs to be decided on a case-by-case basis depending on the water body type and other factors. I therefore created a variable called days_ahead that allows the user to specify the desired time period, the model automatically forecasting for that period. The default value I used is 7 days, but I also ran it for 30 days for this waterbody to show how it works and how the predictions are affected by the forecast period.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">days_ahead</span> <span class="o">=</span> <span class="mi">7</span>
+
+<span class="n">target_cols</span> <span class="o">=</span> <span class="n">targets</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+    <span class="n">train</span><span class="p">[</span><span class="n">target</span> <span class="o">+</span> <span class="s">'_target'</span><span class="p">]</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">target</span><span class="p">].</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="n">days_ahead</span><span class="p">)</span>
+    <span class="n">target_cols</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s">'_target'</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c1"># Creating new columns by shifting the target columns by the forecast period
+</span><span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="p">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="c1"># Required as the shift in the cell above introduces some new NaNs</span></code></pre></figure>
+
+<h2 id="conclusion--">Conclusion  <a id="conc"></a></h2>
+
+<p>All the initial groundwork is finished now, and the actual modelling can be done. As this post is long enough already, we will look at the three different types of models I used in the next post. So long!</p>
+
+<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-1/">&#8672;&nbsp;4. Modelling water bodies - 1</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/Water-modelling-part-3/">6. Modelling water bodies - 3&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+:ET

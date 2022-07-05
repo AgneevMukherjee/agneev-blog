@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Diving into the Archie Comics Multiclass dataset | Agneev’s DS/ML lab book</title>
+<meta name="generator" content="Jekyll v4.2.1" />
+<meta property="og:title" content="Diving into the Archie Comics Multiclass dataset" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="&#8672;&nbsp;8. Introducing the Archie Comics Multiclass dataset 10. ACMC - Undersampling and F-scores&nbsp;&#8674;" />
+<meta property="og:description" content="&#8672;&nbsp;8. Introducing the Archie Comics Multiclass dataset 10. ACMC - Undersampling and F-scores&nbsp;&#8674;" />
+<link rel="canonical" href="https://agneevmukherjee.github.io/agneev-blog/ACMC-simple-model/" />
+<meta property="og:url" content="https://agneevmukherjee.github.io/agneev-blog/ACMC-simple-model/" />
+<meta property="og:site_name" content="Agneev’s DS/ML lab book" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-04-25T13:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Diving into the Archie Comics Multiclass dataset" />
+<script type="application/ld+json">
+{"dateModified":"2022-04-25T13:00:00+02:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://agneevmukherjee.github.io/agneev-blog/ACMC-simple-model/"},"datePublished":"2022-04-25T13:00:00+02:00","url":"https://agneevmukherjee.github.io/agneev-blog/ACMC-simple-model/","headline":"Diving into the Archie Comics Multiclass dataset","description":"&#8672;&nbsp;8. Introducing the Archie Comics Multiclass dataset 10. ACMC - Undersampling and F-scores&nbsp;&#8674;","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/agneev-blog/assets/main.css">
+  <link rel="shortcut icon" type="image/x-icon" href="/agneev-blog/favicon.ico"><link type="application/atom+xml" rel="alternate" href="https://agneevmukherjee.github.io/agneev-blog/feed.xml" title="Agneev's DS/ML lab book" /></head>
+<body><header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/agneev-blog/">Agneev&#39;s DS/ML lab book</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/agneev-blog/about/">About me</a><a class="page-link" href="/agneev-blog/categories/">Categories</a></div>
+      </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">9. Diving into the Archie Comics Multiclass dataset</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2022-04-25T13:00:00+02:00" itemprop="datePublished">Apr 25, 2022
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Archie-comics-multiclass-dataset-intro/">&#8672;&nbsp;8. Introducing the Archie Comics Multiclass dataset</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/ACMC-undersampling/">10. ACMC - Undersampling and F-scores&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Categories:</span></p>
+<div class="post-categories">
+<p style="font-size:20px">
+  
+  
+  <a href="/agneev-blog/categories/#Machine Learning">Machine Learning</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Computer Vision">Computer Vision</a>
+  &nbsp;
+  
+  <a href="/agneev-blog/categories/#Python">Python</a>
+  
+  
+  </p>
+</div>
+<p><br /></p>
+
+<p><span style="font-family:Helvetica; font-size:1.5em;">Tags:</span><br /></p>
+<p style="font-size:18px">
+TensorFlow 2, Keras, Matplotlib, Seaborn, PIL, Pandas, Scikit-learn, Confusion Matrix
+</p>
+<p><br /></p>
+
+<p style="text-align: justify">Hi there! <a href="https://agneevmukherjee.github.io/agneev-blog/Archie-comics-multiclass-dataset-intro/">Last time</a> we had a brief look at the Archie Comics Multiclass (ACMC) dataset that I created, and which can be found <a href="https://www.kaggle.com/datasets/agneev/archie-comics-multi-class">here</a>. In this post, let us look at the dataset in a little more detail, and then do some simple modelling on it.</p>
+
+<h2 id="a-look-at-the-images-and-their-distribution-">A look at the images and their distribution <a id="look"></a></h2>
+
+<p style="text-align: justify">You can find a notebook looking at the images <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/acmc-images.ipynb">here</a>. The first part of the notebook looks at two images from each of the folders (as a reminder, there are 23 folders, for each of the 22 characters + ‘Others’), but as we already saw <a href="https://agneevmukherjee.github.io/agneev-blog/Archie-comics-multiclass-dataset-intro/#brief">something similar</a> in the previous post, let us move on to one of the aspects that I think makes this dataset really interesting- the class distribution. The code below first creates and populates two lists, one for the class names and the other for the number of samples per class, by walking through all the image folders. We can then create a <a href="https://pandas.pydata.org/">Pandas</a> dataframe from these lists, and plot them in a  bar plot using <a href="https://seaborn.pydata.org/">Seaborn</a>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">samples_per_class</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">directory</span><span class="o">=</span><span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="s">'../input/archie-comics-multi-class/Multi-class/'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">directory</span><span class="p">:</span>
+    <span class="n">currentFolder</span> <span class="o">=</span> <span class="s">'../input/archie-comics-multi-class/Multi-class/'</span> <span class="o">+</span> <span class="n">each</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="p">.</span><span class="n">walk</span><span class="p">(</span><span class="n">currentFolder</span><span class="p">))</span>
+    <span class="n">samples_per_class</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+    <span class="n">classes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">each</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">samples_per_class</span><span class="p">)),</span>
+                   <span class="n">columns</span> <span class="o">=</span><span class="p">[</span><span class="s">'Classes'</span><span class="p">,</span> <span class="s">'Samples per class'</span><span class="p">])</span>
+
+<span class="n">rcParams</span><span class="p">[</span><span class="s">'figure.figsize'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span><span class="mi">8</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s">'Classes'</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">'Samples per class'</span><span class="p">)</span>
+<span class="n">ticks</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span></code></pre></figure>
+
+<p style="text-align: justify"><br />
+All right, so let us see what the class distribution looks like…</p>
+
+<p><img src="/agneev-blog/assets/img/img_9_1.png?raw=true" alt="Image_1" width="750&quot;, height=&quot;400" /></p>
+
+<p style="color:grey;font-size:100%;text-align: center;">
+ Image 1: Class distribution of ACMC images
+</p>
+
+<p style="text-align: justify">Wow, that’s quite something, right? We see that there are nearly 1300 Archie images, while the other major characters, and ‘Others’ have plenty of samples as well (&gt;500 each). On the other hand, some of the minor characters have less than 50 samples apiece. This imbalance is a challenge, but I think is quite representative of the real world, where data is unlikely to be neatly balanced.</p>
+
+<p style="text-align: justify">But the imbalance is not restricted just to the number of images per class - let us see what the image size distribution looks like. We can use <a href="https://pillow.readthedocs.io/en/stable/">Pillow</a> to get the size of every image, store these in a list of tuples, and then make a scatter plot. Along the way, we also check the median and mean of the tuples.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">sizes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">directory</span><span class="p">:</span>
+    <span class="n">currentFolder</span> <span class="o">=</span> <span class="s">'../input/archie-comics-multi-class/Multi-class/'</span> <span class="o">+</span> <span class="n">each</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="nb">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">currentFolder</span><span class="p">)):</span>
+        <span class="n">fullpath</span> <span class="o">=</span> <span class="n">currentFolder</span><span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="nb">file</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="n">fullpath</span><span class="p">)</span>
+        <span class="n">sizes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+
+<span class="n">np</span><span class="p">.</span><span class="n">median</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">sizes</span><span class="p">).</span><span class="n">values</span><span class="p">()))</span>
+<span class="c1"># from https://stackoverflow.com/questions/31836655/using-numpy-to-find-median-of-second-element-of-list-of-tuples
+</span>
+<span class="n">np</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">sizes</span><span class="p">).</span><span class="n">values</span><span class="p">()))</span>
+
+<span class="n">rcParams</span><span class="p">[</span><span class="s">'figure.figsize'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span><span class="mi">6</span>
+
+<span class="c1"># https://stackoverflow.com/questions/47032283/how-to-scatter-plot-a-two-dimensional-list-in-python
+</span><span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">sizes</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
+
+<p><br />
+This plot looks like this:</p>
+
+<p><img src="/agneev-blog/assets/img/img_9_2.png?raw=true" alt="Image_2" width="700&quot;, height=&quot;400" /></p>
+
+<p style="color:grey;font-size:100%;text-align: center;">
+ Image 2: Size distribution of ACMC images
+</p>
+
+<p style="text-align: justify">There are two things noticeable here. Firstly, the images have a wide size distribution, with the smallest being smaller than 100 pixel x 100 pixel, and the largest exceeding 1000 pixel by 1000 pixel. The code above gives us a median of 437 and a mean of 470.5. The second thing is that the images are far from being square. As computer vision (CV) models like to be fed images that are similarly sized and square-shaped, it is clear that image processing may be key to maximising image recognition accuracy on this dataset.</p>
+
+<p style="text-align: justify">We can wind up this section with a look at some random images. The exact images displayed will differ every time the notebook is run, but will in general look like this:</p>
+
+<p><img src="/agneev-blog/assets/img/img_9_3.png?raw=true" alt="Image_3" width="750&quot;, height=&quot;400" /></p>
+
+<p style="color:grey;font-size:100%;text-align: center;">
+ Image 3: A look at random ACMC images
+</p>
+
+<p style="text-align: justify">The difference in the image quality, shapes, centering, etc. is obvious from these images. Also, as expected, the main characters and ‘Others’ dominate the images. Less obvious in this subplot is the difference in the image sizes, unless we look at the axes, some of which go beyond 800 while others stop below 100.</p>
+
+<p style="text-align: justify">All right then, let’s get our hands dirty by doing some modelling on the data!</p>
+
+<h2 id="simple-resnet-models-">Simple ResNet models <a id="simple"></a></h2>
+
+<p style="text-align: justify">We will do some more intricate modelling on this data in later posts, but for now, let us make a simple ResNet50-based model on it. I have published the code for this <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/tf-acmc-simple-orig.ipynb">here</a>. The most important parts are given below:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="n">train</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">preprocessing</span><span class="p">.</span><span class="n">image_dataset_from_directory</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="s">"inferred"</span><span class="p">,</span>
+        <span class="n">label_mode</span><span class="o">=</span><span class="s">"categorical"</span><span class="p">,</span>
+        <span class="n">class_names</span><span class="o">=</span><span class="n">classes</span><span class="p">,</span>
+        <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">subset</span><span class="o">=</span><span class="s">"training"</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">image_size</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+    <span class="p">)</span>
+
+<span class="n">valid</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">preprocessing</span><span class="p">.</span><span class="n">image_dataset_from_directory</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="s">"inferred"</span><span class="p">,</span>
+        <span class="n">label_mode</span><span class="o">=</span><span class="s">"categorical"</span><span class="p">,</span>
+        <span class="n">class_names</span><span class="o">=</span><span class="n">classes</span><span class="p">,</span>
+        <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">subset</span><span class="o">=</span><span class="s">"validation"</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">image_size</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+    <span class="p">)</span>
+
+<span class="n">stopping</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">callbacks</span><span class="p">.</span><span class="n">EarlyStopping</span><span class="p">(</span>
+            <span class="n">monitor</span><span class="o">=</span><span class="s">"val_accuracy"</span><span class="p">,</span>
+            <span class="n">min_delta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">patience</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s">"auto"</span><span class="p">,</span>
+            <span class="n">baseline</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+            <span class="n">restore_best_weights</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">callbacks</span><span class="p">.</span><span class="n">ModelCheckpoint</span><span class="p">(</span>
+            <span class="s">"best_model"</span><span class="p">,</span>
+            <span class="n">monitor</span><span class="o">=</span><span class="s">"val_accuracy"</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s">"max"</span><span class="p">,</span>
+            <span class="n">save_best_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">save_weights_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<span class="n">base_model</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">applications</span><span class="p">.</span><span class="n">ResNet50</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">)</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">applications</span><span class="p">.</span><span class="n">resnet</span><span class="p">.</span><span class="n">preprocess_input</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">base_model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span>
+                <span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">optimizers</span><span class="p">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">),</span>
+                <span class="n">loss</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">losses</span><span class="p">.</span><span class="n">CategoricalCrossentropy</span><span class="p">(),</span><span class="c1">#from_logits=True),
+</span>                <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">"accuracy"</span><span class="p">]</span>
+            <span class="p">)</span>
+
+<span class="n">loss_0</span><span class="p">,</span> <span class="n">acc_0</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"loss </span><span class="si">{</span><span class="n">loss_0</span><span class="si">}</span><span class="s">, acc </span><span class="si">{</span><span class="n">acc_0</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+
+<span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span>
+                <span class="n">train</span><span class="p">,</span>
+                <span class="n">validation_data</span><span class="o">=</span><span class="n">valid</span><span class="p">,</span>
+                <span class="n">epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">stopping</span><span class="p">,</span> <span class="n">checkpoint</span><span class="p">]</span>
+        <span class="p">)</span>
+
+<span class="n">model</span><span class="p">.</span><span class="n">load_weights</span><span class="p">(</span><span class="s">"best_model"</span><span class="p">)</span>
+
+<span class="n">loss</span><span class="p">,</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"final loss </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s">, final acc </span><span class="si">{</span><span class="n">acc</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>        
+
+<span class="c1"># summarize history for accuracy
+</span><span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_accuracy'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'model accuracy'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'accuracy'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'epoch'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">([</span><span class="s">'train'</span><span class="p">,</span> <span class="s">'val'</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s">'upper left'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># summarize history for loss
+</span><span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'loss'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_loss'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'model loss'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'loss'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'epoch'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">([</span><span class="s">'train'</span><span class="p">,</span> <span class="s">'val'</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s">'upper left'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span></code></pre></figure>
+
+<p style="text-align: justify">Briefly, what the above code does first is generate training and validation TensorFlow datasets with a 80:20 split. Note that since we do not have a pre-existing training-validation split, i.e. separate folders for training and validation, we use the <a href="https://www.tensorflow.org/api_docs/python/tf/keras/utils/image_dataset_from_directory">image_dataset_from_directory</a> util instead of the more customary <a href="https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator">flow_from_directory ImageDataGenerator</a>. Next, we define and fit a ResNet50 model, saving the model with the best validation accuracy via a checkpoint callback. We also provide an early stopping callback, with a ‘Patience’ of 5, i.e., the model will stop running if the validation accuracy doesn’t improve over 5 epochs. The remaining parameters are fairly standard. After the run, we plot the model accuracy and loss over the epochs, which look like this:</p>
+
+<p><img src="/agneev-blog/assets/img/img_9_4.png?raw=true" alt="Image_4" width="400&quot;, height=&quot;200" /></p>
+
+<p style="color:grey;font-size:100%;">
+ Image 4: Accuracy and loss of ResNet50 model without pre-trained weights
+</p>
+
+<p style="text-align: justify">We can see that the plots show definite overfitting, with a divergence between the training and the validation curves. The other noteworthy feature is the jaggedness of the curves, one reason for which may be the small batch size (8) employed.</p>
+
+<p style="text-align: justify">The maximum validation accuracy obtained in the above run is around 57%. This made me wonder - what if I started with Imagenet weights for the ResNet instead of no weights? I made another notebook on that <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/fork-of-tf-acmc-simple-imagenet.ipynb">here</a>. The main change is that for using the Imagenet weights, the model head needs to be changed, which I did as per <a href="https://pyimagesearch.com/2020/04/27/fine-tuning-resnet-with-keras-tensorflow-and-deep-learning/">this</a> - the modified portion of the code is shown below, while the rest remains unchanged.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># construct the head of the model that will be placed on top of the
+# the base model
+</span><span class="n">headModel</span> <span class="o">=</span> <span class="n">base_model</span><span class="p">.</span><span class="n">output</span>
+<span class="n">headModel</span> <span class="o">=</span> <span class="n">AveragePooling2D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))(</span><span class="n">headModel</span><span class="p">)</span>
+<span class="n">headModel</span> <span class="o">=</span> <span class="n">Flatten</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"flatten"</span><span class="p">)(</span><span class="n">headModel</span><span class="p">)</span>
+<span class="n">headModel</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">headModel</span><span class="p">)</span>
+<span class="n">headModel</span> <span class="o">=</span> <span class="n">Dropout</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)(</span><span class="n">headModel</span><span class="p">)</span>
+<span class="n">headModel</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">"softmax"</span><span class="p">)(</span><span class="n">headModel</span><span class="p">)</span>
+<span class="c1"># place the head FC model on top of the base model (this will become
+# the actual model we will train)
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">base_model</span><span class="p">.</span><span class="nb">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">headModel</span><span class="p">)</span>
+<span class="c1"># loop over all layers in the base model and freeze them so they will
+# *not* be updated during the training process
+</span><span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">base_model</span><span class="p">.</span><span class="n">layers</span><span class="p">:</span>
+    <span class="n">layer</span><span class="p">.</span><span class="n">trainable</span> <span class="o">=</span> <span class="bp">False</span></code></pre></figure>
+
+<p style="text-align: justify">And we obtain a maximum validation accuracy of…56%…in other words, it appears to make no difference whether we use the Imagenet weights or not. This, however, is only true if we look just at the highest validation accuracy. Looking at the training curves gives a slightly different picture.</p>
+
+<p><img src="/agneev-blog/assets/img/img_9_5.png?raw=true" alt="Image_5" width="400&quot;, height=&quot;200" /></p>
+
+<p style="color:grey;font-size:100%;">
+ Image 5: Accuracy and loss of ResNet50 model with Imagenet weights
+</p>
+
+<p style="text-align: justify">We can see that the curves are much smoother, implying that the training is a lot more stable - a feature not to be underestimated while training a small unbalanced dataset - or any dataset for that matter. On the other hand, the issue of overfitting remains, but that is understandable given the class imbalance. We will see later if we can do something about this.</p>
+
+<h2 id="effect-of-image-size-on-validation-accuracy-">Effect of image size on validation accuracy <a id="size"></a></h2>
+
+<p style="text-align: justify">One point that I did not comment on earlier was the image size we fed into the ResNets. If you see the code above, we used an input size of 256 x 256. I selected this size because, looking at Image 2, it is clear that the vast majority of images are larger than this, and it is <a href="https://blog.roboflow.com/you-might-be-resizing-your-images-incorrectly/">generally preferable</a> to downscale images to smaller sizes than upscale them by stretching the pixels.</p>
+
+<p style="text-align: justify">Nevertheless, it is worth taking a look at what effect changing the image size has on accuracy, which is what I did in <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/fork-of-tf-acmc-simple-sizes.ipynb">this notebook</a>. Essentially, I made a list of three numbers - 128, 256 and 512 - and ran these as image sizes in a for-loop. The maximum validation accuracies I got were revealing - 0.43 for 128 x 128, 0.51 for 256 x 256, and 0.63 for 512 x 512. Why is the 256 x 256 accuracy lower than what we got earlier? Mainly because the early stopping kicked in on this particular run and halted the run after only 10 epochs, which is why the absolute numbers must be taken with a pinch of salt. The trend, however, is what is interesting, as we see a clear increase in validation accuracy with image size. Why would this be the case? Well quite simply, all other things equal, larger images have higher resolution, making it possible for the CV model to learn from details that are lost when the image is shrunk. This is in line with results obtained, for instance, in <a href="https://pubmed.ncbi.nlm.nih.gov/34943421/">this paper</a>, which looked at the effect of varying image resolutions from 32 x 32 to 512 x 512 and found the best results at the highest resolution.</p>
+
+<p style="text-align: justify">If this is the case, then why did I not try an even higher resolution? Actually, I <em>did</em> try running the model at 1024 x 1024, and ran into a <a href="https://www.tensorflow.org/api_docs/python/tf/errors/ResourceExhaustedError">‘Resource Exhausted Error’</a>. Essentially, trying to load images of this size into memory results in a memory error. Resolving that would require making other changes in the code. One option would be reducing the batch size - but that is already just 8, and reducing it further would <a href="https://machinelearningmastery.com/how-to-control-the-speed-and-stability-of-training-neural-networks-with-gradient-descent-batch-size/">further increase</a> the volatility that we have already seen in the training curves. Another would be employing a smaller model - but then the comparison with the other image sizes modelled with ResNet50 would not be apples and apples. A third would be to upgrade the system configurations…not really possible in a Kaggle notebook!</p>
+
+<p style="text-align: justify">.</p>
+<p style="text-align: justify">.</p>
+<p style="text-align: justify">.</p>
+
+<p style="text-align: justify">However, even if we <em>could</em> run at 1024 x 1024, we would be unlikely to see much improvement. Why? Remember that we saw that the median image size was 437, while the mean was 470.5. Increasing the size much beyond this would likely be unhelpful, since, as noted <a href="https://blog.roboflow.com/you-might-be-resizing-your-images-incorrectly/">here</a>, increasing image sizes beyond their original dimensions stretches image pixels, impacting the ability of models to learn key features like object boundaries. Therefore, ‘the larger the better’ is only true for image size up to a point, with accuracies <a href="https://pubs.rsna.org/doi/full/10.1148/ryai.2019190015">often dropping</a> when image size is further increased. And finally, even if the accuracy doesn’t drop, one still needs to be consider if the <a href="https://www.quora.com/Does-the-input-image-size-affect-CNNs-performance-For-instance-is-a-CNN-trained-with-512-512-input-perform-better-than-being-trained-with-128-128">64-fold increase</a> in memory requirement and processing time caused by an 8-fold increase in image size (from 128 x 128 to 1024 x 1024) will really be worth it…</p>
+
+<p style="text-align: justify">So, in short, 512 x 512 seems like a good image size, giving high validation accuracy without crashing our system. This image size does take considerably longer to train, though, than 128 x 128 - a 10 minute run for 128 x 128 may become a 160 minute run for 512 x 512. Given this, <a href="https://www.fast.ai/2018/08/10/fastai-diu-imagenet/">progressive resizing</a>, a concept introduced by Jeremy Howard at FastAI, may be a good way to get great accuracies while keeping training times reasonable. As mentioned in that link,</p>
+
+<blockquote style="text-align: justify">
+  <p>One of our main advances in DAWNBench was to introduce progressive image resizing for classification – using small images at the start of training, and gradually increasing size as training progresses. That way, when the model is very inaccurate early on, it can quickly see lots of images and make rapid progress, and later in training it can see larger images to learn about more fine-grained distinctions.</p>
+</blockquote>
+
+<p style="text-align: justify">For now, we will park this idea, since the aim of this post is to keep things simple, and revisit the concept in a later post.</p>
+<p><br /></p>
+<h2 id="the-elephant-in-the-room-">The elephant in the room <a id="elephant"></a></h2>
+
+<p style="text-align: justify">All right, we have talked quite a bit about validation accuracies and image sizes, but haven’t really mentioned one thing that really is important for a dataset as unbalanced as this - how good is the model at identifying each character? In other words, is the high accuracy just because it has learnt to recognise the main characters, or is it more well-rounded? Let’s find out!</p>
+
+<p style="text-align: justify">Since we saw that using the Imagenet weights gives smoother training curves and using an image size of 512 x 512 increases validation accuracy, I made <a href="https://github.com/AgneevMukherjee/agneev-blog/blob/main/tf-acmc-simple-imagenet-512.ipynb">yet another notebook</a>, this time using these parameters. The maximum validation accuracy obtained? 0.63! Yay! But that’s not what we are really interested in here. We are more into the information presented in the <a href="https://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html">‘confusion matrix’</a>. A confusion matrix is a great tool to see at a glance how a machine learning algorithm has performed on a class-level, i.e., how many examples of each class it has correctly classified, and into which classes the incorrect results fall. A simple example is given by Scikit-learn for the Iris dataset:</p>
+
+<p><img src="/agneev-blog/assets/img/img_9_6.png?raw=true" alt="Image_6" width="500&quot;, height=&quot;250" /></p>
+
+<p style="color:grey;font-size:100%;">
+ Image 6: Scikit-learn's example of a confusion matrix on the Iris dataset
+</p>
+
+<p style="text-align: justify">We see here in the normalised confusion matrix that perfect results were obtained for the setosa and virginica irises, while for the versicolor, 62% were correctly classified, the rest all being misclassified as virginica.</p>
+
+<p style="text-align: justify">For the final run on our dataset, the normalised confusion matrix (created using Scikit-learn) looks like the image below. <em>(Note: the image looks much better on Firefox than Chrome, due to a well-known problem Chrome has with downscaling images. If needed, you can open the image in a new tab and zoom it to make it easier to read.)</em></p>
+
+<p><img src="/agneev-blog/assets/img/img_9_7.png?raw=true" alt="Image_7" width="800&quot;, height=&quot;400" /></p>
+
+<p style="color:grey;font-size:100%;text-align: center;">
+ Image 7: Normalised confusion matrix
+</p>
+
+<p style="text-align: justify">Hmmm, we see that the performance is all over the place, and that for some classes, the results are really quite poor. We also see that the model has put some examples from almost every class into ‘Others’, which makes sense if you think about it - if the model is sure that an example is Grundy or Moose, it goes into that category, while any it is unsure of goes into the catch-all bin of ‘Others’.</p>
+
+<p style="text-align: justify">To better understand the model performance, however, we may want to also have a look at the non-normalised confusion matrix. Here it is:</p>
+
+<p><img src="/agneev-blog/assets/img/img_9_8.png?raw=true" alt="Image_8" width="800&quot;, height=&quot;400" /></p>
+
+<p style="color:grey;font-size:100%;text-align: center;">
+ Image 8: Non-normalised confusion matrix
+</p>
+
+<p style="text-align: justify">To get why this is important, have a look at the Harry Clayton class. The normalised confusion matrix was disappointing for this class, as it showed that the model did not make a single accurate prediction on this class. Image 8, however, shows that there were only two images of this class in the validation set! The 0% true positive rate for this class is not, therefore, as shocking as it might first seem. The random manner in which the validation set is selected means that several of the smaller classes may be under-represented even more severely in the validation set than they had been in the original dataset, which is clearly the case here for Harry Clayton. Other runs had given a 100% true positive rate for the same class! This means that for the minor character classes, it is not merely difficult to model them but also hard to quantify the model performance on them.</p>
+
+<p style="text-align: justify">A picture may help demonstrate the effect of class size on the classification performance more vividly. The excellent <a href="https://stackoverflow.com/a/43331484">top-rated answer</a> (not the accepted answer) on a Stackoverflow question shows how to get the true positives (Archie predicted as Archie), true negatives (non-Archie predicted as non-Archie), false positives (non-Archie predicted as Archie) and false negatives (Archie predicted as non-Archie) from a confusion matrix. Let us just deal with the true positive rate (TPR) (also called <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity">sensitivity</a> or <a href="https://en.wikipedia.org/wiki/Precision_and_recall">recall</a>) for now, i.e., what fraction of, say, Ethel pix were correctly predicted as Ethel. The code below calculates the TPR for each class, makes a Pandas dataframe out of these, and then uses that dataframe to create a Seaborn regression plot.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">FN</span> <span class="o">=</span> <span class="n">cm</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
+<span class="n">TP</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
+<span class="c1"># from https://stackoverflow.com/questions/31324218/scikit-learn-how-to-obtain-true-positive-true-negative-false-positive-and-fal
+</span><span class="n">TPR</span> <span class="o">=</span> <span class="n">TP</span><span class="o">/</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FN</span><span class="p">)</span>
+
+<span class="n">df_from_arr</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">samples_per_class</span><span class="p">,</span> <span class="n">TPR</span><span class="p">]).</span><span class="n">T</span>
+<span class="n">df_from_arr</span><span class="p">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s">"No. of samples"</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s">"True positive rate"</span><span class="p">},</span> <span class="n">inplace</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">df_from_arr</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">classes</span>
+<span class="n">df_from_arr</span><span class="p">[</span><span class="s">"No. of samples"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_from_arr</span><span class="p">[</span><span class="s">"No. of samples"</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">df_from_arr</span><span class="p">[</span><span class="s">"True positive rate"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_from_arr</span><span class="p">[</span><span class="s">"True positive rate"</span><span class="p">].</span><span class="nb">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df_from_arr</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">"No. of samples"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"True positive rate"</span><span class="p">)</span></code></pre></figure>
+
+<p><img src="/agneev-blog/assets/img/img_9_9.png?raw=true" alt="Image_9" width="400&quot;, height=&quot;200" /></p>
+
+<p style="color:grey;font-size:100%;">
+ Image 9: True positive rate versus number of samples in class
+</p>
+
+<p style="text-align: justify">We see that there is plenty of scatter towards the left-hand side of the plot, with some minor classes having a very low true positive rate and others very high values. We have already seen one possible cause of this - the fact that random selection means that there may be few examples of the classes in the training or validation sets. Another may be that the image quality or other factors could make certain classes easier to classify. And finally, some characters may simply be easier to recognise than others!</p>
+
+<p style="text-align: justify">On the whole, though, the trend is clear - there is a clear upward trend, indicating that the characters with more images available are classified more accurately than those with fewer, which is what we would expect. For Archie pix, we have a TPR of 0.84, which is quite impressive, while Jughead and Betty also have a TPR of over 0.7, Veronica and Reggie getting 0.67 and 0.61 respectively.</p>
+
+<h3 id="does-it-matter-">Does it matter? <a id="matter"></a></h3>
+
+<p style="text-align: justify">We see that the major classes contribute heavily towards the overall accuracy of 0.63. Is that something we should be happy about? Well, that depends on what we want! If we are trying to build a classifier that will perform well on a randomly selected page from an Archie comics digest, we should be quite happy with what we have done so far. The odds of getting an Archie or a Jughead image, as opposed to a Beazly or Kleats image, in a random Archie comics panel is actually even higher than indicated by this dataset. So it makes sense for us to build a classifier that would work well on the major classes. Think of it this way - if you are building a dog image classifier, you would probably want your model to work well on German Shephard or Golden Retriever images, even if it gets the occasional Azawakh or Lagotto Romagnolo wrong.</p>
+
+<p style="text-align: justify">If, on the other hand, we want a classifier that will work roughly equally well on every class, then our current approach is clearly not working. What can we do to sort this out? We shall see next time, when we discuss the different approaches for handling unbalanced datasets. For now, ciao!</p>
+
+<div class="post-nav">
+  <p>
+    
+    <big><b>
+    <a href="/agneev-blog/Archie-comics-multiclass-dataset-intro/">&#8672;&nbsp;8. Introducing the Archie Comics Multiclass dataset</a></b></big>
+    
+  </p>
+  <p style="text-align:right;">
+    
+    <big><b>
+    <a href="/agneev-blog/ACMC-undersampling/">10. ACMC - Undersampling and F-scores&nbsp;&#8674;</a>
+    </b></big>
+    
+  </p>
+</div>
+
+  </div><a class="u-url" href="/agneev-blog/ACMC-simple-model/" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/agneev-blog/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Agneev&#39;s DS/ML lab book</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Agneev&#39;s DS/ML lab book</li><li><a class="u-email" href="mailto:agneev.m.ai@gmail.com">agneev.m.ai@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/AgneevMukherjee"><svg class="svg-icon"><use xlink:href="/agneev-blog/assets/minima-social-icons.svg#github"></use></svg> <span class="username">AgneevMukherjee</span></a></li><li><a href="https://www.linkedin.com/in/agneevmukherjee"><svg class="svg-icon"><use xlink:href="/agneev-blog/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">agneevmukherjee</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>I mostly write about my experiments in data science/machine learning here,
+ sometimes about other things...</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
